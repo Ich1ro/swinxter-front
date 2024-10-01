@@ -1,0 +1,14 @@
+
+.date_picker input {
+    background:none;
+    text-align: right;
+    font-size: 14px;
+    font-weight: 300;
+    max-width: 100px;
+    outline: none;
+    cursor: pointer;
+}
+
+.date_picker {
+    @apply flex items-center 
+}

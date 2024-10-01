@@ -1,0 +1,11 @@
+.legal_page{
+    width: 100%;
+    background-color: #000;
+    padding-top: 130px;
+    padding-bottom: 60px;
+}
+.legal_container{
+    width: 600px;
+    margin: 20px auto;
+    border-radius: 10px;
+}

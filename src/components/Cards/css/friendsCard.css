@@ -1,0 +1,19 @@
+.friends_card{
+    width: 250px;
+    height: 160px;
+    border-radius: 10px;
+    background-color: #2A2D37;
+    position: relative;
+    margin-right: 20px;
+    margin-bottom: 60px;
+}
+.friends_card_dp{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    top: 0%;
+    background-color: white;
+    transform: translate(-50%,-50%);
+}

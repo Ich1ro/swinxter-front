@@ -1,0 +1,92 @@
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 1px;  /* Remove scrollbar space */
+  background: #131313;
+
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: rgb(192, 190, 187);
+}
+.gap_lists{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 50px;
+  height: 492px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  text-align: justify;
+}
+
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  /* margin: 10px; */
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;  
+
+}
+.title_submenu{
+  /* margin-left: 7px; */
+  /* border: 2px solid red; */
+}
+
+.active {
+  font-weight: bold;
+  color: orange; /* You can choose your own highlight styling */
+}
+.menu-item {
+  background: #2A2D37;
+  border-radius: 11px;
+  box-shadow: 0 3px 8px rgba(0,0,0,.24);
+  color: #fff;
+  cursor: pointer;
+  margin-top: 5px;
+  padding: 9px;
+}
+.menu-item >span{ 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px;
+}
+.submenu-container {
+  margin-top: 10px;
+  z-index: 1;
+  margin: 10px -9px -9px;
+  border-radius: 0px 0px 11px 11px;
+  background: #262626;
+}
+.submenu-container .menu-item {
+  margin: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+.submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.submenu.open {
+  display: block;
+}
+
+.submenu li {
+  padding: 5px 0;
+  cursor: pointer;
+  color: white;
+  margin-top: 40px;
+}

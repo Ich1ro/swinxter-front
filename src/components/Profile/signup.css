@@ -1,0 +1,124 @@
+.it_checkbox input {
+    @apply hidden;
+}
+.it_checkbox input+.check__box {
+    height: 28px;
+    width: 28px;
+    display: block;
+    border-radius: 4px;
+    background: rgb(249, 74, 43);
+    background: linear-gradient(-90deg, rgba(249, 74, 43, 1) 0%, rgba(247, 146, 32, 1) 100%);
+    position: relative;
+    margin: 0 auto;
+}
+.it_checkbox input+.check__box:before {
+    background: #000;
+    height: 24px;
+    width: 24px;
+    display: inline-block;
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    border-radius: 4px;
+}
+.it_checkbox input:checked+.check__box:after {
+    content: '';
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/%3e%3c/svg%3e");
+    position: absolute;
+    top: 7px;
+    left: 7px;
+    display: block;
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-size: 14px;
+}
+.show-top{
+    position: relative;
+}
+.selected-option{
+    width: 100%;
+    border:1px solid;
+}
+.select_ctmBox {
+    position: relative;
+    text-align: right;
+    width: 100%;
+}
+.select_ctmBox .select_options {
+    position: absolute;
+    min-width: 400px;
+    background: #fff;
+    color: #000;
+    right: 0;
+    padding: 10px 15px;
+    border-radius: 6px;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s;
+}
+.select_options .optionBox {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+.select_ctmBox.active .select_options {
+    opacity: 1;
+    visibility: visible;
+}
+.select_options .input_option input {
+    display: none;
+}
+.select_options .input_option input+label {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #AEAEAE;
+    border-radius: 20px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, .15);
+    background-color: #fff;
+}
+.select_options .input_option input:checked+label {
+        background-color: #000;
+            box-shadow: none;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAABMSURBVAiZfc0xDkAAFIPhd2Kr1WRjcAExuIgzGUTIZ/AkImjSofnbNBAfHvzAHjOKNzhiQ42IDFXCDivaaxAJd0xYshT3QqBxqnxeHvhunpu23xnmAAAAAElFTkSuQmCC);
+            background-repeat: no-repeat;
+            background-position: center center;
+}
+.select_label {
+    position: relative;
+    padding-right: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+.select_label  .select_label_icon{
+    display: flex;
+    align-items: center;
+    font-size: 21px;
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    top: 0;
+}
+.ctm_select_drop label{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    @apply rounded-lg bg-black-20
+  }
+  .ctm_select_drop label > span{
+    display: flex;
+    align-items: center;
+    height: auto;
+    @apply p-3 px-4 rounded-md rounded-r-none
+  }
+  .ctm_select_drop .select_label{
+    @apply bg-black-20 items-center rounded-md rounded-l-none justify-start
+  }
+  .ctm_select_drop .select_label .select_label_icon{
+    top: 50%;
+    transform: translateY(-50%);
+  }

@@ -1,0 +1,24 @@
+.plans_card{
+    width: 300px;
+    height: 250px;
+    background-color: #2A2D37;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    text-align: center;
+    padding: 30px;
+}
+.plans_card h1{
+    font-size: 30px;
+    margin-top: 20px;
+    color: orange;
+    font-weight: 600;
+}
+.plans_card p{
+    margin-bottom: 40px;
+}
+.plans_card button{
+    background: linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%);
+    padding: 8px 20px;
+    border-radius: 10px;
+}

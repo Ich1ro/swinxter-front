@@ -1,0 +1,13 @@
+.chatroom{
+    width: 400px;
+    height: 700px;
+    background-color: #262626;
+}
+.chatroom_header{
+    width: 100%;
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}

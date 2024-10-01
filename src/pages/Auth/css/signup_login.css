@@ -1,0 +1,38 @@
+.sign_up__block .container{
+    @apply relative 
+}
+.sign_up__block .container::after,
+.sign_up__block .container::before{
+    content: '';
+    @apply top-1/2 w-[502px] absolute left-0 h-[502px] rounded-full bg-red-500 blur-200 -z-1 transform -translate-x-1/2 -translate-y-1/2
+}
+.sign_up__block .container::after{
+    @apply left-0 right-0 ml-auto top-full translate-x-1/2 bg-yellow
+}
+.forgot-password-text {
+    -webkit-text-fill-color: transparent;
+}
+@media ( min-width:640px ){
+    .input_field{
+        padding: 2px !important;
+        background: linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%);
+    }
+    .input_field label{
+        background: linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%);
+    }
+}
+@media ( max-width: 1023px ){
+    .navbar {
+        transition: all 0.3s;
+        @apply top-0 left-0 bg-black/60 min-h-screen w-full transform -translate-x-full z-[999]
+    }
+    .navbar_open{
+        @apply translate-x-0
+    }
+    .navbar a {
+        border: none;
+    }
+    .navbar ul {
+        @apply m-0 w-[95%] bg-white min-h-screen max-w-sm pt-7
+    }
+}
