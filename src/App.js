@@ -102,7 +102,7 @@ useEffect(() => {
   useEffect(() => {
     if(isAuthenticated){
       console.log(isAuthenticated);
-     setSocket(io("http://localhost:8080"));
+     setSocket(io("https://swinxter-back.onrender.com"));
 
     }
   },[isAuthenticated])
