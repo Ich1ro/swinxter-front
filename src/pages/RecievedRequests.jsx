@@ -14,7 +14,15 @@ const RecievedRequests = () => {
 		const currentUser = await api.get(`/user_details/${user._id}`);
 		currentUser.data.friend_requests.map(async ele => {
 			const { data } = await api.get(`/user_details/${ele}`);
-			setFriends([...friends, data]);
+			setFriends(prev => {
+        const isAlreadyFriend = prev.some(friend => friend._id === data._id);
+
+					if (!isAlreadyFriend) {
+						return [...prev, data];
+					}
+
+					return prev;
+      });
 		});
 	};
 
@@ -37,7 +45,7 @@ const RecievedRequests = () => {
 						<div
 							style={{ display: 'flex', flexWrap: 'wrap', marginTop: '50px' }}
 						>
-							{friends.length > 0 ? (
+							{friends?.length > 0 ? (
 								friends?.map((friend, i) => {
 									return <FriendCard data={friend} key={i} request={true} />;
 								})
