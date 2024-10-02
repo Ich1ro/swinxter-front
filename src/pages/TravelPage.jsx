@@ -267,9 +267,12 @@ console.log(filterKeywords)
           }
         </>
         :
-        <div style={{height: "400px", display: "flex", justifyContent: "center", alignItems: "center", fontSize: "24px"}}>
-          <h1>You need to buy a membership to access the feature</h1>
-        </div>
+        <div style={{height: "400px", display: "flex", justifyContent: "center", alignItems: "center", fontSize: "24px", flexDirection: "column"}}>
+        <h1 style={{marginBottom: "30px"}}>You need to buy a membership to access the feature</h1>
+        <Link to="/membership" className="primary_btn !text-sm sm:!text-xl">
+          Buy membership
+        </Link>
+      </div>
       }
   </div>
   );

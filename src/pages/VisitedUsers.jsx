@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import api from '../utils/api';
 import { useEffect } from 'react';
 import UserCard from '../components/Cards/UserCard';
+import { Link } from 'react-router-dom';
 
 const VisitedUser = () => {
 	const [users, setUsers] = useState(null);
@@ -48,11 +49,15 @@ const VisitedUser = () => {
                 <EventCard key={i} event={el} />
                 </div>
               ))} */}
-						{users ? users.map((user, i) => (
-							<div className='h-full bg-light-grey rounded-2xl'>
-								<UserCard key={i} userInfo={user} />
-							</div>
-						)) : <>No one visitors</>}
+						{users ? (
+							users.map((user, i) => (
+								<div className='h-full bg-light-grey rounded-2xl'>
+									<UserCard key={i} userInfo={user} />
+								</div>
+							))
+						) : (
+							<>No one visitors</>
+						)}
 					</div>
 				</div>
 			) : (
@@ -63,9 +68,15 @@ const VisitedUser = () => {
 						justifyContent: 'center',
 						alignItems: 'center',
 						fontSize: '24px',
+						flexDirection: 'column',
 					}}
 				>
-					<h1>You need to buy a membership to access the feature</h1>
+					<h1 style={{ marginBottom: '30px' }}>
+						You need to buy a membership to access the feature
+					</h1>
+					<Link to='/membership' className='primary_btn !text-sm sm:!text-xl'>
+						Buy membership
+					</Link>
 				</div>
 			)}
 		</div>
