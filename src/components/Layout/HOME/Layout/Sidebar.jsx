@@ -142,6 +142,11 @@ const Sidebar = ({ unread, closeMenu }) => {
       ],
     },
     {
+      title: "Live Chat",
+      submenus: [],
+      path: "/live-chat"
+    },
+    {
       title: "Messages",
       submenus: [],
       path: "/messaging"
@@ -221,7 +226,7 @@ const Sidebar = ({ unread, closeMenu }) => {
   };
 
   return (
-    <div className="sidebar xl:w-60">
+    <div className="sidebar xl:w-60" style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
       <div>
         {userInfo?.profile_type === "couple" ?
           <img src={userInfo?.image ? userInfo?.image : "images/couple-avatar.jpg"} />
@@ -274,6 +279,7 @@ const Sidebar = ({ unread, closeMenu }) => {
             </Link>
           </p>
         </div>
+      </div>
         <nav className="menu">
           <ul className="gap_lists">
             {menuItems.map((menuItem, index) => (
@@ -299,7 +305,6 @@ const Sidebar = ({ unread, closeMenu }) => {
             </li>
           </ul>
         </nav>
-      </div>
     </div>
   );
 };

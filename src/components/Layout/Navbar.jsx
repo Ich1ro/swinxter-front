@@ -15,11 +15,11 @@ const Navbar = ({ Lplayout }) => {
 
   return (
     <header
-      className={`landingpage_header_main top-0 left-0 z-[999] w-full py-5 ${
+      className={`landingpage_header_main top-0 left-0 z-[999] w-full ${
         Lplayout === "light_layout" ? "landingpage_header_bg" : "absolute"
       }`}
     >
-      <div className="container mx-auto">
+      <div className="container mx-auto" style={{padding: '0 50px'}}>
         <div className="landingpage_header flex flex-wrap items-center justify-between">
           <div className="w-[150px]">
             <Link to={isAuthenticated?"/home" :"/"}>
@@ -43,7 +43,7 @@ const Navbar = ({ Lplayout }) => {
           <div
             className={`${
               openMenu ? "lp_navbar_open" : ""
-            } lp_navbar lg:w-[calc(100%-150px)]`}
+            } lp_navbar`}
           >
             <nav className="lg:flex justify-between">
               <div className="flex lg:hidden items-center justify-between gap-5 mb-10 px-4">
@@ -62,7 +62,7 @@ const Navbar = ({ Lplayout }) => {
                   <RxCross1 />
                 </span>
               </div>
-              <ul className="lg:w-[calc(100%-150px)] max-w-full block lg:flex justify-end lg:pr-[100px] items-center">
+              <ul className="max-w-full block lg:flex justify-end items-center">
                 <li
                   className={`${
                     pathname === "/"
@@ -94,7 +94,7 @@ const Navbar = ({ Lplayout }) => {
                   </li>
                 )}
 
-                <li
+                {/* <li
                   className={`${
                     pathname === "/live-chat"
                       ? "text-orange"
@@ -102,7 +102,7 @@ const Navbar = ({ Lplayout }) => {
                   } uppercase px-5`}
                 >
                   <Link to="/live-chat">Live chat</Link>
-                </li>
+                </li> */}
               </ul>
               {isAuthenticated ? (
                 ""

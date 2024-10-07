@@ -17,7 +17,7 @@ const Membership = () => {
           </p>
         </div>
         <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-evenly", marginTop: "50px"}}>
-          <PlansCard title="3 Days" price="Free"/>
+          <PlansCard title="3 Days" price="$2.99"/>
           <PlansCard title="1 Week" price="$14.99"/>
           <PlansCard title="1 Month" price="$24.99"/>
           <PlansCard title="3 Months" price="$46.99"/>

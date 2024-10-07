@@ -245,6 +245,7 @@ span.chip{
 } */
 .dashboard_body_wrap {
   position: relative;
+  width: 100%;
 }
 
 /* .dashboard_body_wrap::before {

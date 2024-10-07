@@ -14,7 +14,7 @@ const Messaging = () => {
 		setUserInfo(user);
 	}, [user?.payement?.membership]);
 
-	if (userInfo) {
+	if (userInfo?.payement?.membership) {
 		return (
 			<ChatContextProvider>
 				<div

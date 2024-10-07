@@ -2,6 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-svg{
-  display: inline;
+svg {
+	display: inline;
+}
+
+.footer {
+  color: white;
+	background: rgb(32, 32, 32);
+	background: linear-gradient(
+		180deg,
+		rgba(32, 32, 32, 1) 30%,
+		rgba(0, 0, 0, 1) 100%
+	);
+  padding: 0 100px;
+}
+
+.blurred-edge {
+  filter: blur(0);
+  mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0));
+}
+
+.top-bg {
+  background-color: #f79220;
+}
+
+.main-block {
+  flex-direction: column;
+}
+
+.blured-bottom {
+  filter: blur(0);
+  mask-image: linear-gradient(to bottom, rgba(32, 32, 32, 1) 70%, rgba(32, 32, 32, 0) 100%);
+}
+
+.blured-top {
+  filter: blur(0);
+  mask-image: linear-gradient(to top, rgba(32, 32, 32, 1) 70%, rgba(32, 32, 32, 0) 100%);
 }

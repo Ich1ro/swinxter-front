@@ -16,7 +16,7 @@ html {
   flex-direction: column;
   gap: 6px;
   margin-top: 50px;
-  height: 492px;
+  height: 390px;
   overflow-x: hidden;
   overflow-y: scroll;
   text-align: justify;

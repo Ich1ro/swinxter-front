@@ -6,10 +6,10 @@ export const Home = () => {
 
   return (
     <>
-  <section className="relative min-h-[80vh] sm:min-h-[95vh] rounded-b-2xl sm:rounded-b-50px hero_section z-[99] flex items-center">
+  <section className="relative min-h-[80vh] sm:min-h-[95vh] rounded-b-2xl sm:rounded-b-50px hero_section z-[99] flex items-center blured-bottom">
       <div className="container mx-auto relative">
         <div className="text-white max-w-xs sm:max-w-470px sm:ml-auto">
-          <p className="text-2xl sm:text-40px font-secondary_font ">
+          <p className="text-2xl sm:text-40px" style={{fontWeight: '100'}}>
             Join the world's largest
           </p>
           <h3 className="text-3xl sm:text-5xl font-bold">
@@ -27,9 +27,9 @@ export const Home = () => {
         before:bg-no-repeat before:bg-cover before:bg-yellow before:blur-[150px] before:rounded-full before:bottom-[-20%] before:z-[-2]"
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div className="left-block flex justify-center lg:justify-end items-center">
-            <div className="inner-block max-w-500">
-              <p className="text-xl xl:text-35px sm:leading-45 font-light lg:max-w-[360px] font-body_font">
+          <div className="left-block flex justify-center items-center">
+            <div className="inner-block" style={{maxWidth: '520px'}}>
+              <p className="text-xl md:text-xl xl:text-35px sm:leading-45 font-light font-body_font">
                 Discover endless possibilities at Swinxter.com! Connect with
                 partners, find hook-ups, and
               </p>
@@ -86,7 +86,7 @@ export const Home = () => {
           </div>
           <div className="left-block flex justify-center items-center Hookup-content rounded-b-2xl roudned-r-none lg:rounded-r-46 lg:rounded-bl-none sm:rounded-b-46 bg-2e2e2e px-5">
             <div className="inner-block px-0 py-10 lg:p-14 xl:p-16">
-              <p className="text-xl md:text-xl xl:text-35px sm:leading-45 font-light max-w-xs font-body_font">
+              <p className="text-xl md:text-xl xl:text-35px sm:leading-45 font-light font-body_font mb-5">
                 Indulge in adult dating and thrilling connections at SWINXTER®.
                 Join now and experience the excitement first-hand!
               </p>
@@ -116,8 +116,8 @@ export const Home = () => {
     <section className="text-with-image  text-white py-6 md:py-8 lg:py-20 meet-member relative z-0">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div className="left-block flex justify-center lg:justify-end items-center">
-            <div className="inner-block max-w-500">
+          <div className="left-block flex justify-center items-center">
+            <div className="inner-block" style={{maxWidth: '600px'}}>
               <p className="text-xl md:text-xl xl:text-35px sm:leading-45 font-light font-body_font">
                 Explore the exciting world of nude cam chat and connect with
                 like-minded{" "}
@@ -151,7 +151,7 @@ export const Home = () => {
       </div>
     </section>
 
-    <section className="hero_section2 relative">
+    <section className="hero_section2 relative blured-bottom">
       <img
         src="landingPage/images/women-with-device.png"
         className="w-full block object-cover inset-0 md:static"

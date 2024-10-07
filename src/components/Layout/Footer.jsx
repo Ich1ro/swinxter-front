@@ -6,7 +6,7 @@ const Footer = () => {
   const { pathname } = location;
   return (
     <div>
-      <footer className="bg-white text-black">
+      <footer className="bg-white text-black footer">
         <div className="container mx-auto ">
       
           <div className="footer-bottom flex flex-col lg:flex-row w-full py-8 gap-6 text-center md:text-start border-t-0 border-gray-900 justify-between">

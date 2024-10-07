@@ -81,14 +81,15 @@ const DbHeader = ({socket}) => {
   };
 
   return (
-    <header className="py-8 bg-black-20 sticky top-0 z-[99] xl:static xl:bg-transparent xl:pt-10 xl:py-0">
-      <div className="flex flex-wrap justify-between xl:justify-center items-center xl:items-start px-5">
+    <header className="py-8 bg-black-20 sticky top-0 z-[99] xl:static xl:bg-transparent xl:py-0 mb-4">
+      <div className="flex justify-between xl:justify-center items-center xl:items-start px-5">
         <div className="w-1/5 pr-5 flex justify-end">
           <Link to={user?"/home":"/"} className="flex justify-center w-full max-w-[15rem]">
             <img
               src="/landingPage/images/SwinxterLogo-bg.png"
               alt="Logo"
               className="cursor-pointer max-w-100px block"
+              height={'auto'}
             />
           </Link>
         </div>
@@ -135,7 +136,7 @@ const DbHeader = ({socket}) => {
                 </div>
               </form>
               <div className="db_header_nav w-full px-[50px]">
-                <ul className="xl:flex items-center justify-between mt-10 grid gap-y-2">
+                <ul className="xl:flex items-center justify-between mt-8 grid gap-y-2">
                   <li
                     className={`${
                       pathname === "/home"
@@ -145,7 +146,7 @@ const DbHeader = ({socket}) => {
                   >
                     <Link to="/home">Home</Link>
                   </li>
-                  <li
+                  {/* <li
                     className={`${
                       pathname === "/live-chat"
                         ? "text-orange"
@@ -153,7 +154,7 @@ const DbHeader = ({socket}) => {
                     }`}
                   >
                     <Link to="/live-chat">Live Chat</Link>
-                  </li>
+                  </li> */}
                   <li
                     className={`${
                       pathname === "/travel-page"
@@ -251,7 +252,8 @@ const DbHeader = ({socket}) => {
                 </div>
               </div>
               <div
-                className="ml-4 h-10 w-10 cursor-pointer flex items-center"
+                className="ml-4 w-10 cursor-pointer flex items-center"
+                style={{height: '56px'}}
                 onClick={() => setSidebar(!sidebar)}
               >
                     {userInfo?.profile_type==="couple"?

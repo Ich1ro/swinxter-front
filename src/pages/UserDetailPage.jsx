@@ -274,10 +274,16 @@ const RenderedStyle={
      </div>
    </div>
    <div className="p-5 bg-light-grey rounded-xl mt-6  max-w-5xl mx-auto">
-    <h3 className="text-2xl text-orange">Slogan</h3>
-   <p className="text-lg font-body_font my-2">{userInfo?.slogan}</p>
-   <h3 className="text-2xl text-orange mt-5">Introduction</h3>
-  <p className="text-lg font-body_font" dangerouslySetInnerHTML={{ __html: userInfo?.introduction?.replace(/\n/g, '<br />') }}></p>
+    <div>
+      <h3 className="text-2xl text-orange">Slogan</h3>
+      <p className="text-lg font-body_font my-2">{userInfo?.slogan}</p>
+    </div>
+    <div style={{width: '100%', height: '2px', backgroundColor: '#f79220', marginTop: '16px'}}>
+    </div>
+    <div>
+      <h3 className="text-2xl text-orange mt-4">Introduction</h3>
+      <p className="text-lg font-body_font" dangerouslySetInnerHTML={{ __html: userInfo?.introduction?.replace(/\n/g, '<br />') }}></p>
+    </div>
    </div>
 
    <div className="max-w-5xl mx-auto pt-20">
