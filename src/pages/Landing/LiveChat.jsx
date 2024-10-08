@@ -13,15 +13,15 @@ const LiveChatPage = () => {
 					alt='live-chat-banner'
 					className='absolute top-0 left-0 w-full h-full -z-1 object-cover object-center blured-bottom'
 				/>
-				<div className='relative max-w-7xl mx-auto pb-5 sm:pb-20 px-5 z-1'>
-					<h3 className='text-2xl sm:text-4xl mb-2'>
+				<div className='relative max-w-7xl mx-auto pb-5 sm:pb-20 px-5 z-1 flex' style={{flexDirection: 'column', alignItems: 'flex-end', textAlign: 'right'}}>
+					<h3 className='text-2xl sm:text-4xl mb-2' style={{width: '65%'}}>
 						Live Member Webcams & Chat on Swinxter Adult Dating Site
 					</h3>
 					<p className='text-3xl sm:text-5xl font-bold mb-2 max-w-xl'>
 						Experience the thrill of live member cams & indulge in sizzling live
 						sex chat at Swinxter.com
 					</p>
-					<p className='text-sm sm:text-lg font-body_font'>
+					<p className='text-sm sm:text-lg font-body_font' style={{textAlign: 'center'}}>
 						Our streaming webcams with live chat allow our members to connect in
 						real-time, no matter where they are. With cam-to-cam sessions,
 						online sex dating and cybersex chat reach new, interactive levels of

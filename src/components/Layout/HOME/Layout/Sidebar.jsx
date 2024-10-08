@@ -228,16 +228,20 @@ const Sidebar = ({ unread, closeMenu }) => {
   return (
     <div className="sidebar xl:w-60" style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
       <div>
-        {userInfo?.profile_type === "couple" ?
-          <img src={userInfo?.image ? userInfo?.image : "images/couple-avatar.jpg"} />
-          :
-          <img
-            src={userInfo?.image ? userInfo?.image : userInfo?.gender === "male" ? "/images/boy-avatar.jpg" : userInfo?.gender === "female" ? "/images/girl-avatar.jpg" : "/images/trans avatar.png"}
-            className="hidden aspect-square object-cover xl:block"
-          />
-        }
+        <Link to={'/user-detail'} style={{width: '230px', height: '230px', display: 'block'}}>
+          {userInfo?.profile_type === "couple" ?
+            <img src={userInfo?.image ? userInfo?.image : "images/couple-avatar.jpg"} />
+            :
+            <img
+              src={userInfo?.image ? userInfo?.image : userInfo?.gender === "male" ? "/images/boy-avatar.jpg" : userInfo?.gender === "female" ? "/images/girl-avatar.jpg" : "/images/trans avatar.png"}
+              className="hidden aspect-square object-cover xl:block"
+            />
+          }
+        </Link>
         <div className="pt-0 pb-8 xl:py-4">
-          <h3 className="font-semibold text-22px mb-3 ">{userInfo.username}</h3>
+          <Link to={'/user-detail'}>
+            <h3 className="font-semibold text-22px mb-3 ">{userInfo.username}</h3> 
+          </Link>
           <p className="flex items-center justify-between gap-4 mb-3 hover:text-orange font-body_font text-lg">
             {userInfo.country || "Country name"}
             <Link className="cursor-pointer">

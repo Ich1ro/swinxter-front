@@ -26,7 +26,7 @@ const EmailVerified = () => {
 			<div className='min-h-[350px] md:min-h-[320px] flex justify-center items-end bg-black rounded-b-50px'>
 				{success ? (
 					<div className='container mx-auto pb-20 text-center'>
-						<h3 className='font-secondary_font text-40px'>Email Verified</h3>
+						<h3 className='text-40px'>Email Verified</h3>
 						<p className='text-xl'>Your Email address has been verified</p>
 						<p className='text-md'>
 							Click here to{' '}
