@@ -258,14 +258,16 @@ const DbHeader = ({socket}) => {
                 style={{height: '56px'}}
                 onClick={() => setSidebar(!sidebar)}
               >
-                    {userInfo?.profile_type==="couple"?
-        <img src={userInfo?.image?userInfo?.image:"images/couple-avatar.jpg"}   className="block rounded-md object-contain"/>
-      :
-      <img
-          src={userInfo?.image?userInfo?.image: userInfo?.gender==="male" ? "/images/boy-avatar.jpg"  :userInfo?.gender==="female" ? "/images/girl-avatar.jpg"  : "/images/trans avatar.png"}
-          className="block rounded-md object-contain"
-        />
-      }
+                 <Link to={'/user-detail'}>
+                  {userInfo?.profile_type==="couple"?
+                    <img src={userInfo?.image?userInfo?.image:"images/couple-avatar.jpg"}   className="block rounded-md object-contain"/>
+                  :
+                    <img
+                      src={userInfo?.image?userInfo?.image: userInfo?.gender==="male" ? "/images/boy-avatar.jpg"  :userInfo?.gender==="female" ? "/images/girl-avatar.jpg"  : "/images/trans avatar.png"}
+                      className="block rounded-md object-contain"
+                    />
+                  }
+                </Link>
                 <span className="flex xl:hidden text-base">
                   <HiChevronDown />
                 </span>

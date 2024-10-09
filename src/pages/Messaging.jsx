@@ -12,9 +12,9 @@ const Messaging = () => {
 
 	useEffect(() => {
 		setUserInfo(user);
-	}, [user?.payement?.membership]);
+	}, [user?.payment?.membership]);
 
-	if (userInfo?.payement?.membership) {
+	if (userInfo?.payment?.membership) {
 		return (
 			<ChatContextProvider>
 				<div

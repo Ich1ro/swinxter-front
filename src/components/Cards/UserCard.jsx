@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const UserCard = ({userInfo}) => {
-  console.log(userInfo);
+  // console.log(userInfo);
   
   const navigate = useNavigate();
   return (
