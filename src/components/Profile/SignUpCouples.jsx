@@ -179,8 +179,8 @@ const SignUpCouple = () => {
 			label: 'arm',
 		},
 		{
-			name: 'Bikni',
-			label: 'bikni',
+			name: 'Bikini',
+			label: 'bikini',
 		},
 		{
 			name: 'Buns',

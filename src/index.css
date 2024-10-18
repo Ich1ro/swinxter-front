@@ -39,3 +39,32 @@ svg {
   filter: blur(0);
   mask-image: linear-gradient(to top, rgba(32, 32, 32, 1) 70%, rgba(32, 32, 32, 0) 100%);
 }
+
+.dark-popup {
+  background-color: #1f1f1f !important; /* Dark background for popup */
+  color: #fff !important; /* White text for items */
+}
+
+.rs-picker-default .rs-picker-toggle {
+  background-color: #1f1f1f !important; /* Dark background for input */
+  color: #fff !important; /* White text */
+  border: 1px solid #333 !important; /* Border to match dark theme */
+}
+
+.rs-picker-toggle-placeholder {
+  color: #999 !important; /* Light gray color for placeholder */
+}
+
+.rs-picker-menu {
+  background-color: #1f1f1f !important; /* Dark background inside the menu */
+  color: #fff !important; /* White text for the menu */
+}
+
+.rs-picker-menu-item {
+  background-color: #1f1f1f !important; /* Dark item background */
+  color: #fff !important; /* White text */
+}
+
+.rs-picker-menu-item:hover {
+  background-color: #333 !important; /* Darker hover effect */
+}

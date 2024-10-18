@@ -347,7 +347,7 @@ h1::first-letter,h2::first-letter,h3::first-letter,h4::first-letter,h5::first-le
 
 /* Form css */
 .radio_btn_wrapper {
-  @apply flex flex-wrap lg:flex-nowrap justify-start lg:justify-between gap-3
+  @apply flex flex-wrap lg:flex-nowrap justify-end gap-3
 }
 
 .radio_btn_wrapper .radio_field {
