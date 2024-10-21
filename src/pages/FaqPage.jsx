@@ -4,6 +4,7 @@ import {
 	AccordionHeader,
 } from '@material-tailwind/react';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 function Icon({ id, open }) {
 	return (
 		<svg
@@ -24,6 +25,7 @@ function Icon({ id, open }) {
 const FaqPage = () => {
 	const [open, setOpen] = useState(0);
 	const [alwaysOpen, setAlwaysOpen] = React.useState(true);
+	const navigate = useNavigate();
 	const handleOpen = value => {
 		if (alwaysOpen) {
 			setAlwaysOpen(false);

@@ -606,7 +606,7 @@ const CoupleEditDetailPage = () => {
 											onChange={handleChange}
 											onClick={() => setCtmSelect(!ctmSelect)}
 										>
-											{userDetails.body_hair.length === 0
+											{userDetails.body_hair.length === 1
 												? 'Please select'
 												: userDetails?.body_hair.map((el, i) => (
 														<span>
@@ -628,7 +628,7 @@ const CoupleEditDetailPage = () => {
 									<div className='select_label' name='body_hair'>
 										<span></span>
 									</div>
-									<div className='select_options'>
+									<div className='select_options_black select_options'>
 										<div className='optionBox'>Please select</div>
 										{hair.map((el, i) => (
 											<div className='optionBox' key={i}>
@@ -1180,8 +1180,8 @@ const CoupleEditDetailPage = () => {
 											onChange={handleChange2}
 											onClick={() => setCtmSelect2(!ctmSelect2)}
 										>
-											{person2.body_hair.length === 0
-												? person2.body_hair || 'Please select'
+											{person2.body_hair.length === 1
+												? <>Please select</>
 												: person2?.body_hair.map((el, i) => (
 														<span>
 															{el}
@@ -1202,7 +1202,7 @@ const CoupleEditDetailPage = () => {
 									<div className='select_label' name='body_hair'>
 										<span></span>
 									</div>
-									<div className='select_options'>
+									<div className='select_options_black select_options'>
 										<div className='optionBox'>Please select</div>
 										{hair.map((el, i) => (
 											<div className='optionBox' key={i}>

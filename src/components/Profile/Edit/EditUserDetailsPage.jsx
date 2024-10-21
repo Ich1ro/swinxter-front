@@ -256,7 +256,7 @@ const EditUserDetailsPage = () => {
 
 	const handleBodyhair = e => {
 		const selectedValue = e.target.value;
-		const updatedData = [...userDetails.body_hair]; // Create a copy of the current selected data
+		const updatedData = [...userDetails?.body_hair]; // Create a copy of the current selected data
 
 		if (updatedData.includes(selectedValue)) {
 			// If the selected value is already in the data, remove it
@@ -430,21 +430,21 @@ const EditUserDetailsPage = () => {
 											className='select_label bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
 											name='body_hair'
 											style={{ height: '49px' }}
-											value={userDetails.body_hair}
+											value={userDetails?.body_hair}
 											onChange={handleChange}
 											onClick={() => setCtmSelect(!ctmSelect)}
 										>
-											{userDetails.body_hair.length === 0
-												? 'Please select'
-												: userDetails?.body_hair.map((el, i) => (
+											{(!Array.isArray(userDetails?.body_hair) || userDetails?.body_hair.length === 1)
+												? <>Please select</>
+												: userDetails?.body_hair?.map((el, i) => (
 														<span>
 															{el}
 															{i !== 0 &&
-																i !== userDetails?.body_hair.length - 1 && (
+																i !== userDetails?.body_hair?.length - 1 && (
 																	<span>,</span>
 																)}
 														</span>
-												  ))}
+											))}
 											<span className='select_label_icon'>
 												<BiChevronDown />
 											</span>
@@ -456,7 +456,7 @@ const EditUserDetailsPage = () => {
 									<div className='select_label' name='body_hair'>
 										<span></span>
 									</div>
-									<div className='select_options'>
+									<div className='select_options_black select_options'>
 										<div className='optionBox'>Please select</div>
 										{hair.map((el, i) => (
 											<div className='optionBox' key={i}>
@@ -469,13 +469,13 @@ const EditUserDetailsPage = () => {
 														value={el.name}
 														onChange={handleBodyhair}
 														checked={
-															userDetails.body_hair.includes(el.name) ||
+															userDetails?.body_hair?.includes(el.name) ||
 															el.selected
 														}
 													/>
 													<label htmlFor={el.label}>
 														{' '}
-														{userDetails.body_hair.includes(el.name)}
+														{userDetails?.body_hair?.includes(el.name)}
 													</label>
 												</div>
 											</div>

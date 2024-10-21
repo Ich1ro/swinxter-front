@@ -991,7 +991,7 @@ const SignUpCouple = () => {
 														</span>
 													</div>
 
-													<div className='select_options'>
+													<div className='select_options_black select_options'>
 														{hair.map((el, i) => (
 															<div className='optionBox' key={i}>
 																<span>{el.name}</span>
@@ -1460,7 +1460,7 @@ const SignUpCouple = () => {
 														</span>
 													</div>
 
-													<div className='select_options'>
+													<div className='select_options_black select_options'>
 														{hair.map((el, i) => (
 															<div className='optionBox' key={i}>
 																<span>{el.name}</span>
