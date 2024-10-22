@@ -871,7 +871,7 @@ const CoupleEditDetailPage = () => {
 
 									<option value='low importance'>Low Importance</option>
 									<option value='medium importance'>Medium Importance</option>
-									<option value='very importance'>Very Importance</option>
+									<option value='very importance'>High Importance</option>
 									<option value='no'>No</option>
 								</select>
 							</div>
@@ -896,7 +896,7 @@ const CoupleEditDetailPage = () => {
 
 									<option value='low importance'>Low Importance</option>
 									<option value='medium importance'>Medium Importance</option>
-									<option value='very importance'>Very Importance</option>
+									<option value='very importance'>High Importance</option>
 									<option value='no'>No</option>
 								</select>
 							</div>
@@ -1180,17 +1180,18 @@ const CoupleEditDetailPage = () => {
 											onChange={handleChange2}
 											onClick={() => setCtmSelect2(!ctmSelect2)}
 										>
-											{person2.body_hair.length === 1
-												? <>Please select</>
-												: person2?.body_hair.map((el, i) => (
-														<span>
-															{el}
-															{i !== 0 &&
-																i !== person2?.body_hair.length - 1 && (
-																	<span>, </span>
-																)}
-														</span>
-												  ))}
+											{person2.body_hair.length === 1 ? (
+												<>Please select</>
+											) : (
+												person2?.body_hair.map((el, i) => (
+													<span>
+														{el}
+														{i !== 0 && i !== person2?.body_hair.length - 1 && (
+															<span>, </span>
+														)}
+													</span>
+												))
+											)}
 											<span className='select_label_icon'>
 												<BiChevronDown />
 											</span>
@@ -1444,7 +1445,7 @@ const CoupleEditDetailPage = () => {
 
 									<option value='low importance'>Low Importance</option>
 									<option value='medium importance'>Medium Importance</option>
-									<option value='very importance'>Very Importance</option>
+									<option value='very importance'>High Importance</option>
 									<option value='no'>No</option>
 								</select>
 							</div>
@@ -1469,7 +1470,7 @@ const CoupleEditDetailPage = () => {
 
 									<option value='low importance'>Low Importance</option>
 									<option value='medium importance'>Medium Importance</option>
-									<option value='very importance'>Very Importance</option>
+									<option value='very importance'>High Importance</option>
 									<option value='no'>No</option>
 								</select>
 							</div>

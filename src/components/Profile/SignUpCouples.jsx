@@ -1195,7 +1195,7 @@ const SignUpCouple = () => {
 														Medium Importance
 													</option>
 													<option value='very importance'>
-														Very Importance
+														High Importance
 													</option>
 													<option value='no'>No</option>
 												</select>
@@ -1214,7 +1214,7 @@ const SignUpCouple = () => {
 														Medium Importance
 													</option>
 													<option value='very importance'>
-														Very Importance
+														High Importance
 													</option>
 													<option value='no'>No</option>
 												</select>
@@ -1662,7 +1662,7 @@ const SignUpCouple = () => {
 														Medium Importance
 													</option>
 													<option value='very importance'>
-														Very Importance
+														High Importance
 													</option>
 													<option value='no'>No</option>
 												</select>
@@ -1681,7 +1681,7 @@ const SignUpCouple = () => {
 														Medium Importance
 													</option>
 													<option value='very importance'>
-														Very Importance
+														High Importance
 													</option>
 													<option value='no'>No</option>
 												</select>

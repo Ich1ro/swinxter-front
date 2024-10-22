@@ -1015,7 +1015,7 @@ const SinglePerson = () => {
 											<option value='medium importance'>
 												Medium Importance
 											</option>
-											<option value='very importance'>Very Importance</option>
+											<option value='very importance'>High Importance</option>
 											<option value='no'>No</option>
 										</select>
 									</div>
@@ -1032,7 +1032,7 @@ const SinglePerson = () => {
 											<option value='medium importance'>
 												Medium Importance
 											</option>
-											<option value='very importance'>Very Importance</option>
+											<option value='very importance'>High Importance</option>
 											<option value='no'>No</option>
 										</select>
 									</div>

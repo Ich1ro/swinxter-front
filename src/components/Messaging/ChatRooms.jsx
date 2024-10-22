@@ -18,7 +18,7 @@ const ChatRooms = () => {
   return (
     <div className='chatroom'>
       <div className='chatroom_header'>
-          <h1>Chats</h1>
+          <h1>Messages</h1>
           {
             friends?
             <IoArrowBackSharp onClick={() => {setFriends(0)}} style={{cursor: "pointer"}}/>

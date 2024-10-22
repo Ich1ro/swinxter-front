@@ -434,17 +434,20 @@ const EditUserDetailsPage = () => {
 											onChange={handleChange}
 											onClick={() => setCtmSelect(!ctmSelect)}
 										>
-											{(!Array.isArray(userDetails?.body_hair) || userDetails?.body_hair.length === 1)
-												? <>Please select</>
-												: userDetails?.body_hair?.map((el, i) => (
-														<span>
-															{el}
-															{i !== 0 &&
-																i !== userDetails?.body_hair?.length - 1 && (
-																	<span>,</span>
-																)}
-														</span>
-											))}
+											{!Array.isArray(userDetails?.body_hair) ||
+											userDetails?.body_hair.length === 1 ? (
+												<>Please select</>
+											) : (
+												userDetails?.body_hair?.map((el, i) => (
+													<span>
+														{el}
+														{i !== 0 &&
+															i !== userDetails?.body_hair?.length - 1 && (
+																<span>,</span>
+															)}
+													</span>
+												))
+											)}
 											<span className='select_label_icon'>
 												<BiChevronDown />
 											</span>
@@ -722,7 +725,7 @@ const EditUserDetailsPage = () => {
 
 									<option value='low importance'>Low Importance</option>
 									<option value='medium importance'>Medium Importance</option>
-									<option value='very importance'>Very Importance</option>
+									<option value='very importance'>High Importance</option>
 									<option value='no'>No</option>
 								</select>
 							</div>
@@ -747,7 +750,7 @@ const EditUserDetailsPage = () => {
 
 									<option value='low importance'>Low Importance</option>
 									<option value='medium importance'>Medium Importance</option>
-									<option value='very importance'>Very Importance</option>
+									<option value='very importance'>High Importance</option>
 									<option value='no'>No</option>
 								</select>
 							</div>
