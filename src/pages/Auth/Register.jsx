@@ -134,30 +134,30 @@ const Signup = () => {
 		setLoading(false);
 	};
 
-	const googleLogin = useGoogleLogin({
-		onSuccess: async tokenResponse => {
-			const userInfo = await axios.get(
-				'https://www.googleapis.com/oauth2/v3/userinfo',
-				{ headers: { Authorization: `Bearer ${tokenResponse.access_token} ` } }
-			);
+	// const googleLogin = useGoogleLogin({
+	// 	onSuccess: async tokenResponse => {
+	// 		const userInfo = await axios.get(
+	// 			'https://www.googleapis.com/oauth2/v3/userinfo',
+	// 			{ headers: { Authorization: `Bearer ${tokenResponse.access_token} ` } }
+	// 		);
 
-			const { data } = await axios.post(`${BASE_URL}/api/register`, {
-				email: userInfo?.data.email,
-				username: userInfo?.data.name,
-				logintype: 'google',
-			});
-			if (!data) {
-				toast.error('Failed to Create User');
-			} else {
-				if (data.data.isVerify) {
-					navigate('/home');
-				} else {
-					navigate('/verify_email');
-				}
-			}
-		},
-		onError: errorResponse => console.log(errorResponse),
-	});
+	// 		const { data } = await axios.post(`${BASE_URL}/api/register`, {
+	// 			email: userInfo?.data.email,
+	// 			username: userInfo?.data.name,
+	// 			logintype: 'google',
+	// 		});
+	// 		if (!data) {
+	// 			toast.error('Failed to Create User');
+	// 		} else {
+	// 			if (data.data.isVerify) {
+	// 				navigate('/home');
+	// 			} else {
+	// 				navigate('/verify_email');
+	// 			}
+	// 		}
+	// 	},
+	// 	onError: errorResponse => console.log(errorResponse),
+	// });
 
 	return (
 		<div className='sign_up__block pt-65px' style={{ marginTop: '225px' }}>

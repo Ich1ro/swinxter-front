@@ -128,7 +128,7 @@ useEffect(() => {
         <Route path="forgot" element={<Layout><ForgotPassword /></Layout>} />
         <Route path="/single/:userId" element={<SinglePerson/>} />
         <Route path="/couple/:userId" element={<SignUpCouple/>} />
-        <Route path="/verify_email" element={<Layout><VerifyEmail/></Layout>} />
+        <Route path="/verify_email/:userId" element={<Layout><VerifyEmail/></Layout>} />
         <Route path="/verified/:id" element={<Layout><EmailVerified/></Layout>} />
         <Route path="/forgot" element={<Layout><ForgotPassword/></Layout>} />
     

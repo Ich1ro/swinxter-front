@@ -478,7 +478,7 @@ const SignUpCouple = () => {
 			);
 			if (isGenderSelected && isGenderSelected_2 && isGenderSelected) {
 				if (data) {
-					navigate('/verify_email', { state: state?.email });
+					navigate(`/verify_email/${userId}`, { state: state?.email });
 					setForm({
 						body_type: '',
 						height: '',
@@ -595,7 +595,7 @@ const SignUpCouple = () => {
 													className='primary_btn gradient  px-8 bg-gradient-to-r from-[#F79220]
  to-[#F94A2B] rounded-lg py-2'
 												>
-													Add Photo
+													Add Photo *
 												</span>
 											)}
 										</label>
@@ -957,7 +957,7 @@ const SignUpCouple = () => {
 												</div>
 											</div>
 											<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>
-												<span>Gender</span>
+												<span>Gender *</span>
 												<select
 													className='bg-[#202020] text-white text-end'
 													name='gender'
@@ -1261,12 +1261,12 @@ const SignUpCouple = () => {
 													value={form.Language}
 												></input>
 											</div>
-											<div className='bg-[#202020]  px-10 py-5 '>
+											<div className='bg-[#202020] px-10 py-5'>
 												<div>
 													<span>Experience Level</span>
 												</div>
 
-												<div className='flex  gap-12 text-end py-4'>
+												<div className='flex gap-2 text-end py-4' style={{flexWrap: 'wrap', width: '100%', justifyContent: 'space-between'}}>
 													<div className='ngBox flex items-center'>
 														<div className='it_checkbox'>
 															<input
@@ -1424,7 +1424,7 @@ const SignUpCouple = () => {
 												</div>
 											</div>
 											<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>
-												<span>Gender</span>
+												<span>Gender *</span>
 												<select
 													className='bg-[#202020] text-white text-end'
 													name='gender_2'
@@ -1728,12 +1728,12 @@ const SignUpCouple = () => {
 													value={form2.Language_2}
 												></input>
 											</div>
-											<div className='bg-[#202020]  px-10 py-5 '>
+											<div className='bg-[#202020] px-10 py-5'>
 												<div>
 													<span>Experience Level</span>
 												</div>
 
-												<div className='flex  gap-12 text-end py-4'>
+												<div className='flex gap-2 text-end py-4' style={{flexWrap: 'wrap', width: '100%', justifyContent: 'space-between'}}>
 													{/* <label>
                           <input
                             type="radio"

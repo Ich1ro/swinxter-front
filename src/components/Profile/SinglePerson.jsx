@@ -378,7 +378,7 @@ const SinglePerson = () => {
 
 			if (isGenderSelected && isPhotoUploaded) {
 				if (data) {
-					navigate('/verify_email', { state: state?.email });
+					navigate(`/verify_email/${userId}`, { state: state?.email });
 				} else {
 					toast.error('Cannot Update');
 				}
@@ -433,7 +433,7 @@ const SinglePerson = () => {
 													className='primary_btn gradient  px-8 bg-gradient-to-r from-[#F79220]
  to-[#F94A2B] rounded-lg py-2'
 												>
-													Add Photo
+													Add Photo *
 												</span>
 											)}
 										</label>
@@ -1079,12 +1079,12 @@ const SinglePerson = () => {
 										></input>
 									</div>
 
-									<div className='bg-[#202020] grid grid-cols-2 px-10 py-5 gap-56'>
+									<div className='bg-[#202020] grid grid-cols-2 px-10 py-5'>
 										<div>
 											<span>Experience Level</span>
 										</div>
 
-										<div className='flex  gap-10 text-end'>
+										<div className='flex gap-8 text-end'>
 											<div class='ngBox flex items-center'>
 												<div class='it_checkbox'>
 													<input

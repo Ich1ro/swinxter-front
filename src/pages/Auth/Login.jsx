@@ -14,7 +14,7 @@ const Login = () => {
 	const location = useLocation();
 	const from = location.state?.from?.pathname || '/home';
 	const [loading, setLoading] = useState(false);
-	const [login, setLogin] = useState({ email: '', password: '' });
+	const [login, setLogin] = useState({ identifier: '', password: '' });
 	const [loginErrors, setLoginErrors] = useState({});
 	const [rememberMe, setRememberMe] = useState(false);
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -27,21 +27,21 @@ const Login = () => {
 	};
 
 	useEffect(() => {
-		if (login.email || login.password) {
+		if (login.identifier || login.password) {
 			setLoginErrors(validate(login));
 		}
 	}, [login]);
 
 	const validate = value => {
 		let errors = {};
-		const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-		if (!value.email) {
-			errors.email = 'email is required';
-		} else if (!regex.test(value.email)) {
-			errors.email = 'Please enter the valid email';
+		const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+		if (!value.identifier) {
+			errors.identifier = 'Username or email is required';
+		} else if (!emailRegex.test(value.identifier) && value.identifier.includes('@')) {
+			errors.identifier = 'Please enter a valid email';
 		}
 		if (!value.password) {
-			errors.password = 'password is required';
+			errors.password = 'Password is required';
 		}
 		return errors;
 	};
@@ -53,8 +53,8 @@ const Login = () => {
 				setLoading(true);
 				let ans;
 				if (
-					login.email === 'test@gmail.com' ||
-					login.email === 'swinxter@gmail.com'
+					login.identifier === 'test@gmail.com' ||
+					login.identifier === 'swinxter@gmail.com'
 				) {
 					const { data } = await api.post(`/login4`, login, {
 						withCredentials: true,
@@ -87,7 +87,7 @@ const Login = () => {
 					});
 					dispatch(loadUser());
 
-					setLogin({ email: '', password: '' });
+					setLogin({ identifier: '', password: '' });
 					setRememberMe(false);
 					toast.success('🦄 Login Successful', {
 						position: 'top-right',
@@ -151,42 +151,42 @@ const Login = () => {
 	//   },
 	// });
 
-	const googleLogin = useGoogleLogin({
-		onSuccess: async tokenResponse => {
-			const userInfo = await axios.get(
-				'https://www.googleapis.com/oauth2/v3/userinfo',
-				{ headers: { Authorization: `Bearer ${tokenResponse.access_token} ` } }
-			);
+	// const googleLogin = useGoogleLogin({
+	// 	onSuccess: async tokenResponse => {
+	// 		const userInfo = await axios.get(
+	// 			'https://www.googleapis.com/oauth2/v3/userinfo',
+	// 			{ headers: { Authorization: `Bearer ${tokenResponse.access_token} ` } }
+	// 		);
 
-			const { data } = await axios.post(`${BASE_URL}/api/register`, {
-				email: userInfo?.data.email,
-				username: userInfo?.data.name,
-				logintype: 'google',
-			});
+	// 		const { data } = await axios.post(`${BASE_URL}/api/register`, {
+	// 			email: userInfo?.data.email,
+	// 			username: userInfo?.data.name,
+	// 			logintype: 'google',
+	// 		});
 
-			if (!data) {
-				toast.error('failed to create user');
-			} else {
-				navigate('/');
+	// 		if (!data) {
+	// 			toast.error('failed to create user');
+	// 		} else {
+	// 			navigate('/');
 
-				toast.success('🦄 Login Successful!', {
-					position: 'top-right',
-					autoClose: 2000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-					theme: 'colored',
-				});
-			}
-		},
-		onError: errorResponse => console.log(errorResponse),
-	});
+	// 			toast.success('🦄 Login Successful!', {
+	// 				position: 'top-right',
+	// 				autoClose: 2000,
+	// 				hideProgressBar: false,
+	// 				closeOnClick: true,
+	// 				pauseOnHover: true,
+	// 				draggable: true,
+	// 				progress: undefined,
+	// 				theme: 'colored',
+	// 			});
+	// 		}
+	// 	},
+	// 	onError: errorResponse => console.log(errorResponse),
+	// });
 	return (
 		<div className='sign_up__block pt-65px' style={{ marginTop: '225px' }}>
 			<div className='container mx-auto relative z-1'>
-				<div className='sign-up__body grid grid-cols-1 md:grid-cols-2 rounded-3xl md:rounded-t-58 md:rounded-r-58 bg-black mt-[-50px] md:rounded-58 relative  border-b-2 border-t-[1px] border-orange'>
+				<div className='sign-up__body grid grid-cols-1 md:grid-cols-2 rounded-3xl md:rounded-t-58 md:rounded-r-58 bg-black mt-[-50px] md:rounded-58 relative border-b-2 border-t-[1px] border-orange'>
 					<div className='sign-up__form flex flex-col justify-center gap-30 py-6 px-6 lg:py-11 lg:px-14'>
 						<h2 className='text-white text-2xl sm:text-3xl xl:text-5xl text-start font-bold mb-6'>
 							Nice to see you again
@@ -198,48 +198,53 @@ const Login = () => {
 							<div>
 								<div className='flex flex-wrap rounded-md input_field'>
 									<label
-										htmlFor='username'
-										className='rounded-l-md sm:w-[100px] xl:w-[195px] mb-1 sm:mb-0 sm:h-[49px] flex items-center justify-center lg:justify-start ps-0 lg:ps-4 text-sm xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+										htmlFor='identifier'
+										className='rounded-l-md sm:w-[100px] xl:w-[195px] mb-1 sm:mb-0 sm:h-[49px] flex items-center justify-center lg:justify-start ps-0 lg:ps-4 text-sm xl:text-lg text-white font-normal leading-5 xl:leading-29 text-center lg:text-start'
 									>
-										Email
+										Username/Email
 									</label>
 									<input
-										name='email'
-										value={login.email}
+										name='identifier'
+										value={login.identifier}
 										onChange={e => handleChange(e)}
 										type='text'
-										id='username'
+										id='identifier'
 										autoComplete='off'
 										className='bg-black border rounded-md sm:border-none sm:border-l-2 border-orange focus:outline-none focus-visible:none w-full sm:w-[calc(100%-100px)] xl:w-[calc(100%-195px)] h-[49px] border-gradient3 text-gray font-normal xl:text-lg sm:rounded-none sm:rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
-										placeholder='Email'
+										placeholder='Username or Email'
 										required
 									/>
 								</div>
-								{loginErrors.email && (
+								{loginErrors.identifier && (
 									<p className='w-full capitalize text-s p-1'>
-										{loginErrors.email}
+										{loginErrors.identifier}
 									</p>
 								)}
 							</div>
 							<div className='flex flex-wrap rounded-md input_field'>
 								<label
 									htmlFor='password'
-									className='rounded-l-md sm:w-[100px] xl:w-[195px] mb-1 sm:mb-0 sm:h-[49px] flex items-center justify-center lg:justify-start ps-0 lg:ps-4 text-sm xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+									className='rounded-l-md sm:w-[100px] xl:w-[195px] mb-1 sm:mb-0 sm:h-[49px] flex items-center justify-center lg:justify-start ps-0 lg:ps-4 text-sm xl:text-lg text-white font-normal leading-5 xl:leading-29 text-center lg:text-start'
 								>
 									Password
 								</label>
 								<input
-									type='password'
 									name='password'
 									value={login.password}
 									onChange={e => handleChange(e)}
+									type='password'
 									id='password'
 									autoComplete='off'
-									placeholder='Enter Password'
 									className='bg-black border rounded-md sm:border-none sm:border-l-2 border-orange focus:outline-none focus-visible:none w-full sm:w-[calc(100%-100px)] xl:w-[calc(100%-195px)] h-[49px] border-gradient3 text-gray font-normal xl:text-lg sm:rounded-none sm:rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									placeholder='Password'
 									required
 								/>
 							</div>
+							{loginErrors.password && (
+								<p className='w-full capitalize text-s p-1'>
+									{loginErrors.password}
+								</p>
+							)}
 							<div className='flex flex-wrap gap-y-5 items-center justify-between'>
 								<div className='flex items-center'>
 									<div className='flex items-center h-5'>
@@ -284,22 +289,6 @@ const Login = () => {
 									</span>
 								</div>
 							)}
-							{/* <div className="or-block flex justify-center items-center gap-6">
-                    <div className="line-1 w-full h-[1px] bg-white"></div>
-                    <div className="text-white px-1">OR</div>
-                    <div className="line-1 w-full h-[1px] bg-white"></div>
-                  </div>
-                  <button
-                    onClick={() => googleLogin()}
-                    className="w-full mb-6 bg-gray-900 sign-up-google flex justify-center items-center text-white rounded-md text-base sm:text-lg xl:text-25px font-light py-3"
-                  >
-                    Sign up with Google{" "}
-                    <img
-                      src="images/google-1.png"
-                      alt="google image"
-                      className="ms-3"
-                    />
-                  </button> */}
 						</form>
 					</div>
 					<div className='sign-up__image relative rounded-b-3xl md:rounded-r-58'>

@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import api from '../../../utils/api';
+import { useNavigate } from 'react-router-dom';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 const VerifyEmail = () => {
 	const { state } = useLocation();
+	const { userId } = useParams();
+	const navigate = useNavigate()
+	const [isVerify, setIsVerify] = useState(false)
+
+	useEffect(() => {
+		getVerify();
+	}, []);
+
+	const getVerify = async () => {
+		try {
+			const { data } = await api.get(`/userverify/${userId}`);
+			if (data) {
+				setIsVerify(data)
+			} else {
+				console.log('Owner not Exist');
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	if(isVerify) {
+		navigate('/login')
+	}
 
 	return (
 		<div className='bg-black-20'>
