@@ -389,64 +389,6 @@ const AllUsers = () => {
 									user?.drugs?.toLowerCase() === 'more, thanks')
 						)));
 
-			// const matchesTreePicker = selectedTreePicker.length === 0 ||  ( // Проверка по Body Type
-			// 	selectedTreePicker.filter(selected =>
-			// 	  [3, 4, 5].includes(selected) // 3 - Slim, 4 - Athletic, 5 - Average
-			// 	).every(selected =>
-			// 	  (selected === 3 && user?.body_type?.toLowerCase() === 'slim') ||
-			// 	  (selected === 4 && user?.body_type?.toLowerCase() === 'athletic') ||
-			// 	  (selected === 5 && user?.body_type?.toLowerCase() === 'average')
-			// 	) &&
-			// 	// Проверка по Piercings
-			// 	selectedTreePicker.filter(selected =>
-			// 	  [18, 19].includes(selected) // 18 - Yes, 19 - No
-			// 	).every(selected =>
-			// 	  (selected === 18 && user?.piercings?.toLowerCase() === 'yes') ||
-			// 	  (selected === 19 && user?.piercings?.toLowerCase() === 'no')
-			// 	) &&
-			// 	// Проверка по Circumcised
-			// 	selectedTreePicker.filter(selected =>
-			// 	  [22, 23].includes(selected) // 22 - Yes, 23 - No
-			// 	).every(selected =>
-			// 	  (selected === 22 && user?.circumcised?.toLowerCase() === 'yes') ||
-			// 	  (selected === 23 && user?.circumcised?.toLowerCase() === 'no')
-			// 	) &&
-			// 	// Проверка по Tattoos
-			// 	selectedTreePicker.filter(selected =>
-			// 	  [25, 26, 27].includes(selected) // 25 - Yes, 26 - No, 27 - A few
-			// 	).every(selected =>
-			// 	  (selected === 25 && user?.tattoos?.toLowerCase() === 'yes') ||
-			// 	  (selected === 26 && user?.tattoos?.toLowerCase() === 'no') ||
-			// 	  (selected === 27 && user?.tattoos?.toLowerCase() === 'a few')
-			// 	) &&
-			// 	// Проверка по Smoking
-			// 	selectedTreePicker.filter(selected =>
-			// 	  [30, 31, 32].includes(selected) // 30 - Yes, 31 - No, 32 - Occasionally
-			// 	).every(selected =>
-			// 	  (selected === 30 && user?.smoking?.toLowerCase() === 'yes') ||
-			// 	  (selected === 31 && user?.smoking?.toLowerCase() === 'no') ||
-			// 	  (selected === 32 && user?.smoking?.toLowerCase() === 'occasionally')
-			// 	) &&
-			// 	// Проверка по Drinking
-			// 	selectedTreePicker.filter(selected =>
-			// 	  [34, 35, 36, 37].includes(selected) // 34 - Not your business, 35 - Like a fish, 36 - Like a cactus, 37 - I drink if offered
-			// 	).every(selected =>
-			// 	  (selected === 34 && user?.drinking === 'Not your business') ||
-			// 	  (selected === 35 && user?.drinking === 'Like a fish') ||
-			// 	  (selected === 36 && user?.drinking === 'Like a cactus') ||
-			// 	  (selected === 37 && user?.drinking === 'I drink if offered')
-			// 	) &&
-			// 	// Проверка по Drugs
-			// 	selectedTreePicker.filter(selected =>
-			// 	  [39, 40, 41, 42].includes(selected) // 39 - Not your business, 40 - No, thanks, 41 - Yes, thanks, 42 - More, thanks
-			// 	).every(selected =>
-			// 	  (selected === 39 && user?.drugs?.toLowerCase() === 'not your business') ||
-			// 	  (selected === 40 && user?.drugs?.toLowerCase() === 'no, thanks') ||
-			// 	  (selected === 41 && user?.drugs?.toLowerCase() === 'yes, thanks') ||
-			// 	  (selected === 42 && user?.drugs?.toLowerCase() === 'more, thanks')
-			// 	)
-			//   );
-
 			return (
 				matchesSearch &&
 				matchesGender &&

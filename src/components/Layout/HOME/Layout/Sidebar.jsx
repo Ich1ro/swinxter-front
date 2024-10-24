@@ -220,8 +220,9 @@ const Sidebar = ({ unread, closeMenu }) => {
 
   const handlelogout = async () => {
     await api.post(`/logout/${userInfo?._id}`).then((res) => {
-      dispatch({ type: LOGOUT });
-      navigate("/login");
+      dispatch({ type: LOGOUT }).then(() => {
+        navigate("/login");
+      });
     }).catch((err) => console.log(err))
   };
 
