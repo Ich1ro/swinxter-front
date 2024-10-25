@@ -630,7 +630,7 @@ const CoupleEditDetailPage = () => {
 									</div>
 									<div className='select_options_black select_options'>
 										<div className='optionBox'>Please select</div>
-										{hair.map((el, i) => (
+										{hair?.map((el, i) => (
 											<div className='optionBox' key={i}>
 												<span>{el.name}</span>
 												<div className='input_option'>
@@ -694,7 +694,7 @@ const CoupleEditDetailPage = () => {
 										onChange={handleChange}
 									>
 										<option value=''>Please Select</option>
-										{heights.map((height, i) => (
+										{heights?.map((height, i) => (
 											<option key={i} value={height}>
 												{height}
 											</option>
@@ -718,7 +718,7 @@ const CoupleEditDetailPage = () => {
 										onChange={handleChange}
 									>
 										<option value=''>Please Select</option>
-										{weights.map((weight, i) => (
+										{weights?.map((weight, i) => (
 											<option key={i} value={weight}>
 												{weight}
 											</option>
@@ -1205,7 +1205,7 @@ const CoupleEditDetailPage = () => {
 									</div>
 									<div className='select_options_black select_options'>
 										<div className='optionBox'>Please select</div>
-										{hair.map((el, i) => (
+										{hair?.map((el, i) => (
 											<div className='optionBox' key={i}>
 												<span>{el.name}</span>
 												<div className='input_option'>
@@ -1268,7 +1268,7 @@ const CoupleEditDetailPage = () => {
 										onChange={handleChange2}
 									>
 										<option value=''>Please Select</option>
-										{heights.map((height, i) => (
+										{heights?.map((height, i) => (
 											<option key={i} value={height}>
 												{height}
 											</option>
@@ -1292,7 +1292,7 @@ const CoupleEditDetailPage = () => {
 										onChange={handleChange2}
 									>
 										<option value=''>Please Select</option>
-										{weights.map((weight, i) => (
+										{weights?.map((weight, i) => (
 											<option key={i} value={weight}>
 												{weight}
 											</option>
