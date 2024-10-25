@@ -608,7 +608,7 @@ const CoupleEditDetailPage = () => {
 										>
 											{userDetails.body_hair.length === 1
 												? 'Please select'
-												: userDetails?.body_hair.map((el, i) => (
+												: userDetails?.body_hair?.map((el, i) => (
 														<span>
 															{el}{' '}
 															{i !== 0 &&
@@ -1183,7 +1183,7 @@ const CoupleEditDetailPage = () => {
 											{person2.body_hair.length === 1 ? (
 												<>Please select</>
 											) : (
-												person2?.body_hair.map((el, i) => (
+												person2?.body_hair?.map((el, i) => (
 													<span>
 														{el}
 														{i !== 0 && i !== person2?.body_hair.length - 1 && (

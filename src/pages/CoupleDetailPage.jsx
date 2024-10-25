@@ -395,7 +395,7 @@ const navigate = useNavigate();
                       ))}
                     </div>
                     <div className="text-right">
-                      {userInfo?.couple?.person2?.body_hair.map((el, i) => (
+                      {userInfo?.couple?.person2?.body_hair?.map((el, i) => (
                         <span
                           className={`block  font-body_font`}
                           style={RenderStyle2}
