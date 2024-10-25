@@ -606,7 +606,7 @@ const CoupleEditDetailPage = () => {
 											onChange={handleChange}
 											onClick={() => setCtmSelect(!ctmSelect)}
 										>
-											{userDetails.body_hair.length === 1
+											{userDetails?.body_hair?.length === 1
 												? 'Please select'
 												: userDetails?.body_hair?.map((el, i) => (
 														<span>
