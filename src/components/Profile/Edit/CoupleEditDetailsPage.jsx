@@ -612,7 +612,7 @@ const CoupleEditDetailPage = () => {
 														<span>
 															{el}{' '}
 															{i !== 0 &&
-																i !== userDetails?.body_hair.length - 1 && (
+																i !== userDetails?.body_hair?.length - 1 && (
 																	<span>, </span>
 																)}
 														</span>
