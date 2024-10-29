@@ -293,6 +293,9 @@ const SinglePerson = () => {
 		if (data) {
 			setIsPhotoUploaded(true);
 			toast.success('Image Uploaded');
+			toast(
+				"We kindly ask that the profile picture be a clear photo of your face. If it's a couple's profile, please use a photo that includes both of you together."
+			);
 		} else {
 			toast.error('failed to Upload Image');
 		}
@@ -447,7 +450,9 @@ const SinglePerson = () => {
 														className='preview_close absolute top-0 transform
                      translate-x-[40%] -translate-y-[50%] right-0 object-contain text-xl z-[1] w-5
                       h-5 rounded-full bg-orange text-black cursor-pointer'
-														onClick={e => setImage('')}
+														onClick={e => {
+															setImage('');
+														}}
 													>
 														<IoCloseCircleSharp />
 													</span>

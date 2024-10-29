@@ -86,7 +86,7 @@ const DbHeader = ({socket}) => {
         <div className="w-1/5 pr-5 flex justify-end">
           <Link to={user?"/home":"/"} className="flex justify-center w-full max-w-[15rem]">
             <img
-              src="/landingPage/images/SwinxterLogo-bg.png"
+              src="/landingPage/images/SwinxterLogo-bg.svg"
               alt="Logo"
               className="cursor-pointer max-w-100px block"
               height={'auto'}
@@ -116,7 +116,7 @@ const DbHeader = ({socket}) => {
               className="absolute top-[60px] left-5 w-full max-w-[100px] block xl:hidden"
             >
               <img
-                src="/landingPage/images/SwinxterLogo-bg.png"
+                src="/landingPage/images/SwinxterLogo-bg.svg"
                 alt="Logo"
                 className="cursor-pointer max-w-100px block"
               />

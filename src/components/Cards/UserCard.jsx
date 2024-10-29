@@ -38,8 +38,6 @@ const UserAge = ({ userInfo }) => {
 		ageDisplay = 23;
 	}
 
-	console.log(ageDisplay);
-
 	const getAgeStyle = (gender, isCouple, couple) => {
 		if (isCouple) {
 			const styles = [];
@@ -126,8 +124,6 @@ const UserAge = ({ userInfo }) => {
 };
 
 const UserCard = ({ userInfo }) => {
-	// console.log(userInfo);
-
 	const navigate = useNavigate();
 	return (
 		<div

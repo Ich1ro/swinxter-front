@@ -26,7 +26,7 @@ const Navbar = ({ Lplayout, isBack }) => {
 					<div className='w-[150px]'>
 						<Link to={isAuthenticated ? '/home' : '/'}>
 							<img
-								src='/landingPage/images/SwinxterLogo-bg.png'
+								src='/landingPage/images/SwinxterLogo-bg.svg'
 								className='cursor-pointer max-w-100px block'
 								alt=''
 							/>
@@ -50,7 +50,7 @@ const Navbar = ({ Lplayout, isBack }) => {
 									className='flex items-center'
 								>
 									<img
-										src='/landingPage/images/SwinxterLogo-bg.png'
+										src='/landingPage/images/SwinxterLogo-bg.svg'
 										className='mr-3 logo_image max-w-[100px] xl:max-w-[215px] h-auto'
 										alt='Logo'
 										style={{ marginLeft: '30px' }}

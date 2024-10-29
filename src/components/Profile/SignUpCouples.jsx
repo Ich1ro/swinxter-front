@@ -326,6 +326,7 @@ const SignUpCouple = () => {
 		);
 		if (data) {
 			toast.success('Image Uploaded');
+			toast('We kindly ask that the profile picture be a clear photo of your face. If it\'s a couple\'s profile, please use a photo that includes both of you together.')
 		} else {
 			toast.error('failed to Upload Image');
 		}
@@ -967,7 +968,7 @@ const SignUpCouple = () => {
 													<option value=''>Please Select </option>
 													<option value='male'>Male</option>
 													<option value='female'>Female</option>
-													<option value='transgender'>Transgender</option>
+													{/* <option value='transgender'>Transgender</option> */}
 												</select>
 											</div>
 											<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>
@@ -1434,7 +1435,7 @@ const SignUpCouple = () => {
 													<option value={''}>Please Select </option>
 													<option value='male'>Male</option>
 													<option value='female'>Female</option>
-													<option value='transgender'>Transgender</option>
+													{/* <option value='transgender'>Transgender</option> */}
 												</select>
 											</div>
 											<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>

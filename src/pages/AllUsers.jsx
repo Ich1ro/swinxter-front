@@ -17,6 +17,9 @@ const AllUsers = () => {
 		male: false,
 		female: false,
 		transgender: false,
+		coupleMaleMale: false,
+		coupleFemaleFemale: false,
+		coupleMaleFemale: false
 	});
 	const [profileTypes, setProfileTypes] = useState({
 		single: false,
@@ -48,7 +51,6 @@ const AllUsers = () => {
 	};
 
 	const handleCheckTreeChange = value => {
-		console.log(value);
 		const selectedItems = [];
 
 		const traverse = nodes => {
@@ -64,8 +66,6 @@ const AllUsers = () => {
 		};
 
 		traverse(data);
-
-		console.log(selectedItems);
 
 		setSelectedTreePicker(selectedItems);
 	};
@@ -295,8 +295,14 @@ const AllUsers = () => {
 				(filters.female && user.gender === 'female') ||
 				(filters.transgender &&
 					!user.gender &&
-					user.profile_type === 'single') ||
-				(!filters.male && !filters.female && !filters.transgender);
+					user.profile_type === 'single') || (user.profile_type === 'couple' && (
+					(filters.coupleMaleMale && user.couple.person1.gender === 'male' && user.couple.person2.gender === 'male') ||
+					(filters.coupleFemaleFemale && user.couple.person1.gender === 'female' && user.couple.person2.gender === 'female') ||
+					(filters.coupleMaleFemale && 
+						((user.couple.person1.gender === 'male' && user.couple.person2.gender === 'female') ||
+						 (user.couple.person1.gender === 'female' && user.couple.person2.gender === 'male')))
+				)) ||
+				(!filters.male && !filters.female && !filters.transgender && !filters.coupleMaleMale && !filters.coupleFemaleFemale && !filters.coupleMaleFemale);
 
 			const matchesProfileType =
 				(profileTypes.single && user.profile_type === 'single') ||
@@ -401,8 +407,8 @@ const AllUsers = () => {
 	}, [search, filters, users, profileTypes, selectedTreePicker]);
 
 	useEffect(() => {
-		console.log(filteredUsers);
-	}, [filteredUsers]);
+		console.log(filters);
+	}, [filters]);
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -494,6 +500,54 @@ const AllUsers = () => {
 							style={{ width: '20px', marginRight: '10px' }}
 						/>
 						<p>Transgender</p>
+					</div>
+					<div
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							marginBottom: '10px',
+						}}
+					>
+						<input
+							type='checkbox'
+							name='coupleMaleMale'
+							checked={filters.coupleMaleMale}
+							onChange={handleGenderChange}
+							style={{ width: '20px', marginRight: '10px' }}
+						/>
+						<p>Male/Male</p>
+					</div>
+					<div
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							marginBottom: '10px',
+						}}
+					>
+						<input
+							type='checkbox'
+							name='coupleFemaleFemale'
+							checked={filters.coupleFemaleFemale}
+							onChange={handleGenderChange}
+							style={{ width: '20px', marginRight: '10px' }}
+						/>
+						<p>Female/Female</p>
+					</div>
+					<div
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							marginBottom: '10px',
+						}}
+					>
+						<input
+							type='checkbox'
+							name='coupleMaleFemale'
+							checked={filters.coupleMaleFemale}
+							onChange={handleGenderChange}
+							style={{ width: '20px', marginRight: '10px' }}
+						/>
+						<p>Male/Female</p>
 					</div>
 				</div>
 				<p style={{ fontSize: '18px', marginBottom: '10px' }}>Profile Type:</p>
