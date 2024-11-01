@@ -204,7 +204,7 @@ const CoupleEditDetailPage = () => {
 				username: userInfo.username || '',
 				DOB: Birthday || '',
 				gender: userInfo?.couple?.person1?.gender || '',
-				body_hair: userInfo?.couple?.person1?.body_hair || '',
+				body_hair: userInfo?.couple?.person1?.body_hair || [],
 				body_type: userInfo?.couple?.person1?.body_type || '',
 				height: userInfo?.couple?.person1?.height || '',
 				weight: userInfo?.couple?.person1?.weight || '',
@@ -231,7 +231,7 @@ const CoupleEditDetailPage = () => {
 			setPerson2({
 				DOB: Birthday2 || '',
 				gender: userInfo?.couple?.person2?.gender || '',
-				body_hair: userInfo?.couple?.person2?.body_hair || '',
+				body_hair: userInfo?.couple?.person2?.body_hair || [],
 				body_type: userInfo?.couple?.person2?.body_type || '',
 				height: userInfo?.couple?.person2?.height || '',
 				weight: userInfo?.couple?.person2?.weight || '',
@@ -602,11 +602,12 @@ const CoupleEditDetailPage = () => {
 										<div
 											className='select_label bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
 											name='body_hair'
-											value={userDetails.body_hair}
+											value={userDetails?.body_hair}
 											onChange={handleChange}
 											onClick={() => setCtmSelect(!ctmSelect)}
 										>
-											{userDetails?.body_hair?.length === 1
+											{!Array.isArray(userDetails?.body_hair) ||
+											userDetails?.body_hair.length === 0
 												? 'Please select'
 												: userDetails?.body_hair?.map((el, i) => (
 														<span>
@@ -1176,14 +1177,15 @@ const CoupleEditDetailPage = () => {
 										<div
 											className='select_label bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] min-h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
 											name='body_hair'
-											value={person2.body_hair}
+											value={person2?.body_hair}
 											onChange={handleChange2}
 											onClick={() => setCtmSelect2(!ctmSelect2)}
 										>
-											{person2.body_hair.length === 1 ? (
+											{Array.isArray(person2?.body_hair) ||
+											person2?.body_hair.length === 1 ? (
 												<>Please select</>
 											) : (
-												person2?.body_hair?.map((el, i) => (
+												userDetails?.couple?.person2?.body_hair?.map((el, i) => (
 													<span>
 														{el}
 														{i !== 0 && i !== person2?.body_hair.length - 1 && (

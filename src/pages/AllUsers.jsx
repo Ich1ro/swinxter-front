@@ -19,12 +19,16 @@ const AllUsers = () => {
 		transgender: false,
 		coupleMaleMale: false,
 		coupleFemaleFemale: false,
-		coupleMaleFemale: false
+		coupleMaleFemale: false,
 	});
-	const [profileTypes, setProfileTypes] = useState({
-		single: false,
-		couple: false,
-	});
+	// const [profileTypes, setProfileTypes] = useState({
+	// 	single: false,
+	// 	couple: false,
+	// });
+	const [weightFrom, setWeightFrom] = useState(null);
+	const [weightTo, setWeightTo] = useState(null);
+	const [ageFrom, setAgeFrom] = useState(null);
+	const [ageTo, setAgeTo] = useState(null);
 	const [selectedTreePicker, setSelectedTreePicker] = useState([]);
 
 	const checkTreePickerRef = useRef(null);
@@ -70,13 +74,13 @@ const AllUsers = () => {
 		setSelectedTreePicker(selectedItems);
 	};
 
-	const handleProfileTypeChange = e => {
-		const { name, checked } = e.target;
-		setProfileTypes(prevProfileTypes => ({
-			...prevProfileTypes,
-			[name]: checked,
-		}));
-	};
+	// const handleProfileTypeChange = e => {
+	// 	const { name, checked } = e.target;
+	// 	setProfileTypes(prevProfileTypes => ({
+	// 		...prevProfileTypes,
+	// 		[name]: checked,
+	// 	}));
+	// };
 
 	const handleSearch = e => {
 		setSearch(e.target.value);
@@ -92,6 +96,26 @@ const AllUsers = () => {
 		});
 		setUsers(userArr);
 	};
+
+	function calculateAge(DOB) {
+		const birthDate = new Date(DOB);
+		const today = new Date();
+		let age = today.getFullYear() - birthDate.getFullYear();
+		const monthDiff = today.getMonth() - birthDate.getMonth();
+
+		if (
+			monthDiff < 0 ||
+			(monthDiff === 0 && today.getDate() < birthDate.getDate())
+		) {
+			age--;
+		}
+		return age;
+	}
+
+	function extractWeightInKg(weightString) {
+		const kgMatch = weightString?.match(/^(\d+)\s*kg/);
+		return kgMatch ? parseInt(kgMatch[1], 10) : null;
+	}
 
 	const data = [
 		{
@@ -278,7 +302,174 @@ const AllUsers = () => {
 				},
 			],
 		},
+		{
+			label: 'Relationship',
+			value: 43,
+			children: [
+				{
+					label: 'Monogamous',
+					value: 44,
+				},
+				{
+					label: 'Open-Minded',
+					value: 45,
+				},
+				{
+					label: 'Swinger',
+					value: 46,
+				},
+				{
+					label: 'Polyamorous',
+					value: 47,
+				},
+			],
+		},
+		{
+			label: 'Ethnic Background',
+			value: 48,
+			children: [
+				{
+					label: 'Caucasian',
+					value: 49,
+				},
+				{
+					label: 'Hispanic/Latin',
+					value: 50,
+				},
+				{
+					label: 'Black/African-American',
+					value: 51,
+				},
+				{
+					label: 'Asian',
+					value: 52,
+				},
+				{
+					label: 'Indian',
+					value: 53,
+				},
+				{
+					label: 'Indigenous',
+					value: 54,
+				},
+				{
+					label: 'Middle Eastern',
+					value: 55,
+				},
+				{
+					label: 'Other',
+					value: 56,
+				},
+			],
+		},
+		{
+			label: 'Experience',
+			value: 57,
+			children: [
+				{
+					label: 'Curious',
+					value: 58,
+				},
+				{
+					label: 'Newbie',
+					value: 59,
+				},
+				{
+					label: 'Intermediate',
+					value: 60,
+				},
+				{
+					label: 'Advanced',
+					value: 61,
+				},
+			],
+		},
+		{
+			label: 'Intelligence',
+			value: 62,
+			children: [
+				{
+					label: 'Low Importance',
+					value: 63,
+				},
+				{
+					label: 'Medium Importance',
+					value: 64,
+				},
+				{
+					label: 'High Importance',
+					value: 65,
+				},
+				{
+					label: 'No',
+					value: 66,
+				},
+			],
+		},
+		{
+			label: 'Looks Important',
+			value: 67,
+			children: [
+				{
+					label: 'Low Importance',
+					value: 68,
+				},
+				{
+					label: 'Medium Importance',
+					value: 69,
+				},
+				{
+					label: 'High Importance',
+					value: 70,
+				},
+				{
+					label: 'No',
+					value: 71,
+				},
+			],
+		},
+		{
+			label: 'Sexuality',
+			value: 72,
+			children: [
+				{
+					label: 'Straight',
+					value: 73,
+				},
+				{
+					label: 'Bi-Sexual',
+					value: 74,
+				},
+				{
+					label: 'Bi-Curious',
+					value: 75,
+				},
+				{
+					label: 'Gay',
+					value: 76,
+				},
+				{
+					label: 'Pansexual',
+					value: 77,
+				},
+			],
+		},
 	];
+
+	const suppressResizeObserverError = error => {
+		if (
+			error.message ===
+			'ResizeObserver loop completed with undelivered notifications.'
+		) {
+			return;
+		}
+		console.error(error);
+	};
+
+	window.addEventListener('error', suppressResizeObserverError);
+	window.addEventListener('unhandledrejection', event =>
+		suppressResizeObserverError(event.reason)
+	);
 
 	useEffect(() => {
 		getAllUsers();
@@ -295,19 +486,61 @@ const AllUsers = () => {
 				(filters.female && user.gender === 'female') ||
 				(filters.transgender &&
 					!user.gender &&
-					user.profile_type === 'single') || (user.profile_type === 'couple' && (
-					(filters.coupleMaleMale && user.couple.person1.gender === 'male' && user.couple.person2.gender === 'male') ||
-					(filters.coupleFemaleFemale && user.couple.person1.gender === 'female' && user.couple.person2.gender === 'female') ||
-					(filters.coupleMaleFemale && 
-						((user.couple.person1.gender === 'male' && user.couple.person2.gender === 'female') ||
-						 (user.couple.person1.gender === 'female' && user.couple.person2.gender === 'male')))
-				)) ||
-				(!filters.male && !filters.female && !filters.transgender && !filters.coupleMaleMale && !filters.coupleFemaleFemale && !filters.coupleMaleFemale);
+					user.profile_type === 'single') ||
+				(user.profile_type === 'couple' &&
+					((filters.coupleMaleMale &&
+						user.couple.person1.gender === 'male' &&
+						user.couple.person2.gender === 'male') ||
+						(filters.coupleFemaleFemale &&
+							user.couple.person1.gender === 'female' &&
+							user.couple.person2.gender === 'female') ||
+						(filters.coupleMaleFemale &&
+							((user.couple.person1.gender === 'male' &&
+								user.couple.person2.gender === 'female') ||
+								(user.couple.person1.gender === 'female' &&
+									user.couple.person2.gender === 'male'))))) ||
+				(!filters.male &&
+					!filters.female &&
+					!filters.transgender &&
+					!filters.coupleMaleMale &&
+					!filters.coupleFemaleFemale &&
+					!filters.coupleMaleFemale);
 
-			const matchesProfileType =
-				(profileTypes.single && user.profile_type === 'single') ||
-				(profileTypes.couple && user.profile_type === 'couple') ||
-				(!profileTypes.single && !profileTypes.couple);
+			const matchesAgeSingle =
+				user.profile_type === 'single' &&
+				(ageFrom === null || calculateAge(user.DOB) >= ageFrom) &&
+				(ageTo === null || calculateAge(user.DOB) <= ageTo);
+
+			const matchesAgeCouple =
+				user.profile_type === 'couple' &&
+				(ageFrom === null ||
+					calculateAge(user.couple.person1.DOB) >= ageFrom ||
+					calculateAge(user.couple.person2.DOB) >= ageFrom) &&
+				(ageTo === null ||
+					calculateAge(user.couple.person1.DOB) <= ageTo ||
+					calculateAge(user.couple.person2.DOB) <= ageTo);
+
+			const matchesAge = matchesAgeSingle || matchesAgeCouple;
+
+			const userWeightKg = extractWeightInKg(user.weight);
+			const matchesWeightSingle =
+				user.profile_type === 'single' &&
+				userWeightKg !== null &&
+				(weightFrom === null || userWeightKg >= weightFrom) &&
+				(weightTo === null || userWeightKg <= weightTo);
+
+			const coupleWeight1Kg = extractWeightInKg(user.couple?.person1?.weight);
+			const coupleWeight2Kg = extractWeightInKg(user.couple?.person2?.weight);
+			const matchesWeightCouple =
+				user.profile_type === 'couple' &&
+				coupleWeight1Kg !== null &&
+				coupleWeight2Kg !== null &&
+				(weightFrom === null ||
+					(coupleWeight1Kg >= weightFrom || coupleWeight2Kg >= weightFrom)) &&
+				(weightTo === null ||
+					(coupleWeight1Kg <= weightTo || coupleWeight2Kg <= weightTo));
+
+			const matchesWeight = matchesWeightSingle || matchesWeightCouple;
 
 			const groupedSelections = {
 				bodyType: [],
@@ -317,6 +550,12 @@ const AllUsers = () => {
 				smoking: [],
 				drinking: [],
 				drugs: [],
+				relationship: [],
+				ethnicBackground: [],
+				experience: [],
+				intelligence: [],
+				looksImportant: [],
+				sexuality: [],
 			};
 
 			selectedTreePicker.forEach(selected => {
@@ -334,11 +573,23 @@ const AllUsers = () => {
 					groupedSelections.drinking.push(selected);
 				if ([39, 40, 41, 42].includes(selected))
 					groupedSelections.drugs.push(selected);
+				if ([44, 45, 46, 47].includes(selected))
+					groupedSelections.relationship.push(selected);
+				if ([49, 50, 51, 52, 53, 54, 55, 56].includes(selected))
+					groupedSelections.ethnicBackground.push(selected);
+				if ([58, 59, 60, 61].includes(selected))
+					groupedSelections.experience.push(selected);
+				if ([63, 64, 65, 66].includes(selected))
+					groupedSelections.intelligence.push(selected);
+				if ([68, 69, 70, 71].includes(selected))
+					groupedSelections.looksImportant.push(selected);
+				if ([73, 74, 75, 76, 77].includes(selected))
+					groupedSelections.sexuality.push(selected);
 			});
 
-			const matchesTreePicker =
-				selectedTreePicker.length === 0 ||
-				((groupedSelections.bodyType.length === 0 ||
+			const matchesTreePickerSingle =
+				user.profile_type === 'single' &&
+				(groupedSelections.bodyType.length === 0 ||
 					groupedSelections.bodyType.some(
 						selected =>
 							(selected === 3 && user?.body_type?.toLowerCase() === 'slim') ||
@@ -346,65 +597,369 @@ const AllUsers = () => {
 								user?.body_type?.toLowerCase() === 'athletic') ||
 							(selected === 5 && user?.body_type?.toLowerCase() === 'average')
 					)) &&
-					(groupedSelections.piercings.length === 0 ||
-						groupedSelections.piercings.some(
-							selected =>
-								(selected === 18 && user?.piercings?.toLowerCase() === 'yes') ||
-								(selected === 19 && user?.piercings?.toLowerCase() === 'no')
-						)) &&
-					(groupedSelections.circumcised.length === 0 ||
-						groupedSelections.circumcised.some(
-							selected =>
-								(selected === 22 &&
-									user?.circumcised?.toLowerCase() === 'yes') ||
-								(selected === 23 && user?.circumcised?.toLowerCase() === 'no')
-						)) &&
-					(groupedSelections.tattoos.length === 0 ||
-						groupedSelections.tattoos.some(
-							selected =>
-								(selected === 25 && user?.tattoos?.toLowerCase() === 'yes') ||
-								(selected === 26 && user?.tattoos?.toLowerCase() === 'no') ||
-								(selected === 27 && user?.tattoos?.toLowerCase() === 'a few')
-						)) &&
-					(groupedSelections.smoking.length === 0 ||
-						groupedSelections.smoking.some(
-							selected =>
-								(selected === 30 && user?.smoking?.toLowerCase() === 'yes') ||
-								(selected === 31 && user?.smoking?.toLowerCase() === 'no') ||
-								(selected === 32 &&
-									user?.smoking?.toLowerCase() === 'occasionally')
-						)) &&
-					(groupedSelections.drinking.length === 0 ||
-						groupedSelections.drinking.some(
-							selected =>
-								(selected === 34 && user?.drinking === 'Not your business') ||
-								(selected === 35 && user?.drinking === 'Like a fish') ||
-								(selected === 36 && user?.drinking === 'Like a cactus') ||
-								(selected === 37 && user?.drinking === 'I drink if offered')
-						)) &&
-					(groupedSelections.drugs.length === 0 ||
-						groupedSelections.drugs.some(
-							selected =>
-								(selected === 39 &&
-									user?.drugs?.toLowerCase() === 'not your business') ||
-								(selected === 40 &&
-									user?.drugs?.toLowerCase() === 'no, thanks') ||
-								(selected === 41 &&
-									user?.drugs?.toLowerCase() === 'yes, thanks') ||
-								(selected === 42 &&
-									user?.drugs?.toLowerCase() === 'more, thanks')
-						)));
+				(groupedSelections.piercings.length === 0 ||
+					groupedSelections.piercings.some(
+						selected =>
+							(selected === 18 && user?.piercings?.toLowerCase() === 'yes') ||
+							(selected === 19 && user?.piercings?.toLowerCase() === 'no')
+					)) &&
+				(groupedSelections.circumcised.length === 0 ||
+					groupedSelections.circumcised.some(
+						selected =>
+							(selected === 22 && user?.circumcised?.toLowerCase() === 'yes') ||
+							(selected === 23 && user?.circumcised?.toLowerCase() === 'no')
+					)) &&
+				(groupedSelections.tattoos.length === 0 ||
+					groupedSelections.tattoos.some(
+						selected =>
+							(selected === 25 && user?.tattoos?.toLowerCase() === 'yes') ||
+							(selected === 26 && user?.tattoos?.toLowerCase() === 'no') ||
+							(selected === 27 && user?.tattoos?.toLowerCase() === 'a few')
+					)) &&
+				(groupedSelections.smoking.length === 0 ||
+					groupedSelections.smoking.some(
+						selected =>
+							(selected === 30 && user?.smoking?.toLowerCase() === 'yes') ||
+							(selected === 31 && user?.smoking?.toLowerCase() === 'no') ||
+							(selected === 32 &&
+								user?.smoking?.toLowerCase() === 'occasionally')
+					)) &&
+				(groupedSelections.drinking.length === 0 ||
+					groupedSelections.drinking.some(
+						selected =>
+							(selected === 34 && user?.drinking === 'Not your business') ||
+							(selected === 35 && user?.drinking === 'Like a fish') ||
+							(selected === 36 && user?.drinking === 'Like a cactus') ||
+							(selected === 37 && user?.drinking === 'I drink if offered')
+					)) &&
+				(groupedSelections.drugs.length === 0 ||
+					groupedSelections.drugs.some(
+						selected =>
+							(selected === 39 &&
+								user?.drugs?.toLowerCase() === 'not your business') ||
+							(selected === 40 &&
+								user?.drugs?.toLowerCase() === 'no, thanks') ||
+							(selected === 41 &&
+								user?.drugs?.toLowerCase() === 'yes, thanks') ||
+							(selected === 42 && user?.drugs?.toLowerCase() === 'more, thanks')
+					)) &&
+				(groupedSelections.relationship.length === 0 ||
+					groupedSelections.relationship.some(
+						selected =>
+							(selected === 44 &&
+								user.relationship?.toLowerCase() === 'monogamous') ||
+							(selected === 45 &&
+								user.relationship?.toLowerCase() === 'open-minded') ||
+							(selected === 46 &&
+								user.relationship?.toLowerCase() === 'swinger') ||
+							(selected === 47 &&
+								user.relationship?.toLowerCase() === 'polyamorous')
+					)) &&
+				(groupedSelections.ethnicBackground.length === 0 ||
+					groupedSelections.ethnicBackground.some(
+						selected =>
+							(selected === 49 &&
+								user.ethnic_background?.toLowerCase() === 'caucasian') ||
+							(selected === 50 &&
+								user.ethnic_background?.toLowerCase() === 'hispanic/latin') ||
+							(selected === 51 &&
+								user.ethnic_background?.toLowerCase() ===
+									'black/african-american') ||
+							(selected === 52 &&
+								user.ethnic_background?.toLowerCase() === 'asian') ||
+							(selected === 53 &&
+								user.ethnic_background?.toLowerCase() === 'indian') ||
+							(selected === 54 &&
+								user.ethnic_background?.toLowerCase() === 'indigenous') ||
+							(selected === 55 &&
+								user.ethnic_background?.toLowerCase() === 'middle eastern') ||
+							(selected === 56 &&
+								user.ethnic_background?.toLowerCase() === 'other')
+					)) &&
+				(groupedSelections.experience.length === 0 ||
+					groupedSelections.experience.some(
+						selected =>
+							(selected === 58 &&
+								user.experience?.toLowerCase() === 'curious') ||
+							(selected === 59 &&
+								user.experience?.toLowerCase() === 'newbie') ||
+							(selected === 60 &&
+								user.experience?.toLowerCase() === 'intermediate') ||
+							(selected === 61 && user.experience?.toLowerCase() === 'advanced')
+					)) &&
+				(groupedSelections.intelligence.length === 0 ||
+					groupedSelections.intelligence.some(
+						selected =>
+							(selected === 63 && user.intelligence === 'Low Importance') ||
+							(selected === 64 && user.intelligence === 'Medium Importance') ||
+							(selected === 65 && user.intelligence === 'High Importance') ||
+							(selected === 66 && user.intelligence === 'No')
+					)) &&
+				(groupedSelections.looksImportant.length === 0 ||
+					groupedSelections.looksImportant.some(
+						selected =>
+							(selected === 68 && user.looks_important === 'Low Importance') ||
+							(selected === 69 &&
+								user.looks_important === 'Medium Importance') ||
+							(selected === 70 && user.looks_important === 'High Importance') ||
+							(selected === 71 && user.looks_important === 'No')
+					)) &&
+				(groupedSelections.sexuality.length === 0 ||
+					groupedSelections.sexuality.some(
+						selected =>
+							(selected === 73 &&
+								user.sexuality?.toLowerCase() === 'straight') ||
+							(selected === 74 &&
+								user.sexuality?.toLowerCase() === 'bi-sexual') ||
+							(selected === 75 &&
+								user.sexuality?.toLowerCase() === 'bi-curious') ||
+							(selected === 76 && user.sexuality?.toLowerCase() === 'gay') ||
+							(selected === 77 && user.sexuality?.toLowerCase() === 'pansexual')
+					));
+
+			const matchesTreePickerCouple =
+				user.profile_type === 'couple' &&
+				(groupedSelections.bodyType.length === 0 ||
+					groupedSelections.bodyType.some(
+						selected =>
+							(selected === 3 &&
+								(user.couple.person1.body_type?.toLowerCase() === 'slim' ||
+									user.couple.person2.body_type?.toLowerCase() === 'slim')) ||
+							(selected === 4 &&
+								(user.couple.person1.body_type?.toLowerCase() === 'athletic' ||
+									user.couple.person2.body_type?.toLowerCase() ===
+										'athletic')) ||
+							(selected === 5 &&
+								(user.couple.person1.body_type?.toLowerCase() === 'average' ||
+									user.couple.person2.body_type?.toLowerCase() === 'average'))
+					)) &&
+				(groupedSelections.piercings.length === 0 ||
+					groupedSelections.piercings.some(
+						selected =>
+							(selected === 18 &&
+								(user.couple.person1.piercings?.toLowerCase() === 'yes' ||
+									user.couple.person2.piercings?.toLowerCase() === 'yes')) ||
+							(selected === 19 &&
+								(user.couple.person1.piercings?.toLowerCase() === 'no' ||
+									user.couple.person2.piercings?.toLowerCase() === 'no'))
+					)) &&
+				(groupedSelections.circumcised.length === 0 ||
+					groupedSelections.circumcised.some(
+						selected =>
+							(selected === 22 &&
+								(user.couple.person1.circumcised?.toLowerCase() === 'yes' ||
+									user.couple.person2.circumcised?.toLowerCase() === 'yes')) ||
+							(selected === 23 &&
+								(user.couple.person1.circumcised?.toLowerCase() === 'no' ||
+									user.couple.person2.circumcised?.toLowerCase() === 'no'))
+					)) &&
+				(groupedSelections.tattoos.length === 0 ||
+					groupedSelections.tattoos.some(
+						selected =>
+							(selected === 25 &&
+								(user.couple.person1.tattoos?.toLowerCase() === 'yes' ||
+									user.couple.person2.tattoos?.toLowerCase() === 'yes')) ||
+							(selected === 26 &&
+								(user.couple.person1.tattoos?.toLowerCase() === 'no' ||
+									user.couple.person2.tattoos?.toLowerCase() === 'no')) ||
+							(selected === 27 &&
+								(user.couple.person1.tattoos?.toLowerCase() === 'a few' ||
+									user.couple.person2.tattoos?.toLowerCase() === 'a few'))
+					)) &&
+				(groupedSelections.smoking.length === 0 ||
+					groupedSelections.smoking.some(
+						selected =>
+							(selected === 30 &&
+								(user.couple.person1.smoking?.toLowerCase() === 'yes' ||
+									user.couple.person2.smoking?.toLowerCase() === 'yes')) ||
+							(selected === 31 &&
+								(user.couple.person1.smoking?.toLowerCase() === 'no' ||
+									user.couple.person2.smoking?.toLowerCase() === 'no')) ||
+							(selected === 32 &&
+								(user.couple.person1.smoking?.toLowerCase() ===
+									'occasionally' ||
+									user.couple.person2.smoking?.toLowerCase() ===
+										'occasionally'))
+					)) &&
+				(groupedSelections.drinking.length === 0 ||
+					groupedSelections.drinking.some(
+						selected =>
+							(selected === 34 &&
+								(user.couple.person1.Drinking === 'Not your business' ||
+									user.couple.person2.Drinking === 'Not your business')) ||
+							(selected === 35 &&
+								(user.couple.person1.Drinking === 'Like a fish' ||
+									user.couple.person2.Drinking === 'Like a fish')) ||
+							(selected === 36 &&
+								(user.couple.person1.Drinking === 'Like a cactus' ||
+									user.couple.person2.Drinking === 'Like a cactus')) ||
+							(selected === 37 &&
+								(user.couple.person1.Drinking === 'I drink if offered' ||
+									user.couple.person2.Drinking === 'I drink if offered'))
+					)) &&
+				(groupedSelections.drugs.length === 0 ||
+					groupedSelections.drugs.some(
+						selected =>
+							(selected === 39 &&
+								(user.couple.person1.Drugs?.toLowerCase() ===
+									'not your business' ||
+									user.couple.person2.Drugs?.toLowerCase() ===
+										'not your business')) ||
+							(selected === 40 &&
+								(user.couple.person1.Drugs?.toLowerCase() === 'no, thanks' ||
+									user.couple.person2.Drugs?.toLowerCase() === 'no, thanks')) ||
+							(selected === 41 &&
+								(user.couple.person1.Drugs?.toLowerCase() === 'yes, thanks' ||
+									user.couple.person2.Drugs?.toLowerCase() ===
+										'yes, thanks')) ||
+							(selected === 42 &&
+								(user.couple.person1.Drugs?.toLowerCase() === 'more, thanks' ||
+									user.couple.person2.Drugs?.toLowerCase() === 'more, thanks'))
+					)) &&
+				(groupedSelections.relationship.length === 0 ||
+					groupedSelections.relationship.some(
+						selected =>
+							(selected === 44 &&
+								(user.couple.person1.relationship === 'Monogamous' ||
+									user.couple.person2.relationship === 'Monogamous')) ||
+							(selected === 45 &&
+								(user.couple.person1.relationship === 'Open-Minded' ||
+									user.couple.person2.relationship === 'Open-Minded')) ||
+							(selected === 46 &&
+								(user.couple.person1.relationship === 'Swinger' ||
+									user.couple.person2.relationship === 'Swinger')) ||
+							(selected === 47 &&
+								(user.couple.person1.relationship === 'Polyamorous' ||
+									user.couple.person2.relationship === 'Polyamorous'))
+					)) &&
+				(groupedSelections.ethnicBackground.length === 0 ||
+					groupedSelections.ethnicBackground.some(
+						selected =>
+							(selected === 49 &&
+								(user.couple.person1.ethnic_background === 'Caucasian' ||
+									user.couple.person2.ethnic_background === 'Caucasian')) ||
+							(selected === 50 &&
+								(user.couple.person1.ethnic_background === 'Hispanic/Latin' ||
+									user.couple.person2.ethnic_background ===
+										'Hispanic/Latin')) ||
+							(selected === 51 &&
+								(user.couple.person1.ethnic_background ===
+									'Black/African-American' ||
+									user.couple.person2.ethnic_background ===
+										'Black/African-American')) ||
+							(selected === 52 &&
+								(user.couple.person1.ethnic_background === 'Asian' ||
+									user.couple.person2.ethnic_background === 'Asian')) ||
+							(selected === 53 &&
+								(user.couple.person1.ethnic_background === 'Indian' ||
+									user.couple.person2.ethnic_background === 'Indian')) ||
+							(selected === 54 &&
+								(user.couple.person1.ethnic_background === 'Indigenous' ||
+									user.couple.person2.ethnic_background === 'Indigenous')) ||
+							(selected === 55 &&
+								(user.couple.person1.ethnic_background === 'Middle Eastern' ||
+									user.couple.person2.ethnic_background ===
+										'Middle Eastern')) ||
+							(selected === 56 &&
+								(user.couple.person1.ethnic_background === 'Other' ||
+									user.couple.person2.ethnic_background === 'Other'))
+					)) &&
+				(groupedSelections.experience.length === 0 ||
+					groupedSelections.experience.some(
+						selected =>
+							(selected === 58 &&
+								(user.couple.person1.experience === 'Curious' ||
+									user.couple.person2.experience === 'Curious')) ||
+							(selected === 59 &&
+								(user.couple.person1.experience === 'Newbie' ||
+									user.couple.person2.experience === 'Newbie')) ||
+							(selected === 60 &&
+								(user.couple.person1.experience === 'Intermediate' ||
+									user.couple.person2.experience === 'Intermediate')) ||
+							(selected === 61 &&
+								(user.couple.person1.experience === 'Advanced' ||
+									user.couple.person2.experience === 'Advanced'))
+					)) &&
+				(groupedSelections.intelligence.length === 0 ||
+					groupedSelections.intelligence.some(
+						selected =>
+							(selected === 63 &&
+								(user.couple.person1.intelligence === 'Low Importance' ||
+									user.couple.person2.intelligence === 'Low Importance')) ||
+							(selected === 64 &&
+								(user.couple.person1.intelligence === 'Medium Importance' ||
+									user.couple.person2.intelligence === 'Medium Importance')) ||
+							(selected === 65 &&
+								(user.couple.person1.intelligence === 'High Importance' ||
+									user.couple.person2.intelligence === 'High Importance')) ||
+							(selected === 66 &&
+								(user.couple.person1.intelligence === 'No' ||
+									user.couple.person2.intelligence === 'No'))
+					)) &&
+				(groupedSelections.looksImportant.length === 0 ||
+					groupedSelections.looksImportant.some(
+						selected =>
+							(selected === 68 &&
+								(user.couple.person1.looks_important === 'Low Importance' ||
+									user.couple.person2.looks_important === 'Low Importance')) ||
+							(selected === 69 &&
+								(user.couple.person1.looks_important === 'Medium Importance' ||
+									user.couple.person2.looks_important ===
+										'Medium Importance')) ||
+							(selected === 70 &&
+								(user.couple.person1.looks_important === 'High Importance' ||
+									user.couple.person2.looks_important === 'High Importance')) ||
+							(selected === 71 &&
+								(user.couple.person1.looks_important === 'No' ||
+									user.couple.person2.looks_important === 'No'))
+					)) &&
+				(groupedSelections.sexuality.length === 0 ||
+					groupedSelections.sexuality.some(
+						selected =>
+							(selected === 73 &&
+								(user.couple.person1.sexuality === 'Straight' ||
+									user.couple.person2.sexuality === 'Straight')) ||
+							(selected === 74 &&
+								(user.couple.person1.sexuality === 'Bi-Sexual' ||
+									user.couple.person2.sexuality === 'Bi-Sexual')) ||
+							(selected === 75 &&
+								(user.couple.person1.sexuality === 'Bi-Curious' ||
+									user.couple.person2.sexuality === 'Bi-Curious')) ||
+							(selected === 76 &&
+								(user.couple.person1.sexuality === 'Gay' ||
+									user.couple.person2.sexuality === 'Gay')) ||
+							(selected === 77 &&
+								(user.couple.person1.sexuality === 'Pansexual' ||
+									user.couple.person2.sexuality === 'Pansexual'))
+					));
+
+			const matchesTreePicker =
+				selectedTreePicker.length === 0 ||
+				matchesTreePickerSingle ||
+				matchesTreePickerCouple;
 
 			return (
 				matchesSearch &&
 				matchesGender &&
-				matchesProfileType &&
-				matchesTreePicker
+				matchesTreePicker &&
+				matchesAge &&
+				matchesWeight
 			);
 		});
 
-		setFilteredUsers(filtered);
-	}, [search, filters, users, profileTypes, selectedTreePicker]);
+		console.log(filtered);
+
+		setFilteredUsers(prev => (prev !== filtered ? filtered : prev));
+	}, [
+		search,
+		filters,
+		users,
+		selectedTreePicker,
+		ageFrom,
+		ageTo,
+		weightFrom,
+		weightTo,
+	]);
 
 	useEffect(() => {
 		console.log(filters);
@@ -451,7 +1006,7 @@ const AllUsers = () => {
 				>
 					Filters
 				</p>
-				<p style={{ fontSize: '18px', marginBottom: '10px' }}>Gender:</p>
+				<p style={{ fontSize: '18px', marginBottom: '10px' }}>Profile Type:</p>
 				<div style={{ padding: '0 10px', marginBottom: '20px' }}>
 					<div
 						style={{
@@ -550,7 +1105,7 @@ const AllUsers = () => {
 						<p>Male/Female</p>
 					</div>
 				</div>
-				<p style={{ fontSize: '18px', marginBottom: '10px' }}>Profile Type:</p>
+				{/* <p style={{ fontSize: '18px', marginBottom: '10px' }}>Profile Type:</p>
 				<div style={{ padding: '0 10px', marginBottom: '20px' }}>
 					<div
 						style={{
@@ -584,17 +1139,134 @@ const AllUsers = () => {
 						/>
 						<p>Couple</p>
 					</div>
+				</div> */}
+				<p style={{ fontSize: '18px', marginBottom: '10px' }}>Age:</p>
+				<div
+					style={{
+						display: 'flex',
+						width: '100%',
+						alignItems: 'center',
+						justifyContent: 'space-between',
+						marginBottom: '10px',
+					}}
+				>
+					<label>From:</label>
+					<input
+						type='number'
+						style={{
+							maxWidth: '100px',
+							backgroundColor: '#1f1f1f',
+							color: '#fff',
+							border: '1px solid #333',
+							borderRadius: '8px',
+							padding: '5px 10px',
+							outline: 'none',
+							fontSize: '14px',
+						}}
+						placeholder='Min age'
+						value={ageFrom || ''}
+						onChange={e =>
+							setAgeFrom(e.target.value ? parseInt(e.target.value) : null)
+						}
+					/>
+				</div>
+				<div
+					style={{
+						display: 'flex',
+						width: '100%',
+						alignItems: 'center',
+						justifyContent: 'space-between',
+						marginBottom: '20px',
+					}}
+				>
+					<label>To:</label>
+					<input
+						type='number'
+						placeholder='Max age'
+						style={{
+							maxWidth: '100px',
+							backgroundColor: '#1f1f1f',
+							color: '#fff',
+							border: '1px solid #333',
+							borderRadius: '8px',
+							padding: '5px 10px',
+							outline: 'none',
+							fontSize: '14px',
+						}}
+						value={ageTo || ''}
+						onChange={e =>
+							setAgeTo(e.target.value ? parseInt(e.target.value) : null)
+						}
+					/>
+				</div>
+				<p style={{ fontSize: '18px', marginBottom: '10px' }}>Weight:</p>
+				<div
+					style={{
+						display: 'flex',
+						width: '100%',
+						alignItems: 'center',
+						justifyContent: 'space-between',
+						marginBottom: '10px',
+					}}
+				>
+					<label>From:</label>
+					<input
+						type='number'
+						style={{
+							maxWidth: '100px',
+							backgroundColor: '#1f1f1f',
+							color: '#fff',
+							border: '1px solid #333',
+							borderRadius: '8px',
+							padding: '5px 10px',
+							outline: 'none',
+							fontSize: '14px',
+						}}
+						placeholder='Min weight'
+						value={weightFrom || ''}
+						onChange={e =>
+							setWeightFrom(e.target.value ? parseInt(e.target.value) : null)
+						}
+					/>
+				</div>
+				<div
+					style={{
+						display: 'flex',
+						width: '100%',
+						alignItems: 'center',
+						justifyContent: 'space-between',
+						marginBottom: '20px',
+					}}
+				>
+					<label>To:</label>
+					<input
+						type='number'
+						placeholder='Max weight'
+						style={{
+							maxWidth: '100px',
+							backgroundColor: '#1f1f1f',
+							color: '#fff',
+							border: '1px solid #333',
+							borderRadius: '8px',
+							padding: '5px 10px',
+							outline: 'none',
+							fontSize: '14px',
+						}}
+						value={weightTo || ''}
+						onChange={e =>
+							setWeightTo(e.target.value ? parseInt(e.target.value) : null)
+						}
+					/>
 				</div>
 				<p style={{ fontSize: '18px', marginBottom: '10px' }}>
 					Advanced Search:
 				</p>
 				<CheckTreePicker
 					ref={checkTreePickerRef}
-					defaultExpandAll
+					// defaultExpandAll
 					data={data}
 					searchable={false}
 					onChange={handleCheckTreeChange}
-					// uncheckableItemValues={[1, 2]}
 					style={{
 						width: 250,
 						backgroundColor: '#1f1f1f',
