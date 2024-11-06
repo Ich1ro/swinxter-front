@@ -63,6 +63,7 @@ import BlockedUsers from './pages/BlockedUsers';
 import SentHotList from './pages/SentHotList';
 import RecievedHotList from './pages/RecievedHotList';
 import {io} from "socket.io-client";
+import SuccessPaymentPage from './pages/SuccessPaymentPage'
 
 function App() {
 const {isAuthenticated} = useSelector((state)=>state.auth);
@@ -138,6 +139,7 @@ useEffect(() => {
         <Route path="/edit-detail" element={<Layout><ProtectedRoute><EditUserDetailsPage /></ProtectedRoute></Layout>} />
         <Route path="editcouple-detail" element={<Layout><ProtectedRoute><CoupleEditDetailPage/></ProtectedRoute></Layout>}/>
         <Route path="/checkout/:title/:price/:month_freq" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+        <Route path="/success" element={<Layout><SuccessPaymentPage/></Layout>} />
 
 
         <Route  element={<Main_Layout socket={socket}/>}>

@@ -38,7 +38,7 @@ const EmailVerified = () => {
 					</div>
 				) : (
 					<div className='container mx-auto pb-20 text-center'>
-						<h3 className='font-secondary_font text-40px'>
+						<h3 className='text-40px'>
 							Something went wrong!
 						</h3>
 						<p className='text-xl'>Your Email address isn't verified</p>

@@ -327,7 +327,7 @@ const ForgotPage = () => {
 							className='rounded-b-3xl rounded-r-none md:rounded-r-58 object-cover h-full'
 						/>
 						<div className='sign-up__image-content absolute bottom-24 left-0 px-5 md:px-20 max-w-[538px] text-start'>
-							<p className='text-xl sm:text-3xl md:text-4xl xl:text-40px text-white font-secondary_font'>
+							<p className='text-xl sm:text-3xl md:text-4xl xl:text-40px text-white'>
 								Login to the
 							</p>
 							<h2 className='text-2xl sm:text-4xl md:text-4xl xl:text-5xl text-white font-bold leading-10 md:leading-45 xl:leading-65'>

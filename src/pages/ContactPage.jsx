@@ -52,7 +52,7 @@ const ContactPage = () => {
 		<>
 			<div className='py-10 container mx-auto contact-page'>
 				<div className='text-center max-w-6xl mx-auto'>
-					<h3 className='font-secondary_font text-40px mb-5 mt-16'>
+					<h3 className='text-40px mb-5 mt-16'>
 						Contact Us
 					</h3>
 					<p className='text-sm md:text-lg'>
