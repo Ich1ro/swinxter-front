@@ -155,6 +155,7 @@ const Sidebar = ({ unread, closeMenu }) => {
       title: "Search",
       submenus: [
         { title: "Search Users", submenus: [], path: "/allusers" },
+        { title: "Advanced Search", submenus: [], path: "/advanced-search" },
         {
           title: "Who Viewed Me",
           submenus: [],

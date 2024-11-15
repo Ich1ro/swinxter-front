@@ -64,6 +64,7 @@ import SentHotList from './pages/SentHotList';
 import RecievedHotList from './pages/RecievedHotList';
 import {io} from "socket.io-client";
 import SuccessPaymentPage from './pages/SuccessPaymentPage'
+import AdvancedSearch from './pages/AdvancedSearch'
 
 function App() {
 const {isAuthenticated} = useSelector((state)=>state.auth);
@@ -149,6 +150,7 @@ useEffect(() => {
 
         {/* EVENTS */}
         <Route path="/event-page" element={<ProtectedRoute><EventPage /></ProtectedRoute>} />
+        <Route path="/advanced-search" element={<ProtectedRoute><AdvancedSearch /></ProtectedRoute>} />
         <Route path="/create_event" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
         <Route path="/event_edit/:id" element={<ProtectedRoute><EditEventPage /></ProtectedRoute>} />
         <Route path='/event-detail/:id' element={<ProtectedRoute><ChatContextProvider><EventDetailPage/></ChatContextProvider></ProtectedRoute>} />
