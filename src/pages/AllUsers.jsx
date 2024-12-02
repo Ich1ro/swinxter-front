@@ -506,21 +506,21 @@ const AllUsers = () => {
 					!filters.coupleFemaleFemale &&
 					!filters.coupleMaleFemale);
 
-			const matchesAgeSingle =
-				user.profile_type === 'single' &&
-				(ageFrom === null || calculateAge(user.DOB) >= ageFrom) &&
-				(ageTo === null || calculateAge(user.DOB) <= ageTo);
+			// const matchesAgeSingle =
+			// 	user.profile_type === 'single' &&
+			// 	(ageFrom === null || calculateAge(user.DOB) >= ageFrom) &&
+			// 	(ageTo === null || calculateAge(user.DOB) <= ageTo);
 
-			const matchesAgeCouple =
-				user.profile_type === 'couple' &&
-				(ageFrom === null ||
-					calculateAge(user.couple.person1.DOB) >= ageFrom ||
-					calculateAge(user.couple.person2.DOB) >= ageFrom) &&
-				(ageTo === null ||
-					calculateAge(user.couple.person1.DOB) <= ageTo ||
-					calculateAge(user.couple.person2.DOB) <= ageTo);
+			// const matchesAgeCouple =
+			// 	user.profile_type === 'couple' &&
+			// 	(ageFrom === null ||
+			// 		calculateAge(user.couple.person1.DOB) >= ageFrom ||
+			// 		calculateAge(user.couple.person2.DOB) >= ageFrom) &&
+			// 	(ageTo === null ||
+			// 		calculateAge(user.couple.person1.DOB) <= ageTo ||
+			// 		calculateAge(user.couple.person2.DOB) <= ageTo);
 
-			const matchesAge = matchesAgeSingle || matchesAgeCouple;
+			// const matchesAge = matchesAgeSingle || matchesAgeCouple;
 
 			const userWeightKg = extractWeightInKg(user.weight);
 			const matchesWeightSingle =
@@ -940,10 +940,9 @@ const AllUsers = () => {
 
 			return (
 				matchesSearch &&
-				matchesGender &&
-				matchesTreePicker &&
-				matchesAge &&
-				matchesWeight
+				matchesGender 
+				// matchesAge &&
+				// matchesWeight
 			);
 		});
 
@@ -1258,7 +1257,7 @@ const AllUsers = () => {
 						}
 					/>
 				</div>
-				<p style={{ fontSize: '18px', marginBottom: '10px' }}>
+				{/* <p style={{ fontSize: '18px', marginBottom: '10px' }}>
 					Advanced Search:
 				</p>
 				<CheckTreePicker
@@ -1283,7 +1282,7 @@ const AllUsers = () => {
 						border: '1px solid #333',
 					}}
 					popupClassName='dark-popup'
-				/>
+				/> */}
 			</div>
 			<div className='mb-20' style={{ width: '75%' }}>
 				<div className='mb-5 sm:mb-8'>
