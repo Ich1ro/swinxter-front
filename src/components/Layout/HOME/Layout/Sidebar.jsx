@@ -245,7 +245,7 @@ const Sidebar = ({ unread, closeMenu }) => {
             <h3 className="font-semibold text-22px mb-3 ">{userInfo.username}</h3> 
           </Link>
           <p className="flex items-center justify-between gap-4 mb-3 hover:text-orange font-body_font text-lg">
-            {`${userInfo.location.city}, ${userInfo.location.state}` || "Country name"}
+            {userInfo?.location ? `${userInfo?.location?.city}, ${userInfo?.location?.state}` : "Country name"}
             <Link className="cursor-pointer">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
