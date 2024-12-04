@@ -6,6 +6,7 @@ import { IoCloseCircleSharp } from 'react-icons/io5';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './signup.css';
+import getCoordinatesFromAWS from '../../utils/client-location'
 const SinglePerson = () => {
 	const [image, setImage] = useState();
 	const [terms, setTerms] = useState(false);
@@ -52,6 +53,8 @@ const SinglePerson = () => {
 		introduction: '',
 		gender: '',
 		personName: '',
+		state: '',
+		city: '',
 	});
 	const { userId } = useParams();
 	const { state } = useLocation();
@@ -366,19 +369,26 @@ const SinglePerson = () => {
 		formData.append('experience', form.experience);
 		formData.append('personName', form.personName);
 		try {
+			const coords = await getCoordinatesFromAWS(form.state, form.city);
+
+			const location = {
+				city: form.city,
+				state: form.state,
+				lat: coords.lat,
+				lon: coords.lon
+			}
+			formData.append('location', JSON.stringify(location));
 			const config = {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
 				withCredentials: true,
 			};
-
 			const { data } = await axios.put(
 				`${BASE_URL}/api/update`,
 				formData,
 				config
 			);
-
 			if (isGenderSelected && isPhotoUploaded) {
 				if (data) {
 					navigate(`/verify_email/${userId}`, { state: state?.email });
@@ -461,6 +471,33 @@ const SinglePerson = () => {
 										</div>
 									</div>
 								</form>
+
+								<h1 className='text-white text-2xl sm:text-3xl xl:text-5xl text-center xl:text-start font-bold mb-4'>
+										LOCATION
+								</h1>
+
+								<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>
+									<span>State *</span>
+									<input
+										type='text'
+										className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+										placeholder='State'
+										onChange={handleInput}
+										value={form.state}
+										name='state'
+									/>
+								</div>
+								<div className='bg-[#202020] grid grid-cols-2 px-10 py-5'>
+									<span>City *</span>
+									<input
+										type='text'
+										className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+										placeholder='City'
+										onChange={handleInput}
+										value={form.city}
+										name='city'
+									/>
+								</div>
 
 								<div className='my-4'>
 									<h1 className='text-white text-2xl sm:text-3xl xl:text-5xl text-center xl:text-start font-bold '>
@@ -798,6 +835,7 @@ const SinglePerson = () => {
 											<option value='transgender'>Transgender</option>
 										</select>
 									</div>
+
 									<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>
 										<span>Body Hair</span>
 										<div

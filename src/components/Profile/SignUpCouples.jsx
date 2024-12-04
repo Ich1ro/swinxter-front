@@ -6,6 +6,7 @@ import { IoCloseCircleSharp } from 'react-icons/io5';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './signup.css';
+import getCoordinatesFromAWS from '../../utils/client-location'
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const SignUpCouple = () => {
 	const navigate = useNavigate();
@@ -38,6 +39,10 @@ const SignUpCouple = () => {
 		female_female: [],
 		male_female: [],
 		transgender: [],
+	});
+	const [location, setLocation] = useState({
+		city: '',
+		state: ''
 	});
 	const [form, setForm] = useState({
 		body_type: '',
@@ -471,6 +476,15 @@ const SignUpCouple = () => {
 				},
 				withCredentials: true,
 			};
+			const coords = await getCoordinatesFromAWS(location.state, location.city);
+
+			const locationData = {
+				city: form.city,
+				state: form.state,
+				lat: coords.lat,
+				lon: coords.lon
+			}
+			formData.append('location', JSON.stringify(locationData));
 
 			const { data } = await axios.put(
 				`${BASE_URL}/api/update`,
@@ -619,6 +633,33 @@ const SignUpCouple = () => {
 										</div>
 									</div>
 								</form>
+
+								<h1 className='text-white text-2xl sm:text-3xl xl:text-5xl text-center xl:text-start font-bold mb-4'>
+										LOCATION
+								</h1>
+
+								<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>
+									<span>State *</span>
+									<input
+										type='text'
+										className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+										placeholder='State'
+										onChange={handleInput}
+										value={form.state}
+										name='state'
+									/>
+								</div>
+								<div className='bg-[#202020] grid grid-cols-2 px-10 py-5'>
+									<span>City *</span>
+									<input
+										type='text'
+										className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+										placeholder='City'
+										onChange={handleInput}
+										value={form.city}
+										name='city'
+									/>
+								</div>
 
 								<div className='my-4'>
 									<h1 className='text-white text-2xl sm:text-3xl xl:text-5xl text-center xl:text-start font-bold '>

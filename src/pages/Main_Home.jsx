@@ -13,21 +13,21 @@ const Main_Home = () => {
 	const { searchquery, setSavedCred } = useContext(Context);
 	const { user } = useSelector(state => state.auth);
 
-	useEffect(() => {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(success, error);
-		} else {
-			console.log('Geolocation not supported');
-		}
-		function success(position) {
-			const latitude = position.coords.latitude;
-			const longitude = position.coords.longitude;
-			setSavedCred({ long: longitude, lat: latitude });
-		}
-		function error() {
-			console.log('Unable to retrieve your location');
-		}
-	}, []);
+	// useEffect(() => {
+	// 	if (navigator.geolocation) {
+	// 		navigator.geolocation.getCurrentPosition(success, error);
+	// 	} else {
+	// 		console.log('Geolocation not supported');
+	// 	}
+	// 	function success(position) {
+	// 		const latitude = position.coords.latitude;
+	// 		const longitude = position.coords.longitude;
+	// 		setSavedCred({ long: longitude, lat: latitude });
+	// 	}
+	// 	function error() {
+	// 		console.log('Unable to retrieve your location');
+	// 	}
+	// }, []);
 
 	const getEvent = async () => {
 		const { data } = await api.get(`/events?q=${searchquery}`);
