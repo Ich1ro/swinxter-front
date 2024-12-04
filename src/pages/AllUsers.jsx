@@ -30,6 +30,7 @@ const AllUsers = () => {
 	const [ageFrom, setAgeFrom] = useState(null);
 	const [ageTo, setAgeTo] = useState(null);
 	const [selectedTreePicker, setSelectedTreePicker] = useState([]);
+	const [radius, setRadius] = useState(null);
 
 	const checkTreePickerRef = useRef(null);
 	const sidebarRef = useRef(null);
@@ -116,6 +117,22 @@ const AllUsers = () => {
 		const kgMatch = weightString?.match(/^(\d+)\s*kg/);
 		return kgMatch ? parseInt(kgMatch[1], 10) : null;
 	}
+
+	const handleSearchNear = async () => {
+		let userArr = [];
+		const { data } = await api.get(
+			`/near-users/${user.geometry.coordinates[0]}/${
+				user.geometry.coordinates[1]
+			}/${+radius * 1609}`
+		);
+		console.log(data);
+		data.map(d => {
+			if (d._id !== userInfo._id && !userInfo.blockedby.includes(d._id)) {
+				userArr.push(d);
+			}
+		});
+		setUsers(userArr);
+	};
 
 	const data = [
 		{
@@ -536,9 +553,11 @@ const AllUsers = () => {
 				coupleWeight1Kg !== null &&
 				coupleWeight2Kg !== null &&
 				(weightFrom === null ||
-					(coupleWeight1Kg >= weightFrom || coupleWeight2Kg >= weightFrom)) &&
+					coupleWeight1Kg >= weightFrom ||
+					coupleWeight2Kg >= weightFrom) &&
 				(weightTo === null ||
-					(coupleWeight1Kg <= weightTo || coupleWeight2Kg <= weightTo));
+					coupleWeight1Kg <= weightTo ||
+					coupleWeight2Kg <= weightTo);
 
 			const matchesWeight = matchesWeightSingle || matchesWeightCouple;
 
@@ -939,13 +958,11 @@ const AllUsers = () => {
 				matchesTreePickerCouple;
 
 			return (
-				matchesSearch &&
-				matchesGender 
+				matchesSearch && matchesGender
 				// matchesAge &&
 				// matchesWeight
 			);
 		});
-
 		console.log(filtered);
 
 		setFilteredUsers(prev => (prev !== filtered ? filtered : prev));
@@ -1257,6 +1274,66 @@ const AllUsers = () => {
 						}
 					/>
 				</div>
+
+				<p style={{ fontSize: '18px', marginBottom: '10px' }}>Near me:</p>
+
+				<div
+					style={{
+						display: 'flex',
+						width: '100%',
+						alignItems: 'center',
+						justifyContent: 'space-between',
+					}}
+				>
+					<label style={{ margin: '0' }}>Radius in miles:</label>
+					<input
+						type='number'
+						placeholder='Radius'
+						style={{
+							maxWidth: '80px',
+							backgroundColor: '#1f1f1f',
+							color: '#fff',
+							border: '1px solid #333',
+							borderRadius: '8px',
+							padding: '5px 10px',
+							outline: 'none',
+							fontSize: '14px',
+						}}
+						value={radius || ''}
+						onChange={e => setRadius(e.target.value)}
+					/>
+				</div>
+				{radius && (
+					<div style={{display: 'flex', justifyContent: 'space-between'}}>
+						<button
+							onClick={handleSearchNear}
+							style={{
+								background: 'black',
+								padding: '5px 10px',
+								borderRadius: '8px',
+								marginTop: '15px',
+								width: '40%',
+								backgroundColor: '#1f1f1f',
+							}}
+						>
+							Search
+						</button>
+						<button
+							onClick={handleSearchNear}
+							style={{
+								background: 'black',
+								padding: '5px 10px',
+								borderRadius: '8px',
+								marginTop: '15px',
+								width: '40%',
+								backgroundColor: '#1f1f1f',
+							}}
+						>
+							clear
+						</button>
+					</div>
+				)}
+
 				{/* <p style={{ fontSize: '18px', marginBottom: '10px' }}>
 					Advanced Search:
 				</p>

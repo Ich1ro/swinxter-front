@@ -23,7 +23,7 @@ const getCoordinatesFromAWS = async (state, city) => {
 
         if (response.Results && response.Results.length > 0) {
             const location = response.Results[0].Place.Geometry.Point;
-			return { lat: location[1], lon: location[0] };
+			return location;
         } else {
             console.error("No results found.");
             return null;

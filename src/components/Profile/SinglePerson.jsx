@@ -6,7 +6,7 @@ import { IoCloseCircleSharp } from 'react-icons/io5';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './signup.css';
-import getCoordinatesFromAWS from '../../utils/client-location'
+import getCoordinatesFromAWS from '../../utils/client-location';
 const SinglePerson = () => {
 	const [image, setImage] = useState();
 	const [terms, setTerms] = useState(false);
@@ -341,57 +341,69 @@ const SinglePerson = () => {
 			return;
 		}
 
-		const formData = new FormData();
-		formData.append('userId', userId);
-
-		formData.append('interests', JSON.stringify(interest));
-		formData.append('slogan', form.slogan);
-		formData.append('introduction', form.introduction);
-		formData.append('gender', form.gender);
-		formData.append('body_type', form.body_type);
-		formData.append('DOB', formattedDate);
-		formData.append('body_hair', bodyhair);
-		formData.append('ethnic_background', form.ethnic);
-		formData.append('height', form.height);
-		formData.append('weight', form.weight);
-		formData.append('smoking', form.smoking);
-		formData.append('piercings', form.piercing);
-		formData.append('tattoos', form.tattoo);
-		formData.append('Drinking', form.Drinking);
-		formData.append('Relationship', form.Relationship);
-		formData.append('Drugs', form.Drugs);
-		formData.append('Language', form.Language);
-		formData.append('circumcised', form.circumcised);
-		formData.append('looks_important', form.looks);
-		formData.append('intelligence', form.intelligence);
-		formData.append('sexuality', form.sexuality);
-		formData.append('relationship_status', form.relationship);
-		formData.append('experience', form.experience);
-		formData.append('personName', form.personName);
 		try {
 			const coords = await getCoordinatesFromAWS(form.state, form.city);
 
 			const location = {
 				city: form.city,
 				state: form.state,
-				lat: coords.lat,
-				lon: coords.lon
-			}
+			};
+
+			const geometry = {
+				type: 'Point',
+				coordinates: coords,
+			};
+
+			const formData = new FormData();
+			formData.append('userId', userId);
+
+			formData.append('interests', JSON.stringify(interest));
+			formData.append('slogan', form.slogan);
+			formData.append('introduction', form.introduction);
+			formData.append('gender', form.gender);
+			formData.append('body_type', form.body_type);
+			formData.append('DOB', formattedDate);
+			formData.append('body_hair', bodyhair);
+			formData.append('ethnic_background', form.ethnic);
+			formData.append('height', form.height);
+			formData.append('weight', form.weight);
+			formData.append('smoking', form.smoking);
+			formData.append('piercings', form.piercing);
+			formData.append('tattoos', form.tattoo);
+			formData.append('Drinking', form.Drinking);
+			formData.append('Relationship', form.Relationship);
+			formData.append('Drugs', form.Drugs);
+			formData.append('Language', form.Language);
+			formData.append('circumcised', form.circumcised);
+			formData.append('looks_important', form.looks);
+			formData.append('intelligence', form.intelligence);
+			formData.append('sexuality', form.sexuality);
+			formData.append('relationship_status', form.relationship);
+			formData.append('experience', form.experience);
+			formData.append('personName', form.personName);
 			formData.append('location', JSON.stringify(location));
+			formData.append('geometry', JSON.stringify(geometry));
+
 			const config = {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
 				withCredentials: true,
 			};
+
 			const { data } = await axios.put(
 				`${BASE_URL}/api/update`,
 				formData,
 				config
 			);
+
 			if (isGenderSelected && isPhotoUploaded) {
+				const userEmail = state?.email;
+				console.log(userEmail);
+				console.log(state);
+
 				if (data) {
-					navigate(`/verify_email/${userId}`, { state: state?.email });
+					navigate(`/verify_email/${userId}`, { state: { email: userEmail } });
 				} else {
 					toast.error('Cannot Update');
 				}
@@ -401,7 +413,8 @@ const SinglePerson = () => {
 					: toast('Image is required');
 			}
 		} catch (error) {
-			console.log(error);
+			console.error('Update failed:', error);
+			toast.error('An error occurred while updating');
 		}
 	};
 
@@ -473,7 +486,7 @@ const SinglePerson = () => {
 								</form>
 
 								<h1 className='text-white text-2xl sm:text-3xl xl:text-5xl text-center xl:text-start font-bold mb-4'>
-										LOCATION
+									LOCATION
 								</h1>
 
 								<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>

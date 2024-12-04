@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import UserCard from '../components/Cards/UserCard'
+import UserCard from '../components/Cards/UserCard';
+import { forEach } from 'rsuite/esm/internals/utils/ReactChildren';
 
 const AdvancedSearch = () => {
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
-	const [data, setData] = useState(null)
+	const [data, setData] = useState(null);
 	const [filters, setFilters] = useState({
 		accountType: 'single',
 		relationship: '',
@@ -26,12 +27,13 @@ const AdvancedSearch = () => {
 			interests: [],
 			location: '',
 			heightRange: [],
+			weightRange: [],
 		},
 		person1: {
 			bodyType: [],
 			gender: 'female',
 			piercings: '',
-			circumcised: '',
+			// circumcised: '',
 			tattoos: '',
 			smoking: '',
 			drinking: '',
@@ -45,6 +47,7 @@ const AdvancedSearch = () => {
 			interests: [],
 			location: '',
 			heightRange: [],
+			weightRange: [],
 		},
 		person2: {
 			bodyType: [],
@@ -64,6 +67,7 @@ const AdvancedSearch = () => {
 			interests: [],
 			location: '',
 			heightRange: [],
+			weightRange: [],
 		},
 	});
 
@@ -93,16 +97,40 @@ const AdvancedSearch = () => {
 		}));
 	};
 
+	const convertLbsToKg = weightStr => {
+		const lbs = parseFloat(weightStr.split(' ')[0]);
+		return lbs ? (lbs * 0.453592).toFixed(2) : null;
+	};
+
 	const handleSubmit = async event => {
 		event.preventDefault();
 		console.log('filters', filters);
 
+		const filtersCopy = { ...filters };
+
+		if (filtersCopy.single && filtersCopy.single.weightRange) {
+			filtersCopy.single.weightRange = filtersCopy.single.weightRange.map(
+				weight => convertLbsToKg(`${weight} lbs`)
+			);
+		}
+
+		if (filtersCopy.person1 && filtersCopy.person1.weightRange) {
+			filtersCopy.person1.weightRange = filtersCopy.person1.weightRange.map(
+				weight => convertLbsToKg(`${weight} lbs`)
+			);
+		}
+
+		if (filtersCopy.person2 && filtersCopy.person2.weightRange) {
+			filtersCopy.person2.weightRange = filtersCopy.person2.weightRange.map(
+				weight => convertLbsToKg(`${weight} lbs`)
+			);
+		}
 		try {
 			const response = await axios.post(
 				`${BASE_URL}/api/advanced-search`,
-				filters
+				filtersCopy
 			);
-			setData(response.data)
+			setData(response.data);
 			console.log('result:', response.data);
 		} catch (error) {
 			console.error('Error:', error);
@@ -116,10 +144,12 @@ const AdvancedSearch = () => {
 				display: 'flex',
 				justifyContent: 'space-between',
 				position: 'relative',
-				flexDirection: 'column'
+				flexDirection: 'column',
 			}}
 		>
-			<h1 style={{marginBottom: '15px', fontSize: '20px'}}>Advanced Search</h1>
+			<h1 style={{ marginBottom: '15px', fontSize: '20px' }}>
+				Advanced Search
+			</h1>
 			<form
 				onSubmit={handleSubmit}
 				style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
@@ -132,7 +162,7 @@ const AdvancedSearch = () => {
 						borderRadius: '10px',
 					}}
 				>
-					<h2 style={{marginBottom: '10px'}}>Account Type</h2>
+					<h2 style={{ marginBottom: '10px' }}>Account Type</h2>
 
 					<div style={{ display: 'flex', alignItems: 'center' }}>
 						<label
@@ -155,7 +185,7 @@ const AdvancedSearch = () => {
 											bodyType: [],
 											gender: 'female',
 											piercings: '',
-											circumcised: '',
+											// circumcised: '',
 											tattoos: '',
 											smoking: '',
 											drinking: '',
@@ -167,6 +197,7 @@ const AdvancedSearch = () => {
 											interests: [],
 											location: '',
 											heightRange: [],
+											weightRange: [],
 										},
 										person2: {
 											bodyType: [],
@@ -184,6 +215,7 @@ const AdvancedSearch = () => {
 											interests: [],
 											location: '',
 											heightRange: [],
+											weightRange: [],
 										},
 									})
 								}
@@ -216,6 +248,7 @@ const AdvancedSearch = () => {
 											interests: [],
 											location: '',
 											heightRange: [],
+											weightRange: [],
 										},
 									})
 								}
@@ -340,7 +373,7 @@ const AdvancedSearch = () => {
 						borderRadius: '10px',
 					}}
 				>
-					<h2 style={{marginBottom: '10px'}}>Relationship</h2>
+					<h2 style={{ marginBottom: '10px' }}>Relationship</h2>
 					<label
 						style={{
 							display: 'flex',
@@ -447,9 +480,14 @@ const AdvancedSearch = () => {
 						}
 					/>
 				) : (
-					<div className='couple-filters' style={{ display: 'flex', justifyContent: "space-between" }}>
+					<div
+						className='couple-filters'
+						style={{ display: 'flex', justifyContent: 'space-between' }}
+					>
 						<div style={{ width: '47%' }}>
-							<h3 style={{textAlign: 'center', marginBottom: '10px'}}>Female</h3>
+							<h3 style={{ textAlign: 'center', marginBottom: '10px' }}>
+								Female
+							</h3>
 							<SingleFilter
 								filters={filters.person1}
 								handleCheckboxChange={(category, value) =>
@@ -460,8 +498,10 @@ const AdvancedSearch = () => {
 								}
 							/>
 						</div>
-						<div style={{width: '47%'}}>
-							<h3 style={{textAlign: 'center', marginBottom: '10px'}}>Male</h3>
+						<div style={{ width: '47%' }}>
+							<h3 style={{ textAlign: 'center', marginBottom: '10px' }}>
+								Male
+							</h3>
 							<SingleFilter
 								filters={filters.person2}
 								handleCheckboxChange={(category, value) =>
@@ -475,16 +515,31 @@ const AdvancedSearch = () => {
 					</div>
 				)}
 
-				<button type='submit' style={{ marginTop: '20px', backgroundColor: 'rgb(42 45 55 / var(--tw-bg-opacity))', padding: '10px', borderRadius: '10px'}}>
+				<button
+					type='submit'
+					style={{
+						marginTop: '20px',
+						backgroundColor: 'rgb(42 45 55 / var(--tw-bg-opacity))',
+						padding: '10px',
+						borderRadius: '10px',
+					}}
+				>
 					Search
 				</button>
 			</form>
 			{data && (
-				<div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '20px', justifyContent: 'center' }}>
-				{data.map((user, i) => (
-					<UserCard key={i} userInfo={user} />
-				))}
-			</div>
+				<div
+					style={{
+						display: 'flex',
+						flexWrap: 'wrap',
+						marginTop: '20px',
+						justifyContent: 'center',
+					}}
+				>
+					{data.map((user, i) => (
+						<UserCard key={i} userInfo={user} />
+					))}
+				</div>
 			)}
 		</div>
 	);
@@ -500,7 +555,7 @@ const SingleFilter = ({ filters, handleCheckboxChange, handleInputChange }) => (
 				borderRadius: '10px',
 			}}
 		>
-			<h1 style={{marginBottom: '10px'}}>Body</h1>
+			<h1 style={{ marginBottom: '10px' }}>Body</h1>
 			<div style={{ display: 'flex' }}>
 				<div style={{ marginRight: '15px' }}>
 					<h3>Body Type</h3>
@@ -570,53 +625,56 @@ const SingleFilter = ({ filters, handleCheckboxChange, handleInputChange }) => (
 					</div>
 				</div>
 				<div style={{ marginRight: '15px' }}>
-					<h3>Circumcised</h3>
-					<div style={{ display: 'flex', flexDirection: 'column' }}>
-						<label
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								marginRight: '20px',
-							}}
-						>
-							<input
-								type='radio'
-								name={`circumcised${filters.gender}`}
-								value={filters.circumcised}
-								checked={filters.circumcised === ''}
-								onChange={() => handleInputChange('circumcised', '')}
-							/>
-							Not important
-						</label>
-						<label
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								marginRight: '20px',
-							}}
-						>
-							<input
-								type='radio'
-								name={`circumcised${filters.gender}`}
-								value={filters.circumcised}
-								checked={filters.circumcised === 'Yes'}
-								onChange={() => handleInputChange('circumcised', 'Yes')}
-							/>
-							Yes
-						</label>
-						<label style={{ display: 'flex', alignItems: 'center' }}>
-							<input
-								type='radio'
-								name={`circumcised${filters.gender}`}
-								value={filters.circumcised}
-								checked={filters.circumcised === 'No'}
-								onChange={() => handleInputChange('circumcised', 'No')}
-							/>
-							No
-						</label>
-					</div>
+					{filters.gender !== 'female' && (
+						<>
+							<h3>Circumcised</h3>
+							<div style={{ display: 'flex', flexDirection: 'column' }}>
+								<label
+									style={{
+										display: 'flex',
+										alignItems: 'center',
+										marginRight: '20px',
+									}}
+								>
+									<input
+										type='radio'
+										name={`circumcised${filters.gender}`}
+										value={filters.circumcised}
+										checked={filters.circumcised === ''}
+										onChange={() => handleInputChange('circumcised', '')}
+									/>
+									Not important
+								</label>
+								<label
+									style={{
+										display: 'flex',
+										alignItems: 'center',
+										marginRight: '20px',
+									}}
+								>
+									<input
+										type='radio'
+										name={`circumcised${filters.gender}`}
+										value={filters.circumcised}
+										checked={filters.circumcised === 'Yes'}
+										onChange={() => handleInputChange('circumcised', 'Yes')}
+									/>
+									Yes
+								</label>
+								<label style={{ display: 'flex', alignItems: 'center' }}>
+									<input
+										type='radio'
+										name={`circumcised${filters.gender}`}
+										value={filters.circumcised}
+										checked={filters.circumcised === 'No'}
+										onChange={() => handleInputChange('circumcised', 'No')}
+									/>
+									No
+								</label>
+							</div>
+						</>
+					)}
 				</div>
-
 				<div>
 					<h3>Tattoos</h3>
 					<div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -685,7 +743,7 @@ const SingleFilter = ({ filters, handleCheckboxChange, handleInputChange }) => (
 				borderRadius: '10px',
 			}}
 		>
-			<h3 style={{marginBottom: '10px'}}>Habits</h3>
+			<h3 style={{ marginBottom: '10px' }}>Habits</h3>
 			<div style={{ display: 'flex' }}>
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					<h2>Smoking</h2>
@@ -902,7 +960,7 @@ const SingleFilter = ({ filters, handleCheckboxChange, handleInputChange }) => (
 			}}
 		>
 			<div style={{ display: 'flex', flexDirection: 'column' }}>
-				<h2 style={{marginBottom: '10px'}}>Ethnic Background</h2>
+				<h2 style={{ marginBottom: '10px' }}>Ethnic Background</h2>
 				<label
 					style={{ display: 'flex', alignItems: 'center', marginRight: '20px' }}
 				>
@@ -1217,7 +1275,7 @@ const SingleFilter = ({ filters, handleCheckboxChange, handleInputChange }) => (
 			}}
 		>
 			<div style={{ display: 'flex', flexDirection: 'column' }}>
-				<h2 style={{marginBottom: '10px'}}>Sexuality</h2>
+				<h2 style={{ marginBottom: '10px' }}>Sexuality</h2>
 				<label
 					style={{ display: 'flex', alignItems: 'center', marginRight: '20px' }}
 				>
@@ -1287,7 +1345,7 @@ const SingleFilter = ({ filters, handleCheckboxChange, handleInputChange }) => (
 			</div>
 		</div>
 
-		<div
+		{/* <div
 			style={{
 				backgroundColor: 'rgb(42 45 55 / var(--tw-bg-opacity))',
 				marginBottom: '15px',
@@ -1312,7 +1370,7 @@ const SingleFilter = ({ filters, handleCheckboxChange, handleInputChange }) => (
 					</label>
 				))}
 			</div>
-		</div>
+		</div> */}
 
 		<div
 			style={{
@@ -1322,7 +1380,7 @@ const SingleFilter = ({ filters, handleCheckboxChange, handleInputChange }) => (
 				borderRadius: '10px',
 			}}
 		>
-			<h3 style={{marginBottom: '10px'}}>Age</h3>
+			<h3 style={{ marginBottom: '10px' }}>Age</h3>
 			<div>
 				<input
 					type='number'
@@ -1371,7 +1429,7 @@ const SingleFilter = ({ filters, handleCheckboxChange, handleInputChange }) => (
 			placeholder='City, State'
 		/> */}
 
-			<h3 style={{marginBottom: '10px'}}>Height</h3>
+			<h3 style={{ marginBottom: '10px' }}>Height</h3>
 			<div>
 				<input
 					type='number'
@@ -1388,7 +1446,7 @@ const SingleFilter = ({ filters, handleCheckboxChange, handleInputChange }) => (
 						maxWidth: '100px',
 						marginRight: '15px',
 						backgroundColor: 'white',
-						color: 'black'
+						color: 'black',
 					}}
 					placeholder='Min'
 				/>
@@ -1399,6 +1457,47 @@ const SingleFilter = ({ filters, handleCheckboxChange, handleInputChange }) => (
 						handleInputChange('heightRange', [
 							filters.heightRange[0],
 							parseInt(e.target.value),
+						])
+					}
+					style={{
+						backgroundColor: 'white',
+						color: 'black',
+						borderRadius: '5px',
+						padding: '0 10px',
+						maxWidth: '100px',
+					}}
+					placeholder='Max'
+				/>
+			</div>
+
+			<h3 style={{ marginBottom: '10px' }}>Weight</h3>
+			<div>
+				<input
+					type='number'
+					value={filters.weightRange[0]}
+					onChange={e =>
+						handleInputChange('weightRange', [
+							e.target.value,
+							filters.weightRange[1],
+						])
+					}
+					style={{
+						borderRadius: '5px',
+						padding: '0 10px',
+						maxWidth: '100px',
+						marginRight: '15px',
+						backgroundColor: 'white',
+						color: 'black',
+					}}
+					placeholder='Min'
+				/>
+				<input
+					type='number'
+					value={filters.weightRange[1]}
+					onChange={e =>
+						handleInputChange('weightRange', [
+							filters.weightRange[0],
+							e.target.value,
 						])
 					}
 					style={{

@@ -476,15 +476,20 @@ const SignUpCouple = () => {
 				},
 				withCredentials: true,
 			};
-			const coords = await getCoordinatesFromAWS(location.state, location.city);
+			const coords = await getCoordinatesFromAWS(form.state, form.city);
 
-			const locationData = {
+			const location = {
 				city: form.city,
 				state: form.state,
-				lat: coords.lat,
-				lon: coords.lon
-			}
-			formData.append('location', JSON.stringify(locationData));
+			};
+
+			const geometry = {
+				type: 'Point',
+				coordinates: coords,
+			};
+
+			formData.append('location', JSON.stringify(location));
+			formData.append('geometry', JSON.stringify(geometry));
 
 			const { data } = await axios.put(
 				`${BASE_URL}/api/update`,

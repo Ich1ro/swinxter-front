@@ -11,9 +11,9 @@ const NearUsers = () => {
 
 	const getRecentUsers = async () => {
 		let userArr = [];
-		const { data } = await api.get(`/recent_users`);
+		const { data } = await api.get(`/near-users/${user.geometry.coordinates[0]}/${user.geometry.coordinates[1]}`);
 		console.log(data);
-		data.users.map(d => {
+		data.map(d => {
 			if (d._id !== userInfo._id && !userInfo.blockedby.includes(d._id)) {
 				userArr.push(d);
 			}
