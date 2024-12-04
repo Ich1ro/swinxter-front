@@ -106,7 +106,7 @@ const AdvancedSearch = () => {
 		event.preventDefault();
 		console.log('filters', filters);
 
-		const filtersCopy = { ...filters };
+		const filtersCopy = JSON.parse(JSON.stringify(filters));
 
 		if (filtersCopy.single && filtersCopy.single.weightRange) {
 			filtersCopy.single.weightRange = filtersCopy.single.weightRange.map(
