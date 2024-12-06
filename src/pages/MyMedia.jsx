@@ -7,10 +7,18 @@ const MyMedia = () => {
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
 	const [addNew, setAddNew] = useState(false);
+	const [filteredMedia, setFilteredMedia] = useState([]);
+	const [isActivePublic, setIsActivePublic] = useState(true);
 
 	useEffect(() => {
 		setUserInfo(user)
 	}, [user])
+
+	useEffect(() => {
+		setFilteredMedia(isActivePublic
+            ? userInfo?.mymedia?.filter(media => !media.isPrivate)
+            : userInfo?.mymedia?.filter(media => media.isPrivate))
+	}, [isActivePublic, userInfo])
 
 	return (
 		<>
@@ -33,9 +41,26 @@ const MyMedia = () => {
 								Add New
 							</button>
 						</div>
+						<div className='flex justify-between flex-wrap gap-5 items-center mb-5 sm:mb-8' style={{padding: '0 35%'}}>
+							<button
+								style={!isActivePublic ? { width: '150px', opacity: '.5' } : {width: '150px'}}
+								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
+								onClick={() => setIsActivePublic(true)}
+							>
+								Public
+							</button>
+							<button
+								style={isActivePublic ? { width: '150px', opacity: '.5' } : {width: '150px'}}
+								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
+								onClick={() => setIsActivePublic(false)}
+							>
+								Private
+							</button>
+						</div>
+
 						<div style={{ display: 'flex', flexWrap: 'wrap' }}>
-							{userInfo?.mymedia?.length > 0
-								? userInfo.mymedia.map((item, i) => (
+							{filteredMedia.length > 0
+								? filteredMedia.map((item, i) => (
 										<div
 											style={{
 												padding: '10px',

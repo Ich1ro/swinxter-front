@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { loadUser } from '../../../redux/actions/auth';
 import api from '../../../utils/api';
+import getCoordinatesFromAWS from '../../../utils/client-location';
 
 const EditUserDetailsPage = () => {
 	const [image, setImage] = useState();
@@ -37,6 +38,8 @@ const EditUserDetailsPage = () => {
 		introduction: '',
 		image: '',
 		slogan: '',
+		city: '',
+		state: '',
 	});
 	const [usertoken, setUsertoken] = useState('');
 	const dispatch = useDispatch();
@@ -181,6 +184,8 @@ const EditUserDetailsPage = () => {
 				experience: userInfo.experience || '',
 				introduction: userInfo.introduction || '',
 				slogan: userInfo.slogan || '',
+				city: userInfo.location.city || '',
+				state: userInfo.location.state || '',
 			});
 		}
 	}, []);
@@ -234,19 +239,68 @@ const EditUserDetailsPage = () => {
 	const handleSave = async e => {
 		e.preventDefault();
 		try {
-			const { data } = await api.put(
-				`/update`,
-				{ userId: Id, ...userDetails },
-				{
-					headers: {
-						token: usertoken,
+			if (
+				userDetails.city !== user.location.city ||
+				userDetails.state !== user.location.state
+			) {
+				const dataForUpdate = {
+					...userDetails,
+					location: {
+						city: userDetails.city || '',
+						state: userDetails.state || '',
 					},
+				};
+				
+				delete dataForUpdate.city;
+				delete dataForUpdate.state;
+				const coords = await getCoordinatesFromAWS(userDetails.state, userDetails.city);
+
+				const geometry = {
+					type: 'Point',
+					coordinates: coords,
+				};
+				dataForUpdate.geometry = geometry
+				console.log(dataForUpdate);
+				
+				const { data } = await api.put(
+					`/update-user`,
+					{ userId: Id, ...dataForUpdate },
+					{
+						headers: {
+							token: usertoken,
+						},
+					}
+				);
+				if (data) {
+					setUserInfo(data);
+					dispatch(loadUser());
+					toast.success('Profile edit successfully');
 				}
-			);
-			if (data) {
-				setUserInfo(data);
-				dispatch(loadUser());
-				toast.success('Profile edit successfully');
+			} else {
+				const dataForUpdate = {
+					...userDetails,
+					location: {
+						city: userDetails.city || '',
+						state: userDetails.state || '',
+					},
+				};
+				
+				delete dataForUpdate.city;
+				delete dataForUpdate.state;
+				const { data } = await api.put(
+					`/update-user`,
+					{ userId: Id, ...userDetails },
+					{
+						headers: {
+							token: usertoken,
+						},
+					}
+				);
+				if (data) {
+					setUserInfo(data);
+					dispatch(loadUser());
+					toast.success('Profile edit successfully');
+				}
 			}
 		} catch (error) {
 			console.log(error);
@@ -638,6 +692,23 @@ const EditUserDetailsPage = () => {
 									<option value='A few'>A few</option>
 								</select>
 							</div>
+							<div className='flex flex-wrap rounded-md input_field'>
+								<label
+									htmlFor='City'
+									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+								>
+									City
+								</label>
+								<input
+									className='bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									id='city'
+									type='text'
+									placeholder='City'
+									onChange={handleChange}
+									name='city'
+									value={userDetails.city}
+								></input>
+							</div>
 							<div>
 								<label
 									htmlFor='slogan_msg'
@@ -916,6 +987,23 @@ const EditUserDetailsPage = () => {
 									onChange={handleChange}
 									name='Language'
 									value={userDetails.Language}
+								></input>
+							</div>
+							<div className='flex flex-wrap rounded-md input_field'>
+								<label
+									htmlFor='state'
+									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+								>
+									State
+								</label>
+								<input
+									className='bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									id='state'
+									type='text'
+									placeholder='State'
+									onChange={handleChange}
+									name='state'
+									value={userDetails.state}
 								></input>
 							</div>
 

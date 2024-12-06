@@ -232,11 +232,11 @@ const Sidebar = ({ unread, closeMenu }) => {
       <div>
         <Link to={'/user-detail'} style={{width: '230px', height: '230px', display: 'block'}}>
           {userInfo?.profile_type === "couple" ?
-            <img src={userInfo?.image ? userInfo?.image : "images/couple-avatar.jpg"} />
+            <img src={userInfo?.image ? userInfo?.image : "images/couple-avatar.jpg"} className='main-image' />
             :
             <img
               src={userInfo?.image ? userInfo?.image : userInfo?.gender === "male" ? "/images/boy-avatar.jpg" : userInfo?.gender === "female" ? "/images/girl-avatar.jpg" : "/images/trans avatar.png"}
-              className="hidden aspect-square object-cover xl:block"
+              className="hidden aspect-square object-cover xl:block main-image"
             />
           }
         </Link>

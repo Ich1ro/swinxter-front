@@ -31,7 +31,7 @@ const BlockCard = ({data,forceRender}) => {
           <img
             src={data?.image}
             alt="book-model"
-            className="w-full h-full object-center object-cover aspect-[5/4] rounded-2xl"
+            className="w-full h-full object-center object-cover aspect-[5/4] rounded-2xl main-image"
           />:(data?.gender==="male"?(<img src="/images/boy-avatar.jpg" alt="boy" />):data?.gender==="female"? (<img src="/images/girl-avatar.jpg" alt="girl"  />):(<img src="/images/trans avatar.png" alt="trans"  />))
         }
         </div>

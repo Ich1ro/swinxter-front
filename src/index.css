@@ -68,3 +68,12 @@ svg {
 .rs-picker-menu-item:hover {
   background-color: #333 !important; /* Darker hover effect */
 }
+
+.main-image {
+	transform: scale(1, 1);
+	transition: 1s;
+}
+
+.main-image:hover {
+	transform: scale(1.2, 1.2);
+}

@@ -1,14 +1,18 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import UserCard from '../components/Cards/UserCard';
-import { forEach } from 'rsuite/esm/internals/utils/ReactChildren';
+// import api from '../utils/api'
+import { useSelector } from 'react-redux';
 
 const AdvancedSearch = () => {
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
 	const [data, setData] = useState(null);
+	const { user } = useSelector(state => state.auth);
+	// const [radius, setRadius] = useState = (null)
 	const [filters, setFilters] = useState({
 		accountType: 'single',
 		relationship: '',
+		radius: '',
 		single: {
 			bodyType: [],
 			gender: '',
@@ -107,6 +111,14 @@ const AdvancedSearch = () => {
 		console.log('filters', filters);
 
 		const filtersCopy = JSON.parse(JSON.stringify(filters));
+		if (filters.radius !== '') {
+			const location = {
+				radius: +filters.radius * 1609,
+				lon: user.geometry.coordinates[0],
+				lat: user.geometry.coordinates[1],
+			};
+			filtersCopy.location = location;
+		}
 
 		if (filtersCopy.single && filtersCopy.single.weightRange) {
 			filtersCopy.single.weightRange = filtersCopy.single.weightRange.map(
@@ -125,17 +137,41 @@ const AdvancedSearch = () => {
 				weight => convertLbsToKg(`${weight} lbs`)
 			);
 		}
+		console.log(filtersCopy);
+
 		try {
 			const response = await axios.post(
 				`${BASE_URL}/api/advanced-search`,
 				filtersCopy
 			);
-			setData(response.data);
+			let userArr = [];
+			response.data.map(d => {
+				if (d._id !== user._id && !user.blockedby.includes(d._id)) {
+					userArr.push(d);
+				}
+			});
+			setData(userArr);
 			console.log('result:', response.data);
 		} catch (error) {
 			console.error('Error:', error);
 		}
 	};
+
+	// const handleSearchNear = async () => {
+	// 	let userArr = [];
+	// 	const { data } = await api.get(
+	// 		`/near-users/${user.geometry.coordinates[0]}/${
+	// 			user.geometry.coordinates[1]
+	// 		}/${+radius * 1609}`
+	// 	);
+	// 	console.log(data);
+	// 	data.map(d => {
+	// 		if (d._id !== user._id && !user.blockedby.includes(d._id)) {
+	// 			userArr.push(d);
+	// 		}
+	// 	});
+	// 	setData(userArr);
+	// };
 
 	return (
 		<div
@@ -467,6 +503,33 @@ const AdvancedSearch = () => {
 						/>
 						Polyamorous
 					</label>
+				</div>
+
+				<div
+					style={{
+						backgroundColor: 'rgb(42 45 55 / var(--tw-bg-opacity))',
+						marginBottom: '15px',
+						padding: '10px',
+						borderRadius: '10px',
+					}}
+				>
+					<h3 style={{ marginBottom: '10px' }}>Search near</h3>
+					<div>
+						<input
+							type='number'
+							value={filters.radius}
+							onChange={e => setFilters({ ...filters, radius: e.target.value })}
+							style={{
+								backgroundColor: 'white',
+								color: 'black',
+								borderRadius: '5px',
+								padding: '0 10px',
+								maxWidth: '200px',
+								marginRight: '15px',
+							}}
+							placeholder='Radius in miles'
+						/>
+					</div>
 				</div>
 
 				{filters.accountType === 'single' ? (

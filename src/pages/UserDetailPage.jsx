@@ -204,7 +204,7 @@ const UserDetailPage = ({ socket }) => {
 									<img
 										src={userInfo?.image}
 										alt='book-model'
-										className='w-full h-full object-center object-cover aspect-[5/4] rounded-2xl'
+										className='w-full h-full object-center object-cover aspect-[5/4] rounded-2xl main-image'
 									/>
 								) : userInfo?.gender === 'male' ? (
 									<img src='/images/boy-avatar.jpg' alt='boy' />
@@ -375,7 +375,7 @@ const UserDetailPage = ({ socket }) => {
 							</div>
 						</div>
 
-						{(!currentUser) && (
+						{!currentUser && (
 							<>
 								{userInfo?.mymedia?.length > 0 && currentUser && (
 									<>
