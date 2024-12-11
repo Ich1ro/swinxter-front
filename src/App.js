@@ -65,6 +65,7 @@ import RecievedHotList from './pages/RecievedHotList';
 import {io} from "socket.io-client";
 import SuccessPaymentPage from './pages/SuccessPaymentPage'
 import AdvancedSearch from './pages/AdvancedSearch'
+import MyMediaUniversal from './pages/MyMediaUniversal'
 
 function App() {
 const {isAuthenticated} = useSelector((state)=>state.auth);
@@ -182,6 +183,7 @@ useEffect(() => {
         <Route path="/edit_travel/:travelid" element={<ProtectedRoute><EditTravelPage /></ProtectedRoute>} />
 
         <Route path="/my-media" element={<ProtectedRoute><MyMedia /></ProtectedRoute>} />
+        <Route path="/my-media/:type" element={<ProtectedRoute><MyMediaUniversal /></ProtectedRoute>} />
         <Route path="/allusers" element={<ProtectedRoute><AllUsers /></ProtectedRoute>} />
         <Route path="/myaccount" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
         <Route path="/blocked_users" element={<ProtectedRoute><BlockedUsers /></ProtectedRoute>} />

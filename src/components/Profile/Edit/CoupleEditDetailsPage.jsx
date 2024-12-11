@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { loadUser } from '../../../redux/actions/auth';
 import api from '../../../utils/api';
+import getCoordinatesFromAWS from '../../../utils/client-location';
 
 const CoupleEditDetailPage = () => {
 	const [image, setImage] = useState();
@@ -20,6 +21,11 @@ const CoupleEditDetailPage = () => {
 	console.log(userInfo);
 	const [ctmSelect, setCtmSelect] = useState(false);
 	const [ctmSelect2, setCtmSelect2] = useState(false);
+	const [location, setLocation] = useState({
+		city: '',
+		state: '',
+		country: ''
+	});
 	const [userDetails, setUserDetails] = useState({
 		email: '',
 		username: '',
@@ -185,6 +191,11 @@ const CoupleEditDetailPage = () => {
 	}, []);
 
 	useEffect(() => {
+		console.log(location);
+		
+	}, [location]);
+
+	useEffect(() => {
 		function handleClickOutside(event) {
 			if (ref.current && !ref.current.contains(event.target)) {
 				setIsEditing('');
@@ -252,6 +263,12 @@ const CoupleEditDetailPage = () => {
 				experience: userInfo?.couple?.person2?.experience || '',
 				person2_Name: userInfo?.couple?.person2?.person2_Name || '',
 			});
+
+			setLocation({
+				city: userInfo?.location?.city,
+				state: userInfo?.location?.state,
+				country: userInfo?.location?.country,
+			});
 		}
 	}, []);
 
@@ -263,6 +280,11 @@ const CoupleEditDetailPage = () => {
 	const handleChange = e => {
 		const { name, value } = e.target;
 		setUserDetails({ ...userDetails, [name]: value });
+	};
+
+	const handleLocationChange = e => {
+		const { name, value } = e.target;
+		setLocation({ ...location, [name]: value });
 	};
 
 	const handleImageChange = async e => {
@@ -386,16 +408,58 @@ const CoupleEditDetailPage = () => {
 		};
 
 		try {
-			const { data } = await api.put(`/update`, {
-				couple: JSON.stringify(couple),
-				userId: userInfo._id,
-				introduction: userDetails?.introduction,
-				slogan: userDetails.slogan,
-			});
+			if (
+				location.city !== user?.location?.city ||
+				location.state !== user?.location?.state || location.country !== user?.location?.country || 
+				!user?.location?.city || !user?.location?.state || !user?.location?.country
+			) {
+				const locationData = {
+					city: location.city || '',
+					state: location.state || '',
+					country: location.country || '',
+				};
 
-			if (data) {
-				dispatch(loadUser());
-				toast.success('Profile edit successfully');
+				const coords = await getCoordinatesFromAWS(
+					location?.state,
+					location?.city
+				);
+
+				const geometry = {
+					type: 'Point',
+					coordinates: coords,
+				};
+
+				const { data } = await api.put(`/update-user`, {
+					couple: couple,
+					userId: userInfo._id,
+					introduction: userDetails?.introduction,
+					slogan: userDetails.slogan,
+					location: locationData,
+					geometry: geometry,
+				});
+
+				if (data) {
+					dispatch(loadUser());
+					toast.success('Profile edit successfully');
+				}
+			} else {
+				// const locationData = {
+				// 	city: location.city || '',
+				// 	state: location.state || '',
+				// };
+
+				const { data } = await api.put(`/update-user`, {
+					couple: couple,
+					userId: userInfo._id,
+					introduction: userDetails?.introduction,
+					slogan: userDetails.slogan,
+					// location: locationData,
+				});
+
+				if (data) {
+					dispatch(loadUser());
+					toast.success('Profile edit successfully');
+				}
 			}
 		} catch (error) {
 			console.log(error);
@@ -471,6 +535,69 @@ const CoupleEditDetailPage = () => {
 										</span>
 									</>
 								)}
+							</div>
+						</div>
+					</div>
+					<div className='mt-6 grid gap-y-6'>
+						<p className='text-2xl font-medium flex justify-between'>
+							Location
+						</p>
+						<div className='grid md:grid-cols-2 gap-x-10 justify-stretch items-start md:justify-center gap-y-4 sm:gap-y-6'>
+						<div className='flex flex-wrap rounded-md input_field'>
+								<label
+									htmlFor='City'
+									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+								>
+									City
+								</label>
+								<input
+									className='bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									id='city'
+									type='text'
+									placeholder='City'
+									onChange={handleLocationChange}
+									name='city'
+									value={location?.city}
+								></input>
+							</div>
+							<div className='flex flex-wrap rounded-md input_field'>
+								<label
+									htmlFor='state'
+									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+								>
+									State / Province
+								</label>
+								<input
+									className='bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									id='state'
+									type='text'
+									placeholder='State'
+									onChange={handleLocationChange}
+									name='state'
+									value={location?.state}
+								></input>
+							</div>
+						</div>
+						<div className='w-full flex justify-center'>
+							<div
+								className='flex flex-wrap justify-center rounded-md input_field mb-4 md:mb-6'
+								style={{ width: '50%' }}
+							>
+								<label
+									htmlFor='Country'
+									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+								>
+									Country
+								</label>
+								<input
+									className='bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									id='country'
+									type='text'
+									placeholder='Country'
+									onChange={handleLocationChange}
+									name='country'
+									value={location?.country}
+								></input>
 							</div>
 						</div>
 					</div>
@@ -1185,14 +1312,17 @@ const CoupleEditDetailPage = () => {
 											person2?.body_hair.length === 1 ? (
 												<>Please select</>
 											) : (
-												userDetails?.couple?.person2?.body_hair?.map((el, i) => (
-													<span>
-														{el}
-														{i !== 0 && i !== person2?.body_hair.length - 1 && (
-															<span>, </span>
-														)}
-													</span>
-												))
+												userDetails?.couple?.person2?.body_hair?.map(
+													(el, i) => (
+														<span>
+															{el}
+															{i !== 0 &&
+																i !== person2?.body_hair.length - 1 && (
+																	<span>, </span>
+																)}
+														</span>
+													)
+												)
 											)}
 											<span className='select_label_icon'>
 												<BiChevronDown />
@@ -1662,7 +1792,6 @@ const CoupleEditDetailPage = () => {
 							</div>
 						</div>
 					</div>
-					<div className='mt-6 grid gap-y-6'></div>
 					<div className='flex justify-center'>
 						<button
 							className='gradient !py-3 w-full max-w-xs ml-auto mr-auto md:mx-0 !text-lg xl:!text-25px capitalize !font-bold mt-10 !flex justify-center items-center text-white rounded-xl primary_btn'

@@ -468,6 +468,7 @@ const SignUpCouple = () => {
 		formData.append('slogan', form.slogan);
 		formData.append('introduction', form.introduction);
 		formData.append('couple', JSON.stringify(couple));
+		formData.append('privatePassword', '');
 
 		try {
 			const config = {

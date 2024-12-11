@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { IoCloseCircleSharp } from 'react-icons/io5';
 import { useParams } from 'react-router-dom';
 
-const MyMediaAddNew = ({ user, setAddNew, setUserInfo }) => {
+const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 	const [image, setImage] = useState();
 	const [imageData, setImageData] = useState(null);
 	const [isPublic, setIsPublic] = useState(true);
@@ -14,6 +14,7 @@ const MyMediaAddNew = ({ user, setAddNew, setUserInfo }) => {
 
 	const handleimage = async e => {
 		const file = e.target.files[0];
+		
 		if (!file) {
 			return;
 		} else {
@@ -21,6 +22,7 @@ const MyMediaAddNew = ({ user, setAddNew, setUserInfo }) => {
 		}
 
 		setImageData(file);
+		
 	};
 
 	const handleSave = async () => {
@@ -30,28 +32,55 @@ const MyMediaAddNew = ({ user, setAddNew, setUserInfo }) => {
 					'Content-Type': 'multipart/form-data',
 				},
 			};
-			const formData = new FormData();
-			formData.append('image', imageData);
-			formData.append('description', desc);
-			formData.append('isPublic', isPublic);
-			if (privatePassword) {
-				formData.append('privatePassword', privatePassword);
-			}
+			if (type === 'photos') {
+				const formData = new FormData();
+				formData.append('image', imageData);
+				formData.append('description', desc);
+				formData.append('isPublic', isPublic);
+				if (privatePassword) {
+					formData.append('privatePassword', privatePassword);
+				}
 
-			const { data } = await axios.put(
-				`${BASE_URL}/api/upload_media/${user._id}`,
-				formData,
-				config
-			);
-			if (data) {
-				setUserInfo(data);
-				console.log('success', data);
+				const { data } = await axios.put(
+					`${BASE_URL}/api/upload_media/${user._id}`,
+					formData,
+					config
+				);
+				if (data) {
+					setUserInfo(data);
+					console.log('success', data);
+				} else {
+					console.log('error', data);
+				}
+
+				setAddNew(false);
 			} else {
-				console.log('error', data);
-			}
+				const formData = new FormData();
+				formData.append('video', imageData);
+				formData.append('description', desc);
+				formData.append('isPublic', isPublic);
+				if (privatePassword) {
+					formData.append('privatePassword', privatePassword);
+				}
 
-			setAddNew(false);
+				const { data } = await axios.put(
+					`${BASE_URL}/api/upload_video/${user._id}`,
+					formData,
+					config
+				);
+				if (data) {
+					setUserInfo(data);
+					console.log('success', data);
+				} else {
+					console.log('error', data);
+				}
+
+				setAddNew(false);
+			}
 		}
+		// console.log(image);
+		// console.log(imageData);
+		
 	};
 
 	useEffect(() => {
@@ -69,7 +98,7 @@ const MyMediaAddNew = ({ user, setAddNew, setUserInfo }) => {
 				justifyContent: 'center',
 			}}
 		>
-			<h1 style={{ marginBottom: '10px', fontSize: '20px' }}>Add New Media</h1>
+			<h1 style={{ marginBottom: '10px', fontSize: '20px' }}>{type === 'photos' ? 'Add New Photo' : 'Add New Video'}</h1>
 			<div>
 				<label htmlFor='add_photos'>
 					<input
@@ -79,27 +108,21 @@ const MyMediaAddNew = ({ user, setAddNew, setUserInfo }) => {
 						name='image'
 						onChange={handleimage}
 					/>
-					{image ? (
+					{
 						<span
 							className='primary_btn gradient  px-8 bg-gradient-to-r from-[#F79220]
  to-[#F94A2B] rounded-lg py-2'
 						>
-							Change Photo
+							{type === 'photos' ? 'Add Photo *' : 'Add Video *'}
 						</span>
-					) : (
-						<span
-							className='primary_btn gradient  px-8 bg-gradient-to-r from-[#F79220]
- to-[#F94A2B] rounded-lg py-2'
-						>
-							Add Photo *
-						</span>
-					)}
+					}
 				</label>
-				<span className='px-5'>jpg/png, max 25MB/Photo</span>
+				<span className='px-5'>{type === 'photos' ? 'jpg/png, max 25MB/Photo' : 'mp4, max 100MB/video'}</span>
 				<div className='mt-5 flex justify-center mb-8'>
 					<div className='relative inline-block'>
 						{' '}
-						<img src={image} style={{ maxWidth: '250px' }} />
+						{type === 'photos' ? (<img src={image} style={{ maxWidth: '250px' }} />) : image ? (<video src={image} controls style={{ maxWidth: '250px' }}></video>) : <></>}
+						
 						{image && (
 							<span
 								className='preview_close absolute top-0 transform
@@ -160,7 +183,7 @@ const MyMediaAddNew = ({ user, setAddNew, setUserInfo }) => {
 						className='outline-none border-none px-3 h-10 bg-light-grey rounded-xl'
 						placeholder='Password...'
 						value={privatePassword}
-						onChange={(e) => setPrivatePassword(e.target.value)}
+						onChange={e => setPrivatePassword(e.target.value)}
 						style={{ marginBottom: '25px', width: '250px' }}
 					/>
 				</>

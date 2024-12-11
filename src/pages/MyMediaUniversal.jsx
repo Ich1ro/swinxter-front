@@ -2,41 +2,57 @@ import React, { useEffect, useState } from 'react';
 import api from '../utils/api';
 import { useSelector } from 'react-redux';
 import MyMediaAddNew from './MyMediaAddNew';
+import { useParams } from 'react-router-dom';
 
-const MyMedia = () => {
+const MyMediaUniversal = () => {
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
 	const [addNew, setAddNew] = useState(false);
 	const [filteredMedia, setFilteredMedia] = useState([]);
 	const [isActivePublic, setIsActivePublic] = useState(true);
+	const { type } = useParams();
 
 	useEffect(() => {
-		setUserInfo(user)
-	}, [user])
+		setUserInfo(user);
+	}, [user]);
 
 	useEffect(() => {
 		console.log(filteredMedia);
-		
-	}, [filteredMedia])
+	}, [filteredMedia]);
 
 	useEffect(() => {
-		setFilteredMedia(isActivePublic
-            ? userInfo?.mymedia?.filter(media => media.isPublic)
-            : userInfo?.mymedia?.filter(media => !media.isPublic))
-	}, [isActivePublic, userInfo])
+		if (type === 'photos') {
+			setFilteredMedia(
+				isActivePublic
+					? userInfo?.mymedia?.filter(media => media.isPublic)
+					: userInfo?.mymedia?.filter(media => !media.isPublic)
+			);
+		} else {
+			setFilteredMedia(
+				isActivePublic
+					? userInfo?.videos?.filter(media => media.isPublic)
+					: userInfo?.videos?.filter(media => !media.isPublic)
+			);
+		}
+	}, [isActivePublic, userInfo, type]);
 
 	return (
 		<>
 			{addNew ? (
 				<div className='home_page bg-black py-8 px-6 rounded-2xl'>
-					<MyMediaAddNew user={user} setAddNew={setAddNew} setUserInfo={setUserInfo} />
+					<MyMediaAddNew
+						user={user}
+						type={type}
+						setAddNew={setAddNew}
+						setUserInfo={setUserInfo}
+					/>
 				</div>
 			) : (
 				<div className='home_page bg-black py-8 px-6 rounded-2xl'>
 					<div className='mb-20' style={{}}>
 						<div className='flex justify-between flex-wrap gap-5 items-center mb-5 sm:mb-8'>
 							<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
-								My Media
+								{type === 'photos' ? 'My Photos' : 'My Videos'}
 							</h3>
 							<button
 								style={{ width: '150px' }}
@@ -46,16 +62,27 @@ const MyMedia = () => {
 								Add New
 							</button>
 						</div>
-						<div className='flex justify-between flex-wrap gap-5 items-center mb-5 sm:mb-8' style={{padding: '0 35%'}}>
+						<div
+							className='flex justify-between flex-wrap gap-5 items-center mb-5 sm:mb-8'
+							style={{ padding: '0 35%' }}
+						>
 							<button
-								style={!isActivePublic ? { width: '150px', opacity: '.5' } : {width: '150px'}}
+								style={
+									!isActivePublic
+										? { width: '150px', opacity: '.5' }
+										: { width: '150px' }
+								}
 								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
 								onClick={() => setIsActivePublic(true)}
 							>
 								Public
 							</button>
 							<button
-								style={isActivePublic ? { width: '150px', opacity: '.5' } : {width: '150px'}}
+								style={
+									isActivePublic
+										? { width: '150px', opacity: '.5' }
+										: { width: '150px' }
+								}
 								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
 								onClick={() => setIsActivePublic(false)}
 							>
@@ -75,15 +102,28 @@ const MyMedia = () => {
 											}}
 											key={i}
 										>
-											<img
-												src={item?.image || item}
-												alt=''
-												srcset=''
-												style={{
-													width: '250px',
-													height: '200px',
-												}}
-											/>
+											{type === 'photos' ? (
+												<img
+													src={item?.image || item}
+													alt=''
+													srcset=''
+													style={{
+														width: '250px',
+														height: '200px',
+													}}
+												/>
+											) : (
+												<video
+													controls
+													src={item?.video || item}
+													alt=''
+													srcset=''
+													style={{
+														width: '250px',
+														height: '200px',
+													}}
+												></video>
+											)}
 											<div style={{ display: 'flex', marginTop: '20px' }}>
 												<button
 													style={{ marginRight: '10px' }}
@@ -111,4 +151,4 @@ const MyMedia = () => {
 	);
 };
 
-export default MyMedia;
+export default MyMediaUniversal;

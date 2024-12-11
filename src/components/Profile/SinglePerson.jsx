@@ -359,6 +359,7 @@ const SinglePerson = () => {
 
 			formData.append('interests', JSON.stringify(interest));
 			formData.append('slogan', form.slogan);
+			formData.append('privatePassword', '');
 			formData.append('introduction', form.introduction);
 			formData.append('gender', form.gender);
 			formData.append('body_type', form.body_type);

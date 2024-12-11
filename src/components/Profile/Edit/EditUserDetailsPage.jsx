@@ -40,6 +40,7 @@ const EditUserDetailsPage = () => {
 		slogan: '',
 		city: '',
 		state: '',
+		country: '',
 	});
 	const [usertoken, setUsertoken] = useState('');
 	const dispatch = useDispatch();
@@ -184,8 +185,9 @@ const EditUserDetailsPage = () => {
 				experience: userInfo.experience || '',
 				introduction: userInfo.introduction || '',
 				slogan: userInfo.slogan || '',
-				city: userInfo.location.city || '',
-				state: userInfo.location.state || '',
+				city: userInfo?.location?.city || '',
+				state: userInfo?.location?.state || '',
+				country: userInfo?.location?.country || '',
 			});
 		}
 	}, []);
@@ -240,28 +242,37 @@ const EditUserDetailsPage = () => {
 		e.preventDefault();
 		try {
 			if (
-				userDetails.city !== user.location.city ||
-				userDetails.state !== user.location.state
+				userDetails?.city !== user?.location?.city ||
+				userDetails?.state !== user?.location?.state ||
+				userDetails?.country !== user?.location?.country ||
+				!user?.location?.city ||
+				!user?.location?.state ||
+				!user?.location?.country
 			) {
 				const dataForUpdate = {
 					...userDetails,
 					location: {
-						city: userDetails.city || '',
-						state: userDetails.state || '',
+						city: userDetails?.city || '',
+						state: userDetails?.state || '',
+						country: userDetails?.country || '',
 					},
 				};
-				
+
 				delete dataForUpdate.city;
 				delete dataForUpdate.state;
-				const coords = await getCoordinatesFromAWS(userDetails.state, userDetails.city);
+				delete dataForUpdate.country;
+				const coords = await getCoordinatesFromAWS(
+					userDetails.state,
+					userDetails.city
+				);
 
 				const geometry = {
 					type: 'Point',
 					coordinates: coords,
 				};
-				dataForUpdate.geometry = geometry
+				dataForUpdate.geometry = geometry;
 				console.log(dataForUpdate);
-				
+
 				const { data } = await api.put(
 					`/update-user`,
 					{ userId: Id, ...dataForUpdate },
@@ -282,11 +293,13 @@ const EditUserDetailsPage = () => {
 					location: {
 						city: userDetails.city || '',
 						state: userDetails.state || '',
+						country: userDetails?.country || '',
 					},
 				};
-				
+
 				delete dataForUpdate.city;
 				delete dataForUpdate.state;
+				delete dataForUpdate.country;
 				const { data } = await api.put(
 					`/update-user`,
 					{ userId: Id, ...userDetails },
@@ -381,6 +394,72 @@ const EditUserDetailsPage = () => {
 							</div>
 						</div>
 					</div>
+					<div className='mt-6 grid gap-y-6'>
+						<p className='text-2xl font-medium flex justify-between'>
+							Location
+						</p>
+						<div className='grid md:grid-cols-2 gap-x-10 justify-stretch items-start md:justify-center gap-y-4 sm:gap-y-6'>
+							<div className='flex flex-wrap rounded-md input_field'>
+								<label
+									htmlFor='City'
+									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+								>
+									City
+								</label>
+								<input
+									className='bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									id='city'
+									type='text'
+									placeholder='City'
+									onChange={handleChange}
+									name='city'
+									value={userDetails?.city}
+								></input>
+							</div>
+							<div className='flex flex-wrap rounded-md input_field'>
+								<label
+									htmlFor='state'
+									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+								>
+									State / Province
+								</label>
+								<input
+									className='bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									id='state'
+									type='text'
+									placeholder='State'
+									onChange={handleChange}
+									name='state'
+									value={userDetails?.state}
+								></input>
+							</div>
+						</div>
+						<div className='w-full flex justify-center'>
+							<div
+								className='flex flex-wrap justify-center rounded-md input_field mb-4 md:mb-6'
+								style={{ width: '50%' }}
+							>
+								<label
+									htmlFor='Country'
+									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+								>
+									Country
+								</label>
+								<input
+									className='bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									id='country'
+									type='text'
+									placeholder='Country'
+									onChange={handleChange}
+									name='country'
+									value={userDetails?.country}
+								></input>
+							</div>
+						</div>
+					</div>
+					<p className='text-2xl font-medium flex justify-between mb-4 md:mb-6'>
+						Details
+					</p>
 					<div className='grid md:grid-cols-2 gap-x-10 justify-stretch items-start md:justify-center gap-y-4 sm:gap-y-6'>
 						<div className='grid gap-y-4 md:gap-y-6'>
 							<div>
@@ -692,23 +771,7 @@ const EditUserDetailsPage = () => {
 									<option value='A few'>A few</option>
 								</select>
 							</div>
-							<div className='flex flex-wrap rounded-md input_field'>
-								<label
-									htmlFor='City'
-									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
-								>
-									City
-								</label>
-								<input
-									className='bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
-									id='city'
-									type='text'
-									placeholder='City'
-									onChange={handleChange}
-									name='city'
-									value={userDetails.city}
-								></input>
-							</div>
+
 							<div>
 								<label
 									htmlFor='slogan_msg'
@@ -987,23 +1050,6 @@ const EditUserDetailsPage = () => {
 									onChange={handleChange}
 									name='Language'
 									value={userDetails.Language}
-								></input>
-							</div>
-							<div className='flex flex-wrap rounded-md input_field'>
-								<label
-									htmlFor='state'
-									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
-								>
-									State
-								</label>
-								<input
-									className='bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
-									id='state'
-									type='text'
-									placeholder='State'
-									onChange={handleChange}
-									name='state'
-									value={userDetails.state}
 								></input>
 							</div>
 

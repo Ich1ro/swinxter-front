@@ -17,7 +17,6 @@ const getCoordinatesFromAWS = async (state, city) => {
         const command = new SearchPlaceIndexForTextCommand({
             IndexName: indexName,
             Text: searchText,
-
         });
         const response = await client.send(command);
 

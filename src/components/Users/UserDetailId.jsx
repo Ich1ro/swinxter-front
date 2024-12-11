@@ -25,6 +25,8 @@ const UserDetailPage = () => {
 			setSent(0);
 		}
 	};
+	console.log(1);
+	
 
 	useEffect(() => {
 		if (location.search.length > 0) {
@@ -193,11 +195,11 @@ const UserDetailPage = () => {
 
 						<div className='max-w-5xl mx-auto pt-20'>
 							<div className='px-8'>
-								<span className='inline-block py-3 px-8 text-lg rounded-t-lg bg-white text-black min-w-[200px] text-center'>
+								<span style={{backgroundColor: 'rgb(247 146 32)'}} className='inline-block py-3 px-8 text-lg rounded-t-lg text-black min-w-[200px] text-center'>
 									Profile
 								</span>
 							</div>
-							<div className='bg-white rounded-lg py-10 px-3 lg:px-8 items-start'>
+							<div style={{backgroundColor: 'rgb(247 146 32)'}} className='rounded-lg py-10 px-3 lg:px-8 items-start'>
 								<div className='grid gap-y-5'>
 									<div className='p-5 bg-black-20 rounded-2xl w-[100%] '>
 										<div className='flex justify-between gap-3 font-normal pb-3 mb-3 border-b border-orange'>
