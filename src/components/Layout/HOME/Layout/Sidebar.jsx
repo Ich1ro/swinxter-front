@@ -217,7 +217,7 @@ const Sidebar = ({ unread, closeMenu }) => {
 							? '/editcouple-detail'
 							: '/edit-detail',
 				},
-				{ title: 'My Media', submenus: [], path: '/my-media' },
+				// { title: 'My Media', submenus: [], path: '/my-media' },
 				{
 					title: 'Media',
 					submenus: [

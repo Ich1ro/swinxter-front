@@ -7,6 +7,7 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 	const [image, setImage] = useState();
 	const [imageData, setImageData] = useState(null);
 	const [isPublic, setIsPublic] = useState(true);
+	const [isSaving, setIsSaving] = useState(false);
 	const [privatePassword, setPrivatePassword] = useState(null);
 	const [desc, setDesc] = useState('');
 	const { userId } = useParams();
@@ -14,7 +15,7 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 
 	const handleimage = async e => {
 		const file = e.target.files[0];
-		
+
 		if (!file) {
 			return;
 		} else {
@@ -22,10 +23,10 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 		}
 
 		setImageData(file);
-		
 	};
 
 	const handleSave = async () => {
+		setIsSaving(true);
 		if (privatePassword || user.privatePassword !== '' || isPublic) {
 			const config = {
 				headers: {
@@ -48,6 +49,7 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 				);
 				if (data) {
 					setUserInfo(data);
+					setIsSaving(false);
 					console.log('success', data);
 				} else {
 					console.log('error', data);
@@ -70,6 +72,7 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 				);
 				if (data) {
 					setUserInfo(data);
+					setIsSaving(false);
 					console.log('success', data);
 				} else {
 					console.log('error', data);
@@ -80,7 +83,6 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 		}
 		// console.log(image);
 		// console.log(imageData);
-		
 	};
 
 	useEffect(() => {
@@ -98,7 +100,9 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 				justifyContent: 'center',
 			}}
 		>
-			<h1 style={{ marginBottom: '10px', fontSize: '20px' }}>{type === 'photos' ? 'Add New Photo' : 'Add New Video'}</h1>
+			<h1 style={{ marginBottom: '10px', fontSize: '20px' }}>
+				{type === 'photos' ? 'Add New Photo' : 'Add New Video'}
+			</h1>
 			<div>
 				<label htmlFor='add_photos'>
 					<input
@@ -117,12 +121,21 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 						</span>
 					}
 				</label>
-				<span className='px-5'>{type === 'photos' ? 'jpg/png, max 25MB/Photo' : 'mp4, max 100MB/video'}</span>
+				<span className='px-5'>
+					{type === 'photos'
+						? 'jpg/png, max 25MB/Photo'
+						: 'mp4, max 100MB/video'}
+				</span>
 				<div className='mt-5 flex justify-center mb-8'>
 					<div className='relative inline-block'>
 						{' '}
-						{type === 'photos' ? (<img src={image} style={{ maxWidth: '250px' }} />) : image ? (<video src={image} controls style={{ maxWidth: '250px' }}></video>) : <></>}
-						
+						{type === 'photos' ? (
+							<img src={image} style={{ maxWidth: '250px' }} />
+						) : image ? (
+							<video src={image} controls style={{ maxWidth: '250px' }}></video>
+						) : (
+							<></>
+						)}
 						{image && (
 							<span
 								className='preview_close absolute top-0 transform
@@ -194,6 +207,7 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 					style={{ width: '150px', marginBottom: '20px', marginRight: '20px' }}
 					className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
 					onClick={() => setAddNew(false)}
+					disabled={isSaving}
 				>
 					Cancel
 				</button>
@@ -201,6 +215,7 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 					style={{ width: '150px', marginBottom: '20px' }}
 					className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
 					onClick={handleSave}
+					disabled={isSaving}
 				>
 					Save
 				</button>

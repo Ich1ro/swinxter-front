@@ -26,7 +26,6 @@ const UserDetailPage = () => {
 		}
 	};
 	console.log(1);
-	
 
 	useEffect(() => {
 		if (location.search.length > 0) {
@@ -93,11 +92,11 @@ const UserDetailPage = () => {
 						<div className='flex flex-wrap items-stretch bg-black rounded-2xl max-w-5xl mx-auto'>
 							<div className='w-full sm:w-2/5 md:w-1/5'>
 								{userInfo?.image ? (
-										<img
-											src={userInfo?.image}
-											alt='book-model'
-											className='w-full h-full object-center object-cover aspect-[5/4] rounded-2xl main-image'
-										/>
+									<img
+										src={userInfo?.image}
+										alt='book-model'
+										className='w-full h-full object-center object-cover aspect-[5/4] rounded-2xl main-image'
+									/>
 								) : userInfo?.gender === 'male' ? (
 									<img
 										src='/images/boy-avatar.jpg'
@@ -193,323 +192,370 @@ const UserDetailPage = () => {
 							></p>
 						</div>
 
-						<div className='max-w-5xl mx-auto pt-20'>
-							<div className='px-8'>
-								<span style={{backgroundColor: 'rgb(247 146 32)'}} className='inline-block py-3 px-8 text-lg rounded-t-lg text-black min-w-[200px] text-center'>
-									Profile
-								</span>
-							</div>
-							<div style={{backgroundColor: 'rgb(247 146 32)'}} className='rounded-lg py-10 px-3 lg:px-8 items-start'>
-								<div className='grid gap-y-5'>
-									<div className='p-5 bg-black-20 rounded-2xl w-[100%] '>
-										<div className='flex justify-between gap-3 font-normal pb-3 mb-3 border-b border-orange'>
-											<p className='text-base sm:text-2xl'>Profile</p>
-											{location.search.length > 0 ? null : (
-												<Link
-													to='/edit-detail'
-													className='cursor-pointer text-xs sm:text-lg'
-												>
-													Edit
-												</Link>
-											)}
-										</div>
-
-										<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 mb-2'>
-											<span className='block font-body_font text-lg'>
-												Interest :
-											</span>
-											<span
-												className={`block text-right font-body_font`}
-												style={RenderedStyle}
-											></span>
-										</div>
-										<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
-											<span>Male</span>
-											<div>
-												<span className='block text-right'>
-													{userInfo?.interests?.male?.map((el, i) => (
-														<>
-															<span key={i}>
-																{i !== 0 && <span>, </span>}
-																{el}
-															</span>
-														</>
-													))}
-												</span>
-											</div>
-										</div>
-										<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px]'>
-											<span>Male Female</span>
-											<div>
-												<span className='block text-right'>
-													{userInfo?.interests?.male_female?.map((el, i) => (
-														<>
-															<span key={i}>
-																{i !== 0 && <span>, </span>}
-																{el}
-															</span>
-														</>
-													))}
-												</span>
-											</div>
-										</div>
-										<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px]'>
-											<span>Female </span>
-											<div>
-												<span className='block text-right'>
-													{userInfo?.interests?.female?.map((el, i) => (
-														<span key={i}>
-															{' '}
-															{i !== 0 && <span>, </span>}
-															{el}
-														</span>
-													))}
-												</span>
-											</div>
-										</div>
-										<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px]'>
-											<span>Female Female </span>
-											<div>
-												<span className='block text-right'>
-													{userInfo?.interests?.female_female?.map((el, i) => (
-														<span key={i}>
-															{' '}
-															{i !== 0 && <span>, </span>}
-															{el}
-														</span>
-													))}
-												</span>
-											</div>
-										</div>
-										<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 '>
-											<span>Male Male</span>
-											<div>
-												<span className='block text-right'>
-													{userInfo?.interests?.male_male?.map((el, i) => (
-														<span key={i}>
-															{' '}
-															{i !== 0 && <span>, </span>}
-															{el}
-														</span>
-													))}
-												</span>
-											</div>
-										</div>
-									</div>
-									<div className='p-5 bg-black-20 rounded-2xl'>
-										<div className='grid grid-cols-2 gap-3 font-normal pb-3 mb-3 border-b border-orange'>
-											<p className='text-base sm:text-2xl'>Details</p>
-											<p
-												className={`text-right flex items-center justify-end text-xl`}
-												style={RenderedStyle}
-											>
-												{userInfo?.gender === 'male' ? (
-													<img
-														src='/images/Male.png'
-														alt='Male'
-														className='h-[26px] mr-1'
-													/>
-												) : userInfo?.gender === 'female' ? (
-													<img
-														src='/images/Female.png'
-														alt='Male'
-														className='h-[26px] mr-1'
-													/>
-												) : (
-													<img
-														src='/images/Trans.png'
-														alt='trans'
-														className='h-[26px] mr-1'
-													/>
+						{user.payment.membership ? (
+							<div className='max-w-5xl mx-auto pt-20'>
+								<div className='px-8'>
+									<span
+										style={{ backgroundColor: 'rgb(247 146 32)' }}
+										className='inline-block py-3 px-8 text-lg rounded-t-lg text-black min-w-[200px] text-center'
+									>
+										Profile
+									</span>
+								</div>
+								<div
+									style={{ backgroundColor: 'rgb(247 146 32)' }}
+									className='rounded-lg py-10 px-3 lg:px-8 items-start'
+								>
+									<div className='grid gap-y-5'>
+										<div className='p-5 bg-black-20 rounded-2xl w-[100%] '>
+											<div className='flex justify-between gap-3 font-normal pb-3 mb-3 border-b border-orange'>
+												<p className='text-base sm:text-2xl'>Profile</p>
+												{location.search.length > 0 ? null : (
+													<Link
+														to='/edit-detail'
+														className='cursor-pointer text-xs sm:text-lg'
+													>
+														Edit
+													</Link>
 												)}
-												{userInfo?.personName}
-											</p>
-										</div>
-										<div className='grid'>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
-												<span className='block font-body_font'>
-													Ethnic Background:
+											</div>
+
+											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 mb-2'>
+												<span className='block font-body_font text-lg'>
+													Interest :
 												</span>
 												<span
 													className={`block text-right font-body_font`}
 													style={RenderedStyle}
-												>
-													{userInfo?.ethnic_background}
-												</span>
+												></span>
+											</div>
+											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+												<span>Male</span>
+												<div>
+													<span className='block text-right'>
+														{userInfo?.interests?.male?.map((el, i) => (
+															<>
+																<span key={i}>
+																	{i !== 0 && <span>, </span>}
+																	{el}
+																</span>
+															</>
+														))}
+													</span>
+												</div>
 											</div>
 											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px]'>
-												<span className='block font-body_font'>
-													Experience:
-												</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.experience}
-												</span>
+												<span>Male Female</span>
+												<div>
+													<span className='block text-right'>
+														{userInfo?.interests?.male_female?.map((el, i) => (
+															<>
+																<span key={i}>
+																	{i !== 0 && <span>, </span>}
+																	{el}
+																</span>
+															</>
+														))}
+													</span>
+												</div>
 											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px] border-b border-[#666]'>
-												<span className='block font-body_font'>Gender:</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.gender}
-												</span>
+											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px]'>
+												<span>Female </span>
+												<div>
+													<span className='block text-right'>
+														{userInfo?.interests?.female?.map((el, i) => (
+															<span key={i}>
+																{' '}
+																{i !== 0 && <span>, </span>}
+																{el}
+															</span>
+														))}
+													</span>
+												</div>
+											</div>
+											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px]'>
+												<span>Female Female </span>
+												<div>
+													<span className='block text-right'>
+														{userInfo?.interests?.female_female?.map(
+															(el, i) => (
+																<span key={i}>
+																	{' '}
+																	{i !== 0 && <span>, </span>}
+																	{el}
+																</span>
+															)
+														)}
+													</span>
+												</div>
+											</div>
+											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 '>
+												<span>Male Male</span>
+												<div>
+													<span className='block text-right'>
+														{userInfo?.interests?.male_male?.map((el, i) => (
+															<span key={i}>
+																{' '}
+																{i !== 0 && <span>, </span>}
+																{el}
+															</span>
+														))}
+													</span>
+												</div>
 											</div>
 										</div>
-										<div className='grid'>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
-												<span className='block font-body_font'>Birthdate:</span>
-												<span
-													className={`block text-right font-body_font`}
+										<div className='p-5 bg-black-20 rounded-2xl'>
+											<div className='grid grid-cols-2 gap-3 font-normal pb-3 mb-3 border-b border-orange'>
+												<p className='text-base sm:text-2xl'>Details</p>
+												<p
+													className={`text-right flex items-center justify-end text-xl`}
 													style={RenderedStyle}
 												>
-													{userInfo?.DOB}
-												</span>
+													{userInfo?.gender === 'male' ? (
+														<img
+															src='/images/Male.png'
+															alt='Male'
+															className='h-[26px] mr-1'
+														/>
+													) : userInfo?.gender === 'female' ? (
+														<img
+															src='/images/Female.png'
+															alt='Male'
+															className='h-[26px] mr-1'
+														/>
+													) : (
+														<img
+															src='/images/Trans.png'
+															alt='trans'
+															className='h-[26px] mr-1'
+														/>
+													)}
+													{userInfo?.personName}
+												</p>
 											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
-												<span className='block font-body_font'>Sexuality</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.sexuality}
-												</span>
+											<div className='grid'>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+													<span className='block font-body_font'>
+														Ethnic Background:
+													</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.ethnic_background}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px]'>
+													<span className='block font-body_font'>
+														Experience:
+													</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.experience}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px] border-b border-[#666]'>
+													<span className='block font-body_font'>Gender:</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.gender}
+													</span>
+												</div>
 											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
-												<span className='block font-body_font'>Height:</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.height}
-												</span>
-											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
-												<span className='block font-body_font'>Weight:</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.weight}
-												</span>
-											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
-												<span className='block font-body_font'>Body Type:</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.body_type}
-												</span>
-											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
-												<span className='block font-body_font'>Body Hair:</span>
-												<span className='block text-right'>
-													{userInfo?.body_hair?.map((el, i) => (
-														<span
-															className={` font-body_font`}
-															style={RenderedStyle}
-															key={i}
-														>
-															{el}{' '}
-															{i !== 0 &&
-																i !== userInfo?.body_hair.length - 1 && (
-																	<span>, </span>
-																)}
-														</span>
-													))}
-												</span>
-											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
-												<span className='block font-body_font'>Piercings:</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.piercings}
-												</span>
-											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
-												<span className='block font-body_font'>Looks:</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.looks_important}
-												</span>
-											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
-												<span className='block font-body_font'>Smoking:</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.smoking}
-												</span>
-											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
-												<span className='block font-body_font'>Tattoos:</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.tattoos}
-												</span>
-											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px] border-b border-[#666]'>
-												<span className='block font-body_font'>Relation:</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.relationship_status}
-												</span>
-											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px] border-b border-[#666]'>
-												<span className='block font-body_font'>Drinking:</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.Drinking}
-												</span>
-											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px] border-b border-[#666]'>
-												<span className='block font-body_font'>Drugs:</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.Drugs}
-												</span>
-											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px] border-b border-[#666] '>
-												<span className='block font-body_font'>
-													Relationship Status:
-												</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.Relationship}
-												</span>
-											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px]'>
-												<span className='block font-body_font'>Language:</span>
-												<span
-													className={`block text-right font-body_font`}
-													style={RenderedStyle}
-												>
-													{userInfo?.Language}
-												</span>
+											<div className='grid'>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+													<span className='block font-body_font'>
+														Birthdate:
+													</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.DOB}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+													<span className='block font-body_font'>
+														Sexuality
+													</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.sexuality}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+													<span className='block font-body_font'>Height:</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.height}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+													<span className='block font-body_font'>Weight:</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.weight}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+													<span className='block font-body_font'>
+														Body Type:
+													</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.body_type}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+													<span className='block font-body_font'>
+														Body Hair:
+													</span>
+													<span className='block text-right'>
+														{userInfo?.body_hair?.map((el, i) => (
+															<span
+																className={` font-body_font`}
+																style={RenderedStyle}
+																key={i}
+															>
+																{el}{' '}
+																{i !== 0 &&
+																	i !== userInfo?.body_hair.length - 1 && (
+																		<span>, </span>
+																	)}
+															</span>
+														))}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+													<span className='block font-body_font'>
+														Piercings:
+													</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.piercings}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+													<span className='block font-body_font'>Looks:</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.looks_important}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+													<span className='block font-body_font'>Smoking:</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.smoking}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+													<span className='block font-body_font'>Tattoos:</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.tattoos}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px] border-b border-[#666]'>
+													<span className='block font-body_font'>
+														Relation:
+													</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.relationship_status}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px] border-b border-[#666]'>
+													<span className='block font-body_font'>
+														Drinking:
+													</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.Drinking}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px] border-b border-[#666]'>
+													<span className='block font-body_font'>Drugs:</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.Drugs}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px] border-b border-[#666] '>
+													<span className='block font-body_font'>
+														Relationship Status:
+													</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.Relationship}
+													</span>
+												</div>
+												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px]'>
+													<span className='block font-body_font'>
+														Language:
+													</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.Language}
+													</span>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						) : (
+							<div
+								style={{
+									height: '400px',
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+									fontSize: '24px',
+									flexDirection: 'column',
+								}}
+							>
+								<h1 style={{ marginBottom: '30px' }}>
+									You need to buy a membership to access the feature
+								</h1>
+								<Link
+									to='/membership'
+									className='primary_btn !text-sm sm:!text-xl'
+								>
+									Buy membership
+								</Link>
+							</div>
+						)}
 					</div>
 					<div className='audit-dating__block relative py-4 md:py-16 md:pt-0 container mx-auto mt-14'>
 						<div className='flex flex-col md:flex-row justify-center items-center text-center gap-6 py-71px'>
