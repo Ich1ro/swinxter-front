@@ -11,22 +11,28 @@ const SentRequest = () => {
 	console.log(user);
 
 	const getFriends = async () => {
-		const currentUser = await api.get(`/user_details/${user._id}`);
-		currentUser.data.sent_requests.map(async ele => {
-			console.log(ele);
-			if (ele && ele !== 'undefined') {
-				const { data } = await api.get(`/user_details/${ele}`);
-				setFriends(prev => {
-					const isAlreadyFriend = prev.some(friend => friend._id === data._id);
+		if (user?.sent_requests.length > 0) {
+			const { data } = await api.post(`/get-friends`, {
+				friendIds: user.sent_requests,
+			});
+			setFriends(data);
+		}
+		// const currentUser = await api.get(`/user_details/${user._id}`);
+		// currentUser.data.sent_requests.map(async ele => {
+		// 	console.log(ele);
+		// 	if (ele && ele !== 'undefined') {
+		// 		const { data } = await api.get(`/user_details/${ele}`);
+		// 		setFriends(prev => {
+		// 			const isAlreadyFriend = prev.some(friend => friend._id === data._id);
 
-					if (!isAlreadyFriend) {
-						return [...prev, data];
-					}
+		// 			if (!isAlreadyFriend) {
+		// 				return [...prev, data];
+		// 			}
 
-					return prev;
-				});
-			}
-		});
+		// 			return prev;
+		// 		});
+		// 	}
+		// });
 	};
 
 	useEffect(() => {

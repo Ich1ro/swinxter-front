@@ -6,7 +6,7 @@ import { IoCloseCircleSharp } from 'react-icons/io5';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './signup.css';
-import getCoordinatesFromAWS from '../../utils/client-location'
+import getCoordinatesFromAWS from '../../utils/client-location';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const SignUpCouple = () => {
 	const navigate = useNavigate();
@@ -42,7 +42,8 @@ const SignUpCouple = () => {
 	});
 	const [location, setLocation] = useState({
 		city: '',
-		state: ''
+		state: '',
+		country: '',
 	});
 	const [form, setForm] = useState({
 		body_type: '',
@@ -67,6 +68,9 @@ const SignUpCouple = () => {
 		introduction: '',
 		gender: '',
 		person1_Name: '',
+		city: '',
+		state: '',
+		country: '',
 	});
 
 	const [form2, setForm2] = useState({
@@ -331,7 +335,9 @@ const SignUpCouple = () => {
 		);
 		if (data) {
 			toast.success('Image Uploaded');
-			toast('We kindly ask that the profile picture be a clear photo of your face. If it\'s a couple\'s profile, please use a photo that includes both of you together.')
+			toast(
+				"We kindly ask that the profile picture be a clear photo of your face. If it's a couple's profile, please use a photo that includes both of you together."
+			);
 		} else {
 			toast.error('failed to Upload Image');
 		}
@@ -482,6 +488,7 @@ const SignUpCouple = () => {
 			const location = {
 				city: form.city,
 				state: form.state,
+				country: form.country,
 			};
 
 			const geometry = {
@@ -522,6 +529,9 @@ const SignUpCouple = () => {
 						introduction: '',
 						gender: '',
 						person1_Name: '',
+						city: '',
+						state: '',
+						country: '',
 					});
 					setForm2({
 						body_type_2: '',
@@ -641,7 +651,7 @@ const SignUpCouple = () => {
 								</form>
 
 								<h1 className='text-white text-2xl sm:text-3xl xl:text-5xl text-center xl:text-start font-bold mb-4'>
-										LOCATION
+									LOCATION
 								</h1>
 
 								<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>
@@ -655,7 +665,7 @@ const SignUpCouple = () => {
 										name='state'
 									/>
 								</div>
-								<div className='bg-[#202020] grid grid-cols-2 px-10 py-5'>
+								<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>
 									<span>City *</span>
 									<input
 										type='text'
@@ -664,6 +674,17 @@ const SignUpCouple = () => {
 										onChange={handleInput}
 										value={form.city}
 										name='city'
+									/>
+								</div>
+								<div className='bg-[#202020] grid grid-cols-2 px-10 py-5'>
+									<span>Country *</span>
+									<input
+										type='text'
+										className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+										placeholder='Country'
+										onChange={handleInput}
+										value={form.country}
+										name='country'
 									/>
 								</div>
 
@@ -1314,7 +1335,14 @@ const SignUpCouple = () => {
 													<span>Experience Level</span>
 												</div>
 
-												<div className='flex gap-2 text-end py-4' style={{flexWrap: 'wrap', width: '100%', justifyContent: 'space-between'}}>
+												<div
+													className='flex gap-2 text-end py-4'
+													style={{
+														flexWrap: 'wrap',
+														width: '100%',
+														justifyContent: 'space-between',
+													}}
+												>
 													<div className='ngBox flex items-center'>
 														<div className='it_checkbox'>
 															<input
@@ -1781,7 +1809,14 @@ const SignUpCouple = () => {
 													<span>Experience Level</span>
 												</div>
 
-												<div className='flex gap-2 text-end py-4' style={{flexWrap: 'wrap', width: '100%', justifyContent: 'space-between'}}>
+												<div
+													className='flex gap-2 text-end py-4'
+													style={{
+														flexWrap: 'wrap',
+														width: '100%',
+														justifyContent: 'space-between',
+													}}
+												>
 													{/* <label>
                           <input
                             type="radio"

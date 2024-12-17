@@ -57,7 +57,7 @@ const MenuItem = ({
 	};
 
 	return (
-		<li className='menu-item' style={{ position: 'relative' }}>
+		<li className={(title === 'My Photos' || title === 'My Videos') ? 'menu-item-media' : `menu-item`} style={{ position: 'relative' }}>
 			<span
 				className={`title_submenu ${activeMenuItem === title ? 'active' : ''}`}
 				onClick={toggleSubmenu}
@@ -66,7 +66,7 @@ const MenuItem = ({
 				{submenus.length > 0 && (
 					<i
 						className={`fas fa-chevron-down`}
-						style={{ transform: `${showSubmenu ? 'scaleY(-1)' : ''}` }}
+						style={{ transform: `${showSubmenu ? 'scaleY(-1)' : ''}`}}
 					></i>
 				)}
 			</span>
@@ -126,29 +126,24 @@ const Sidebar = ({ unread, closeMenu }) => {
 		{
 			title: 'My Interactions',
 			submenus: [
-				{
-					title: 'Friends',
-					submenus: [
-						{ title: 'My Friends', submenus: [], path: '/my_friends' },
-						{ title: 'Sent', submenus: [], path: '/sent_request' },
-						{ title: 'Received', submenus: [], path: '/recieved_request' },
-					],
-				},
-				// {
-				//   title: "Hot List",
-				//   submenus: [
-				//     { title: "Sent", submenus: [], path: "/sent_superlike" },
-				//     { title: "Received", submenus: [], path: "/recieved_superlike" },
-				//   ],
-				// },
-				// {
-				//   title: "Gifts/Tips",
-				//   submenus: [
-				//     { title: "Sent", submenus: [] },
-				//     { title: "Received", submenus: [] },
-				//   ],
-				// },
+				{ title: 'My Friends', submenus: [], path: '/my_friends' },
+				{ title: 'Sent', submenus: [], path: '/sent_request' },
+				{ title: 'Received', submenus: [], path: '/recieved_request' },
 			],
+			// {
+			//   title: "Hot List",
+			//   submenus: [
+			//     { title: "Sent", submenus: [], path: "/sent_superlike" },
+			//     { title: "Received", submenus: [], path: "/recieved_superlike" },
+			//   ],
+			// },
+			// {
+			//   title: "Gifts/Tips",
+			//   submenus: [
+			//     { title: "Sent", submenus: [] },
+			//     { title: "Received", submenus: [] },
+			//   ],
+			// },
 		},
 		{
 			title: 'Live Chat',
@@ -296,12 +291,12 @@ const Sidebar = ({ unread, closeMenu }) => {
 					<p className='flex items-center justify-between gap-4 mb-3 hover:text-orange font-body_font text-lg'>
 						{userInfo?.location
 							? `${userInfo?.location?.city}, ${
-									userInfo?.location?.state || userInfo?.location?.state !== ''
+									(userInfo?.location?.state && userInfo?.location?.state !== '')
 										? `${userInfo?.location?.state}`
 										: ''
 							  }${
-									userInfo?.location?.country ||
-									userInfo?.location?.country !== ''
+									(userInfo?.location?.country &&
+									userInfo?.location?.country !== '')
 										? `, ${userInfo?.location?.country}`
 										: ''
 							  }`

@@ -1,152 +1,174 @@
-import React, { useContext, useState,useEffect,useRef } from "react";
-import { IoSearchOutline } from "react-icons/io5";
-import { RxCross1 } from "react-icons/rx";
-import { HiChevronDown } from "react-icons/hi2";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import "./db_header.css";
-import Sidebar from "../Layout/Sidebar";
-import { useSelector } from "react-redux";
-import { Context } from "../../../../Context/context";
-import Notification from "./Notification";
-import api from "../../../../utils/api";
+import React, { useContext, useState, useEffect, useRef } from 'react';
+import { IoSearchOutline } from 'react-icons/io5';
+import { RxCross1 } from 'react-icons/rx';
+import { HiChevronDown } from 'react-icons/hi2';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import './db_header.css';
+import Sidebar from '../Layout/Sidebar';
+import { useSelector } from 'react-redux';
+import { Context } from '../../../../Context/context';
+import Notification from './Notification';
+import api from '../../../../utils/api';
 
-const DbHeader = ({socket}) => {
-  const dropdownRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [sidebar, setSidebar] = useState(false);
-  const location = useLocation();
-  const { pathname } = location;
-  const {user} = useSelector((state)=>state.auth);
-  const [userInfo,setUserInfo]=useState(user);
-  const [realtimeNotification, setRealtimeNotification] = useState([]);
-  const [notifications,setNotifications] = useState([]);
-  const [notificationCount, setNotificationCount] = useState(null);
+const DbHeader = ({ socket }) => {
+	const dropdownRef = useRef(null);
+	const [isOpen, setIsOpen] = useState(false);
+	const [menuOpen, setMenuOpen] = useState(false);
+	const [sidebar, setSidebar] = useState(false);
+	const location = useLocation();
+	const { pathname } = location;
+	const { user } = useSelector(state => state.auth);
+	const [userInfo, setUserInfo] = useState(user);
+	const [realtimeNotification, setRealtimeNotification] = useState([]);
+	const [notifications, setNotifications] = useState([]);
+	const [notificationCount, setNotificationCount] = useState(null);
+	const navigate = useNavigate();
 
-  let dbNotificationCount = user?.notifications?.length - user?.lastNotificationCount;
+	let dbNotificationCount =
+		user?.notifications?.length - user?.lastNotificationCount;
 
-  useEffect(()=>{
-    setUserInfo(user)
-  },[]);
+	useEffect(() => {
+		setUserInfo(user);
+	}, []);
 
-  const {
-    searchquery,
-    setSearchQuery,
-    search,
-    setSearch,
-  } = useContext(Context);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSearch(!search);
-  };
+	const { searchquery, setSearchQuery, search, setSearch } = useContext(
+		Context
+	);
+	const handleSubmit = e => {
+		e.preventDefault();
+		setSearch(!search);
+	};
 
-  const handleChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
+	const handleChange = e => {
+		setSearchQuery(e.target.value);
+	};
 
-  const getDbNotifcations = async () => {
-    const res = await api.get(`/notifications/${user._id}`);
-    setNotifications(res.data);
-  }
+	const getDbNotifcations = async () => {
+		const res = await api.get(`/notifications/${user._id}`);
+		setNotifications(res.data);
+	};
 
-  useEffect(() => {
-    if(user?.uid){
-      getDbNotifcations();
-    }
-  }, [user]);
+	const handleNotification = async notification => {
+		// const res = await api.post(`set-notifications/${user._id}`, {count: 0})
+		const res = await api
+			.get(`/notifications-status/${notification._id}`)
+			.then(async () => {
+				await getDbNotifcations().then(() => {
+					toggleDropdown();
+					navigate('/recieved_request');
+				});
+			});
+		console.log(res);
+	};
 
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-        // setNotificationCount(0);
-      }
-    }
+	useEffect(() => {
+		if (user?._id) {
+			getDbNotifcations();
+		}
+	}, [user]);
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+	useEffect(() => {
+		function handleClickOutside(event) {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+				setIsOpen(false);
+				setNotificationCount(0);
+			}
+		}
 
-  useEffect(() => {
-    socket?.on("getNotification", (data) => {
-      setRealtimeNotification(prev => [...prev, data]);
-      setNotificationCount(realtimeNotification.length);
-    })
-  },[socket])
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, []);
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+	useEffect(() => {
+		socket?.on('getNotification', data => {
+			setRealtimeNotification(prev => [...prev, data]);
+		});
+	}, [socket]);
 
-  return (
-    <header className="py-8 bg-black-20 sticky top-0 z-[99] xl:static xl:bg-transparent xl:py-0 mb-4">
-      <div className="flex justify-between xl:justify-center items-center xl:items-start px-5">
-        <div className="w-1/5 pr-5 flex justify-end">
-          <Link to={user?"/home":"/"} className="flex justify-center w-full max-w-[15rem]">
-            <img
-              src="/landingPage/images/SwinxterLogo-bg.svg"
-              alt="Logo"
-              className="cursor-pointer max-w-100px block"
-              height={'auto'}
-            />
-          </Link>
-        </div>
-        <span
-          className="block xl:hidden w-10 cursor-pointer"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          <img src="images/toggle-btn.png" alt="toggle" className="w-full" />
-        </span>
-        <div
-          className={`xl:w-4/5 mobile_db_header ${
-            menuOpen ? "mobile_db_header_open" : ""
-          }`}
-        >
-          <div className="flex-wrap grid xl:flex content-start xl:items-start mobile_db_header_inner relative">
-            <span
-              className="text-xl text-white absolute top-3 right-5 flex z-9 xl:hidden cursor-pointer"
-              onClick={() => setMenuOpen(false)}
-            >
-              <RxCross1 />
-            </span>
-            <Link
-              to={user?"/home":"/"}
-              className="absolute top-[60px] left-5 w-full max-w-[100px] block xl:hidden"
-            >
-              <img
-                src="/landingPage/images/SwinxterLogo-bg.svg"
-                alt="Logo"
-                className="cursor-pointer max-w-100px block"
-              />
-            </Link>
-            <div className="xl:w-4/5">
-              <form onSubmit={handleSubmit}>
-                <div className="relative text-white ">
-                  <span className="absolute top-1/2 left-5 transform -translate-y-1/2 text-2xl flex items-center">
-                    <IoSearchOutline />
-                  </span>
-                  <input
-                    type="search"
-                    className="outline-none border-none w-full px-5 pl-16 h-14 bg-light-grey rounded-xl"
-                    onChange={handleChange}
-                    value={searchquery}
-                  />
-                </div>
-              </form>
-              <div className="db_header_nav w-full px-[50px]">
-                <ul className="xl:flex items-center justify-between mt-8 grid gap-y-2">
-                  <li
-                    className={`${
-                      pathname === "/home"
-                        ? "text-orange"
-                        : "text-white hover:text-orange"
-                    }`}
-                  >
-                    <Link to="/home">Home</Link>
-                  </li>
-                  {/* <li
+	useEffect(() => {
+		setNotificationCount(realtimeNotification.length);
+	}, [realtimeNotification]);
+
+	useEffect(() => {
+		console.log('notificationCount', notificationCount);
+	}, [notificationCount]);
+
+	const toggleDropdown = () => {
+		setIsOpen(!isOpen);
+	};
+
+	return (
+		<header className='py-8 bg-black-20 sticky top-0 z-[99] xl:static xl:bg-transparent xl:py-0 mb-4'>
+			<div className='flex justify-between xl:justify-center items-center xl:items-start px-5'>
+				<div className='w-1/5 pr-5 flex justify-end'>
+					<Link
+						to={user ? '/home' : '/'}
+						className='flex justify-center w-full max-w-[15rem]'
+					>
+						<img
+							src='/landingPage/images/SwinxterLogo-bg.svg'
+							alt='Logo'
+							className='cursor-pointer max-w-100px block'
+							height={'auto'}
+						/>
+					</Link>
+				</div>
+				<span
+					className='block xl:hidden w-10 cursor-pointer'
+					onClick={() => setMenuOpen(!menuOpen)}
+				>
+					<img src='images/toggle-btn.png' alt='toggle' className='w-full' />
+				</span>
+				<div
+					className={`xl:w-4/5 mobile_db_header ${
+						menuOpen ? 'mobile_db_header_open' : ''
+					}`}
+				>
+					<div className='flex-wrap grid xl:flex content-start xl:items-start mobile_db_header_inner relative'>
+						<span
+							className='text-xl text-white absolute top-3 right-5 flex z-9 xl:hidden cursor-pointer'
+							onClick={() => setMenuOpen(false)}
+						>
+							<RxCross1 />
+						</span>
+						<Link
+							to={user ? '/home' : '/'}
+							className='absolute top-[60px] left-5 w-full max-w-[100px] block xl:hidden'
+						>
+							<img
+								src='/landingPage/images/SwinxterLogo-bg.svg'
+								alt='Logo'
+								className='cursor-pointer max-w-100px block'
+							/>
+						</Link>
+						<div className='xl:w-4/5'>
+							<form onSubmit={handleSubmit}>
+								<div className='relative text-white '>
+									<span className='absolute top-1/2 left-5 transform -translate-y-1/2 text-2xl flex items-center'>
+										<IoSearchOutline />
+									</span>
+									<input
+										type='search'
+										className='outline-none border-none w-full px-5 pl-16 h-14 bg-light-grey rounded-xl'
+										onChange={handleChange}
+										value={searchquery}
+									/>
+								</div>
+							</form>
+							<div className='db_header_nav w-full px-[50px]'>
+								<ul className='xl:flex items-center justify-between mt-8 grid gap-y-2'>
+									<li
+										className={`${
+											pathname === '/home'
+												? 'text-orange'
+												: 'text-white hover:text-orange'
+										}`}
+									>
+										<Link to='/home'>Home</Link>
+									</li>
+									{/* <li
                     className={`${
                       pathname === "/live-chat"
                         ? "text-orange"
@@ -155,20 +177,23 @@ const DbHeader = ({socket}) => {
                   >
                     <Link to="/live-chat">Live Chat</Link>
                   </li> */}
-                  <li
-                    className={`${
-                      pathname === "/travel-page"
-                        ? "text-orange"
-                        : "text-white hover:text-orange"
-                    }`}
-                  >
-                    <Link to="/travel-page">Situationship</Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="xl:w-1/5 flex justify-end items-center xl:pl-5 flex-wrap order-first xl:order-2 mt-8 xl:mt-0 xl:mb-0 mb-5" style={{position: "relative"}}>
-              {/* <div className="cursor-pointer w-10 flex justify-center">
+									<li
+										className={`${
+											pathname === '/travel-page'
+												? 'text-orange'
+												: 'text-white hover:text-orange'
+										}`}
+									>
+										<Link to='/travel-page'>Situationship</Link>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div
+							className='xl:w-1/5 flex justify-end items-center xl:pl-5 flex-wrap order-first xl:order-2 mt-8 xl:mt-0 xl:mb-0 mb-5'
+							style={{ position: 'relative' }}
+						>
+							{/* <div className="cursor-pointer w-10 flex justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="23"
@@ -194,55 +219,82 @@ const DbHeader = ({socket}) => {
                   />
                 </svg>
               </div> */}
-              <div class="notificationDrp relative ml-2 w-10 flex justify-center">
-                <div className="cursor-pointer">
-                  {
-                    dbNotificationCount+realtimeNotification.length > 0?
-                    <div className="notification_indicator"><p>{dbNotificationCount+realtimeNotification?.length}</p></div>
-                    :
-                    null
-                  }
-                  <svg
-                  onClick={toggleDropdown}
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="23"
-                    viewBox="0 0 20 23"
-                    fill="none"
-                    
-                  >
-                    <path
-                      d="M16.8889 11.6827V9.55553C16.8889 6.45234 14.8262 3.82217 12 2.9631V1.99999C12 0.897197 11.1028 0 10 0C8.89722 0 8.00003 0.897197 8.00003 1.99999V2.9631C5.17381 3.82217 3.11115 6.45229 3.11115 9.55553V11.6827C3.11115 14.4086 2.07213 16.9933 0.185518 18.9607C0.00062972 19.1535 -0.0513257 19.438 0.053474 19.6837C0.158274 19.9294 0.399606 20.0888 0.666717 20.0888H6.73377C7.04345 21.6085 8.39029 22.7555 10 22.7555C11.6098 22.7555 12.9565 21.6085 13.2663 20.0888H19.3333C19.6004 20.0888 19.8417 19.9294 19.9465 19.6837C20.0513 19.438 19.9994 19.1535 19.8145 18.9607C17.9279 16.9933 16.8889 14.4085 16.8889 11.6827ZM9.33336 1.99999C9.33336 1.6324 9.63242 1.33333 10 1.33333C10.3676 1.33333 10.6667 1.6324 10.6667 1.99999V2.69901C10.4473 2.67786 10.2249 2.66666 10 2.66666C9.77513 2.66666 9.55278 2.67786 9.33336 2.69901V1.99999ZM10 21.4222C9.13091 21.4222 8.38989 20.8648 8.11469 20.0888H11.8853C11.6101 20.8648 10.8691 21.4222 10 21.4222ZM2.1036 18.7555C3.62186 16.7203 4.44448 14.2574 4.44448 11.6827V9.55553C4.44448 6.4922 6.9367 3.99999 10 3.99999C13.0633 3.99999 15.5556 6.4922 15.5556 9.55553V11.6827C15.5556 14.2574 16.3782 16.7203 17.8965 18.7555H2.1036Z"
-                      fill="white"
-                    />
-                    <path
-                      d="M18.6665 9.55552C18.6665 9.9237 18.965 10.2222 19.3332 10.2222C19.7014 10.2222 19.9998 9.9237 19.9998 9.55552C19.9998 6.88442 18.9597 4.37318 17.0709 2.48443C16.8106 2.22412 16.3885 2.22408 16.1281 2.48443C15.8678 2.74479 15.8678 3.16688 16.1281 3.42723C17.7651 5.06416 18.6665 7.24055 18.6665 9.55552Z"
-                      fill="white"
-                    />
-                    <path
-                      d="M0.666665 10.2222C1.03484 10.2222 1.33333 9.92367 1.33333 9.5555C1.33333 7.24057 2.23484 5.06418 3.87172 3.42725C4.13208 3.16689 4.13208 2.74481 3.87172 2.48445C3.61141 2.2241 3.18928 2.2241 2.92892 2.48445C1.04017 4.3732 0 6.88439 0 9.5555C0 9.92367 0.298488 10.2222 0.666665 10.2222Z"
-                      fill="white"
-                    />
-                  </svg>
-                </div>
-                <div className={`dropdownList ${isOpen ? 'show' : 'hide'}`} ref={dropdownRef}>
-                {/* <button onClick={toggleDropdown}>Open Dropdown</button> */}
-                    <ul >
-                      {
+							<div
+								className='notificationDrp relative ml-2 w-10 flex justify-center' ref={dropdownRef}
+							>
+								<div className='cursor-pointer' onClick={toggleDropdown}
+								>
+									{notificationCount > 0 ? (
+										<div className='notification_indicator'>
+											<p>{notificationCount}</p>
+										</div>
+									) : null}
+									<svg
+										onClick={toggleDropdown}
+										xmlns='http://www.w3.org/2000/svg'
+										width='20'
+										height='23'
+										viewBox='0 0 20 23'
+										fill='none'
+									>
+										<path
+											d='M16.8889 11.6827V9.55553C16.8889 6.45234 14.8262 3.82217 12 2.9631V1.99999C12 0.897197 11.1028 0 10 0C8.89722 0 8.00003 0.897197 8.00003 1.99999V2.9631C5.17381 3.82217 3.11115 6.45229 3.11115 9.55553V11.6827C3.11115 14.4086 2.07213 16.9933 0.185518 18.9607C0.00062972 19.1535 -0.0513257 19.438 0.053474 19.6837C0.158274 19.9294 0.399606 20.0888 0.666717 20.0888H6.73377C7.04345 21.6085 8.39029 22.7555 10 22.7555C11.6098 22.7555 12.9565 21.6085 13.2663 20.0888H19.3333C19.6004 20.0888 19.8417 19.9294 19.9465 19.6837C20.0513 19.438 19.9994 19.1535 19.8145 18.9607C17.9279 16.9933 16.8889 14.4085 16.8889 11.6827ZM9.33336 1.99999C9.33336 1.6324 9.63242 1.33333 10 1.33333C10.3676 1.33333 10.6667 1.6324 10.6667 1.99999V2.69901C10.4473 2.67786 10.2249 2.66666 10 2.66666C9.77513 2.66666 9.55278 2.67786 9.33336 2.69901V1.99999ZM10 21.4222C9.13091 21.4222 8.38989 20.8648 8.11469 20.0888H11.8853C11.6101 20.8648 10.8691 21.4222 10 21.4222ZM2.1036 18.7555C3.62186 16.7203 4.44448 14.2574 4.44448 11.6827V9.55553C4.44448 6.4922 6.9367 3.99999 10 3.99999C13.0633 3.99999 15.5556 6.4922 15.5556 9.55553V11.6827C15.5556 14.2574 16.3782 16.7203 17.8965 18.7555H2.1036Z'
+											fill='white'
+										/>
+										<path
+											d='M18.6665 9.55552C18.6665 9.9237 18.965 10.2222 19.3332 10.2222C19.7014 10.2222 19.9998 9.9237 19.9998 9.55552C19.9998 6.88442 18.9597 4.37318 17.0709 2.48443C16.8106 2.22412 16.3885 2.22408 16.1281 2.48443C15.8678 2.74479 15.8678 3.16688 16.1281 3.42723C17.7651 5.06416 18.6665 7.24055 18.6665 9.55552Z'
+											fill='white'
+										/>
+										<path
+											d='M0.666665 10.2222C1.03484 10.2222 1.33333 9.92367 1.33333 9.5555C1.33333 7.24057 2.23484 5.06418 3.87172 3.42725C4.13208 3.16689 4.13208 2.74481 3.87172 2.48445C3.61141 2.2241 3.18928 2.2241 2.92892 2.48445C1.04017 4.3732 0 6.88439 0 9.5555C0 9.92367 0.298488 10.2222 0.666665 10.2222Z'
+											fill='white'
+										/>
+									</svg>
+								</div>
+								<div className={`dropdownList ${isOpen ? 'show' : 'hide'}`}>
+									{/* <button onClick={toggleDropdown}>Open Dropdown</button> */}
+									<ul>
+										{/* {
                         realtimeNotification.length>0 ? realtimeNotification.map((notification,i) => (
                           <li onClick={() => {}}><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23" fill="none" > <path d="M16.8889 11.6827V9.55553C16.8889 6.45234 14.8262 3.82217 12 2.9631V1.99999C12 0.897197 11.1028 0 10 0C8.89722 0 8.00003 0.897197 8.00003 1.99999V2.9631C5.17381 3.82217 3.11115 6.45229 3.11115 9.55553V11.6827C3.11115 14.4086 2.07213 16.9933 0.185518 18.9607C0.00062972 19.1535 -0.0513257 19.438 0.053474 19.6837C0.158274 19.9294 0.399606 20.0888 0.666717 20.0888H6.73377C7.04345 21.6085 8.39029 22.7555 10 22.7555C11.6098 22.7555 12.9565 21.6085 13.2663 20.0888H19.3333C19.6004 20.0888 19.8417 19.9294 19.9465 19.6837C20.0513 19.438 19.9994 19.1535 19.8145 18.9607C17.9279 16.9933 16.8889 14.4085 16.8889 11.6827ZM9.33336 1.99999C9.33336 1.6324 9.63242 1.33333 10 1.33333C10.3676 1.33333 10.6667 1.6324 10.6667 1.99999V2.69901C10.4473 2.67786 10.2249 2.66666 10 2.66666C9.77513 2.66666 9.55278 2.67786 9.33336 2.69901V1.99999ZM10 21.4222C9.13091 21.4222 8.38989 20.8648 8.11469 20.0888H11.8853C11.6101 20.8648 10.8691 21.4222 10 21.4222ZM2.1036 18.7555C3.62186 16.7203 4.44448 14.2574 4.44448 11.6827V9.55553C4.44448 6.4922 6.9367 3.99999 10 3.99999C13.0633 3.99999 15.5556 6.4922 15.5556 9.55553V11.6827C15.5556 14.2574 16.3782 16.7203 17.8965 18.7555H2.1036Z" fill="white" /> <path d="M18.6665 9.55552C18.6665 9.9237 18.965 10.2222 19.3332 10.2222C19.7014 10.2222 19.9998 9.9237 19.9998 9.55552C19.9998 6.88442 18.9597 4.37318 17.0709 2.48443C16.8106 2.22412 16.3885 2.22408 16.1281 2.48443C15.8678 2.74479 15.8678 3.16688 16.1281 3.42723C17.7651 5.06416 18.6665 7.24055 18.6665 9.55552Z" fill="white" /> <path d="M0.666665 10.2222C1.03484 10.2222 1.33333 9.92367 1.33333 9.5555C1.33333 7.24057 2.23484 5.06418 3.87172 3.42725C4.13208 3.16689 4.13208 2.74481 3.87172 2.48445C3.61141 2.2241 3.18928 2.2241 2.92892 2.48445C1.04017 4.3732 0 6.88439 0 9.5555C0 9.92367 0.298488 10.2222 0.666665 10.2222Z" fill="white" /> </svg>
                           <span>{notification.message}</span></a></li>
                         )) : 
                         <p style={{paddingLeft: '15px', fontSize: '14px'}}>You don't have any notifications yet</p>
-                      }
-                      {
-                        notifications.length>0 && notifications.map((notification,i) => (
-                          <li onClick={() => {}}><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23" fill="none" > <path d="M16.8889 11.6827V9.55553C16.8889 6.45234 14.8262 3.82217 12 2.9631V1.99999C12 0.897197 11.1028 0 10 0C8.89722 0 8.00003 0.897197 8.00003 1.99999V2.9631C5.17381 3.82217 3.11115 6.45229 3.11115 9.55553V11.6827C3.11115 14.4086 2.07213 16.9933 0.185518 18.9607C0.00062972 19.1535 -0.0513257 19.438 0.053474 19.6837C0.158274 19.9294 0.399606 20.0888 0.666717 20.0888H6.73377C7.04345 21.6085 8.39029 22.7555 10 22.7555C11.6098 22.7555 12.9565 21.6085 13.2663 20.0888H19.3333C19.6004 20.0888 19.8417 19.9294 19.9465 19.6837C20.0513 19.438 19.9994 19.1535 19.8145 18.9607C17.9279 16.9933 16.8889 14.4085 16.8889 11.6827ZM9.33336 1.99999C9.33336 1.6324 9.63242 1.33333 10 1.33333C10.3676 1.33333 10.6667 1.6324 10.6667 1.99999V2.69901C10.4473 2.67786 10.2249 2.66666 10 2.66666C9.77513 2.66666 9.55278 2.67786 9.33336 2.69901V1.99999ZM10 21.4222C9.13091 21.4222 8.38989 20.8648 8.11469 20.0888H11.8853C11.6101 20.8648 10.8691 21.4222 10 21.4222ZM2.1036 18.7555C3.62186 16.7203 4.44448 14.2574 4.44448 11.6827V9.55553C4.44448 6.4922 6.9367 3.99999 10 3.99999C13.0633 3.99999 15.5556 6.4922 15.5556 9.55553V11.6827C15.5556 14.2574 16.3782 16.7203 17.8965 18.7555H2.1036Z" fill="white" /> <path d="M18.6665 9.55552C18.6665 9.9237 18.965 10.2222 19.3332 10.2222C19.7014 10.2222 19.9998 9.9237 19.9998 9.55552C19.9998 6.88442 18.9597 4.37318 17.0709 2.48443C16.8106 2.22412 16.3885 2.22408 16.1281 2.48443C15.8678 2.74479 15.8678 3.16688 16.1281 3.42723C17.7651 5.06416 18.6665 7.24055 18.6665 9.55552Z" fill="white" /> <path d="M0.666665 10.2222C1.03484 10.2222 1.33333 9.92367 1.33333 9.5555C1.33333 7.24057 2.23484 5.06418 3.87172 3.42725C4.13208 3.16689 4.13208 2.74481 3.87172 2.48445C3.61141 2.2241 3.18928 2.2241 2.92892 2.48445C1.04017 4.3732 0 6.88439 0 9.5555C0 9.92367 0.298488 10.2222 0.666665 10.2222Z" fill="white" /> </svg>
-                          <span>{notification.message}</span></a></li>
-                        )) 
-                        // <p>You don't have any notifications yet</p>
-                      }
-                    {/* <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23" fill="none" > <path d="M16.8889 11.6827V9.55553C16.8889 6.45234 14.8262 3.82217 12 2.9631V1.99999C12 0.897197 11.1028 0 10 0C8.89722 0 8.00003 0.897197 8.00003 1.99999V2.9631C5.17381 3.82217 3.11115 6.45229 3.11115 9.55553V11.6827C3.11115 14.4086 2.07213 16.9933 0.185518 18.9607C0.00062972 19.1535 -0.0513257 19.438 0.053474 19.6837C0.158274 19.9294 0.399606 20.0888 0.666717 20.0888H6.73377C7.04345 21.6085 8.39029 22.7555 10 22.7555C11.6098 22.7555 12.9565 21.6085 13.2663 20.0888H19.3333C19.6004 20.0888 19.8417 19.9294 19.9465 19.6837C20.0513 19.438 19.9994 19.1535 19.8145 18.9607C17.9279 16.9933 16.8889 14.4085 16.8889 11.6827ZM9.33336 1.99999C9.33336 1.6324 9.63242 1.33333 10 1.33333C10.3676 1.33333 10.6667 1.6324 10.6667 1.99999V2.69901C10.4473 2.67786 10.2249 2.66666 10 2.66666C9.77513 2.66666 9.55278 2.67786 9.33336 2.69901V1.99999ZM10 21.4222C9.13091 21.4222 8.38989 20.8648 8.11469 20.0888H11.8853C11.6101 20.8648 10.8691 21.4222 10 21.4222ZM2.1036 18.7555C3.62186 16.7203 4.44448 14.2574 4.44448 11.6827V9.55553C4.44448 6.4922 6.9367 3.99999 10 3.99999C13.0633 3.99999 15.5556 6.4922 15.5556 9.55553V11.6827C15.5556 14.2574 16.3782 16.7203 17.8965 18.7555H2.1036Z" fill="white" /> <path d="M18.6665 9.55552C18.6665 9.9237 18.965 10.2222 19.3332 10.2222C19.7014 10.2222 19.9998 9.9237 19.9998 9.55552C19.9998 6.88442 18.9597 4.37318 17.0709 2.48443C16.8106 2.22412 16.3885 2.22408 16.1281 2.48443C15.8678 2.74479 15.8678 3.16688 16.1281 3.42723C17.7651 5.06416 18.6665 7.24055 18.6665 9.55552Z" fill="white" /> <path d="M0.666665 10.2222C1.03484 10.2222 1.33333 9.92367 1.33333 9.5555C1.33333 7.24057 2.23484 5.06418 3.87172 3.42725C4.13208 3.16689 4.13208 2.74481 3.87172 2.48445C3.61141 2.2241 3.18928 2.2241 2.92892 2.48445C1.04017 4.3732 0 6.88439 0 9.5555C0 9.92367 0.298488 10.2222 0.666665 10.2222Z" fill="white" /> </svg>
+                      } */}
+										{notifications.length > 0 &&
+											notifications.map((notification, i) => (
+												<button
+													disabled={notification.read}
+													onClick={() => handleNotification(notification)}
+                          key={i}
+												>
+													<svg
+														xmlns='http://www.w3.org/2000/svg'
+														width='20'
+														height='23'
+														viewBox='0 0 20 23'
+														fill='none'
+													>
+														{' '}
+														<path
+															d='M16.8889 11.6827V9.55553C16.8889 6.45234 14.8262 3.82217 12 2.9631V1.99999C12 0.897197 11.1028 0 10 0C8.89722 0 8.00003 0.897197 8.00003 1.99999V2.9631C5.17381 3.82217 3.11115 6.45229 3.11115 9.55553V11.6827C3.11115 14.4086 2.07213 16.9933 0.185518 18.9607C0.00062972 19.1535 -0.0513257 19.438 0.053474 19.6837C0.158274 19.9294 0.399606 20.0888 0.666717 20.0888H6.73377C7.04345 21.6085 8.39029 22.7555 10 22.7555C11.6098 22.7555 12.9565 21.6085 13.2663 20.0888H19.3333C19.6004 20.0888 19.8417 19.9294 19.9465 19.6837C20.0513 19.438 19.9994 19.1535 19.8145 18.9607C17.9279 16.9933 16.8889 14.4085 16.8889 11.6827ZM9.33336 1.99999C9.33336 1.6324 9.63242 1.33333 10 1.33333C10.3676 1.33333 10.6667 1.6324 10.6667 1.99999V2.69901C10.4473 2.67786 10.2249 2.66666 10 2.66666C9.77513 2.66666 9.55278 2.67786 9.33336 2.69901V1.99999ZM10 21.4222C9.13091 21.4222 8.38989 20.8648 8.11469 20.0888H11.8853C11.6101 20.8648 10.8691 21.4222 10 21.4222ZM2.1036 18.7555C3.62186 16.7203 4.44448 14.2574 4.44448 11.6827V9.55553C4.44448 6.4922 6.9367 3.99999 10 3.99999C13.0633 3.99999 15.5556 6.4922 15.5556 9.55553V11.6827C15.5556 14.2574 16.3782 16.7203 17.8965 18.7555H2.1036Z'
+															fill='white'
+														/>{' '}
+														<path
+															d='M18.6665 9.55552C18.6665 9.9237 18.965 10.2222 19.3332 10.2222C19.7014 10.2222 19.9998 9.9237 19.9998 9.55552C19.9998 6.88442 18.9597 4.37318 17.0709 2.48443C16.8106 2.22412 16.3885 2.22408 16.1281 2.48443C15.8678 2.74479 15.8678 3.16688 16.1281 3.42723C17.7651 5.06416 18.6665 7.24055 18.6665 9.55552Z'
+															fill='white'
+														/>{' '}
+														<path
+															d='M0.666665 10.2222C1.03484 10.2222 1.33333 9.92367 1.33333 9.5555C1.33333 7.24057 2.23484 5.06418 3.87172 3.42725C4.13208 3.16689 4.13208 2.74481 3.87172 2.48445C3.61141 2.2241 3.18928 2.2241 2.92892 2.48445C1.04017 4.3732 0 6.88439 0 9.5555C0 9.92367 0.298488 10.2222 0.666665 10.2222Z'
+															fill='white'
+														/>{' '}
+													</svg>
+													<span>{notification.message}</span>
+												</button>
+											))
+										// <p>You don't have any notifications yet</p>
+										}
+										{/* <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23" fill="none" > <path d="M16.8889 11.6827V9.55553C16.8889 6.45234 14.8262 3.82217 12 2.9631V1.99999C12 0.897197 11.1028 0 10 0C8.89722 0 8.00003 0.897197 8.00003 1.99999V2.9631C5.17381 3.82217 3.11115 6.45229 3.11115 9.55553V11.6827C3.11115 14.4086 2.07213 16.9933 0.185518 18.9607C0.00062972 19.1535 -0.0513257 19.438 0.053474 19.6837C0.158274 19.9294 0.399606 20.0888 0.666717 20.0888H6.73377C7.04345 21.6085 8.39029 22.7555 10 22.7555C11.6098 22.7555 12.9565 21.6085 13.2663 20.0888H19.3333C19.6004 20.0888 19.8417 19.9294 19.9465 19.6837C20.0513 19.438 19.9994 19.1535 19.8145 18.9607C17.9279 16.9933 16.8889 14.4085 16.8889 11.6827ZM9.33336 1.99999C9.33336 1.6324 9.63242 1.33333 10 1.33333C10.3676 1.33333 10.6667 1.6324 10.6667 1.99999V2.69901C10.4473 2.67786 10.2249 2.66666 10 2.66666C9.77513 2.66666 9.55278 2.67786 9.33336 2.69901V1.99999ZM10 21.4222C9.13091 21.4222 8.38989 20.8648 8.11469 20.0888H11.8853C11.6101 20.8648 10.8691 21.4222 10 21.4222ZM2.1036 18.7555C3.62186 16.7203 4.44448 14.2574 4.44448 11.6827V9.55553C4.44448 6.4922 6.9367 3.99999 10 3.99999C13.0633 3.99999 15.5556 6.4922 15.5556 9.55553V11.6827C15.5556 14.2574 16.3782 16.7203 17.8965 18.7555H2.1036Z" fill="white" /> <path d="M18.6665 9.55552C18.6665 9.9237 18.965 10.2222 19.3332 10.2222C19.7014 10.2222 19.9998 9.9237 19.9998 9.55552C19.9998 6.88442 18.9597 4.37318 17.0709 2.48443C16.8106 2.22412 16.3885 2.22408 16.1281 2.48443C15.8678 2.74479 15.8678 3.16688 16.1281 3.42723C17.7651 5.06416 18.6665 7.24055 18.6665 9.55552Z" fill="white" /> <path d="M0.666665 10.2222C1.03484 10.2222 1.33333 9.92367 1.33333 9.5555C1.33333 7.24057 2.23484 5.06418 3.87172 3.42725C4.13208 3.16689 4.13208 2.74481 3.87172 2.48445C3.61141 2.2241 3.18928 2.2241 2.92892 2.48445C1.04017 4.3732 0 6.88439 0 9.5555C0 9.92367 0.298488 10.2222 0.666665 10.2222Z" fill="white" /> </svg>
                     <span>Notification go here</span></a></li>
                     <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23" fill="none" > <path d="M16.8889 11.6827V9.55553C16.8889 6.45234 14.8262 3.82217 12 2.9631V1.99999C12 0.897197 11.1028 0 10 0C8.89722 0 8.00003 0.897197 8.00003 1.99999V2.9631C5.17381 3.82217 3.11115 6.45229 3.11115 9.55553V11.6827C3.11115 14.4086 2.07213 16.9933 0.185518 18.9607C0.00062972 19.1535 -0.0513257 19.438 0.053474 19.6837C0.158274 19.9294 0.399606 20.0888 0.666717 20.0888H6.73377C7.04345 21.6085 8.39029 22.7555 10 22.7555C11.6098 22.7555 12.9565 21.6085 13.2663 20.0888H19.3333C19.6004 20.0888 19.8417 19.9294 19.9465 19.6837C20.0513 19.438 19.9994 19.1535 19.8145 18.9607C17.9279 16.9933 16.8889 14.4085 16.8889 11.6827ZM9.33336 1.99999C9.33336 1.6324 9.63242 1.33333 10 1.33333C10.3676 1.33333 10.6667 1.6324 10.6667 1.99999V2.69901C10.4473 2.67786 10.2249 2.66666 10 2.66666C9.77513 2.66666 9.55278 2.67786 9.33336 2.69901V1.99999ZM10 21.4222C9.13091 21.4222 8.38989 20.8648 8.11469 20.0888H11.8853C11.6101 20.8648 10.8691 21.4222 10 21.4222ZM2.1036 18.7555C3.62186 16.7203 4.44448 14.2574 4.44448 11.6827V9.55553C4.44448 6.4922 6.9367 3.99999 10 3.99999C13.0633 3.99999 15.5556 6.4922 15.5556 9.55553V11.6827C15.5556 14.2574 16.3782 16.7203 17.8965 18.7555H2.1036Z" fill="white" /> <path d="M18.6665 9.55552C18.6665 9.9237 18.965 10.2222 19.3332 10.2222C19.7014 10.2222 19.9998 9.9237 19.9998 9.55552C19.9998 6.88442 18.9597 4.37318 17.0709 2.48443C16.8106 2.22412 16.3885 2.22408 16.1281 2.48443C15.8678 2.74479 15.8678 3.16688 16.1281 3.42723C17.7651 5.06416 18.6665 7.24055 18.6665 9.55552Z" fill="white" /> <path d="M0.666665 10.2222C1.03484 10.2222 1.33333 9.92367 1.33333 9.5555C1.33333 7.24057 2.23484 5.06418 3.87172 3.42725C4.13208 3.16689 4.13208 2.74481 3.87172 2.48445C3.61141 2.2241 3.18928 2.2241 2.92892 2.48445C1.04017 4.3732 0 6.88439 0 9.5555C0 9.92367 0.298488 10.2222 0.666665 10.2222Z" fill="white" /> </svg>
                     <span>Notification go here</span></a></li>
@@ -250,41 +302,60 @@ const DbHeader = ({socket}) => {
                     <span>Notification go here</span></a></li>
                     <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23" fill="none" > <path d="M16.8889 11.6827V9.55553C16.8889 6.45234 14.8262 3.82217 12 2.9631V1.99999C12 0.897197 11.1028 0 10 0C8.89722 0 8.00003 0.897197 8.00003 1.99999V2.9631C5.17381 3.82217 3.11115 6.45229 3.11115 9.55553V11.6827C3.11115 14.4086 2.07213 16.9933 0.185518 18.9607C0.00062972 19.1535 -0.0513257 19.438 0.053474 19.6837C0.158274 19.9294 0.399606 20.0888 0.666717 20.0888H6.73377C7.04345 21.6085 8.39029 22.7555 10 22.7555C11.6098 22.7555 12.9565 21.6085 13.2663 20.0888H19.3333C19.6004 20.0888 19.8417 19.9294 19.9465 19.6837C20.0513 19.438 19.9994 19.1535 19.8145 18.9607C17.9279 16.9933 16.8889 14.4085 16.8889 11.6827ZM9.33336 1.99999C9.33336 1.6324 9.63242 1.33333 10 1.33333C10.3676 1.33333 10.6667 1.6324 10.6667 1.99999V2.69901C10.4473 2.67786 10.2249 2.66666 10 2.66666C9.77513 2.66666 9.55278 2.67786 9.33336 2.69901V1.99999ZM10 21.4222C9.13091 21.4222 8.38989 20.8648 8.11469 20.0888H11.8853C11.6101 20.8648 10.8691 21.4222 10 21.4222ZM2.1036 18.7555C3.62186 16.7203 4.44448 14.2574 4.44448 11.6827V9.55553C4.44448 6.4922 6.9367 3.99999 10 3.99999C13.0633 3.99999 15.5556 6.4922 15.5556 9.55553V11.6827C15.5556 14.2574 16.3782 16.7203 17.8965 18.7555H2.1036Z" fill="white" /> <path d="M18.6665 9.55552C18.6665 9.9237 18.965 10.2222 19.3332 10.2222C19.7014 10.2222 19.9998 9.9237 19.9998 9.55552C19.9998 6.88442 18.9597 4.37318 17.0709 2.48443C16.8106 2.22412 16.3885 2.22408 16.1281 2.48443C15.8678 2.74479 15.8678 3.16688 16.1281 3.42723C17.7651 5.06416 18.6665 7.24055 18.6665 9.55552Z" fill="white" /> <path d="M0.666665 10.2222C1.03484 10.2222 1.33333 9.92367 1.33333 9.5555C1.33333 7.24057 2.23484 5.06418 3.87172 3.42725C4.13208 3.16689 4.13208 2.74481 3.87172 2.48445C3.61141 2.2241 3.18928 2.2241 2.92892 2.48445C1.04017 4.3732 0 6.88439 0 9.5555C0 9.92367 0.298488 10.2222 0.666665 10.2222Z" fill="white" /> </svg>
                     <span>Notification go here</span></a></li> */}
-                    </ul>
-                </div>
-              </div>
-              <div
-                className="ml-4 w-10 cursor-pointer flex items-center"
-                style={{height: '56px'}}
-                onClick={() => setSidebar(!sidebar)}
-              >
-                 <Link to={'/user-detail'}>
-                  {userInfo?.profile_type==="couple"?
-                    <img src={userInfo?.image?userInfo?.image:"images/couple-avatar.jpg"}   className="block rounded-md object-contain"/>
-                  :
-                    <img
-                      src={userInfo?.image?userInfo?.image: userInfo?.gender==="male" ? "/images/boy-avatar.jpg"  :userInfo?.gender==="female" ? "/images/girl-avatar.jpg"  : "/images/trans avatar.png"}
-                      className="block rounded-md object-contain"
-                    />
-                  }
-                </Link>
-                <span className="flex xl:hidden text-base">
-                  <HiChevronDown />
-                </span>
-              </div>
-              <div
-                className={`block w-full xl:hidden sidebar_normal ${
-                  sidebar ? "sidebar_open" : ""
-                }`}
-              >
-                <Sidebar closeMenu={() => {setMenuOpen(false)}}/>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
+									</ul>
+								</div>
+							</div>
+							<div
+								className='ml-4 w-10 cursor-pointer flex items-center'
+								style={{ height: '56px' }}
+								onClick={() => setSidebar(!sidebar)}
+							>
+								<Link to={'/user-detail'}>
+									{userInfo?.profile_type === 'couple' ? (
+										<img
+											src={
+												userInfo?.image
+													? userInfo?.image
+													: 'images/couple-avatar.jpg'
+											}
+											className='block rounded-md object-contain'
+										/>
+									) : (
+										<img
+											src={
+												userInfo?.image
+													? userInfo?.image
+													: userInfo?.gender === 'male'
+													? '/images/boy-avatar.jpg'
+													: userInfo?.gender === 'female'
+													? '/images/girl-avatar.jpg'
+													: '/images/trans avatar.png'
+											}
+											className='block rounded-md object-contain'
+										/>
+									)}
+								</Link>
+								<span className='flex xl:hidden text-base'>
+									<HiChevronDown />
+								</span>
+							</div>
+							<div
+								className={`block w-full xl:hidden sidebar_normal ${
+									sidebar ? 'sidebar_open' : ''
+								}`}
+							>
+								<Sidebar
+									closeMenu={() => {
+										setMenuOpen(false);
+									}}
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+	);
 };
 
 export default DbHeader;

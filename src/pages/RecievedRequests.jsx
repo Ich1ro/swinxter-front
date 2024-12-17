@@ -11,24 +11,18 @@ const RecievedRequests = () => {
 	const [friends, setFriends] = useState([]);
 
 	const getFriends = async () => {
-		const currentUser = await api.get(`/user_details/${user._id}`);
-		currentUser.data.friend_requests.map(async ele => {
-			const { data } = await api.get(`/user_details/${ele}`);
-			setFriends(prev => {
-        const isAlreadyFriend = prev.some(friend => friend._id === data._id);
-
-					if (!isAlreadyFriend) {
-						return [...prev, data];
-					}
-
-					return prev;
-      });
-		});
+		if (userInfo?.friend_requests.length > 0) {
+			const { data } = await api.post(`/get-friends`, {
+				friendIds: userInfo.friend_requests,
+			});
+			setFriends(data);
+		}
 	};
 
 	useEffect(() => {
 		getFriends();
 	}, [userInfo.friend_requests]);
+
 	return (
 		<div className='home_page bg-black py-8 px-6 rounded-2xl'>
 			{user.payment?.membership ? (

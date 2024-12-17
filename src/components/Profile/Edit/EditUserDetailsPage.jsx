@@ -42,6 +42,7 @@ const EditUserDetailsPage = () => {
 		state: '',
 		country: '',
 	});
+	const [privatePassword, setPrivatePassword] = useState('');
 	const [usertoken, setUsertoken] = useState('');
 	const dispatch = useDispatch();
 	const { user } = useSelector(state => state.auth);
@@ -240,6 +241,8 @@ const EditUserDetailsPage = () => {
 	};
 	const handleSave = async e => {
 		e.preventDefault();
+		console.log(privatePassword);
+		
 		try {
 			if (
 				userDetails?.city !== user?.location?.city ||
@@ -271,6 +274,10 @@ const EditUserDetailsPage = () => {
 					coordinates: coords,
 				};
 				dataForUpdate.geometry = geometry;
+
+				if(privatePassword !== '') {
+					dataForUpdate.privatePassword = privatePassword
+				}
 				console.log(dataForUpdate);
 
 				const { data } = await api.put(
@@ -284,25 +291,21 @@ const EditUserDetailsPage = () => {
 				);
 				if (data) {
 					setUserInfo(data);
+					setPrivatePassword('')
 					dispatch(loadUser());
 					toast.success('Profile edit successfully');
 				}
 			} else {
 				const dataForUpdate = {
 					...userDetails,
-					location: {
-						city: userDetails.city || '',
-						state: userDetails.state || '',
-						country: userDetails?.country || '',
-					},
 				};
 
-				delete dataForUpdate.city;
-				delete dataForUpdate.state;
-				delete dataForUpdate.country;
+				if(privatePassword !== '') {
+					dataForUpdate.privatePassword = privatePassword
+				}
 				const { data } = await api.put(
 					`/update-user`,
-					{ userId: Id, ...userDetails },
+					{ userId: Id, ...dataForUpdate },
 					{
 						headers: {
 							token: usertoken,
@@ -311,6 +314,7 @@ const EditUserDetailsPage = () => {
 				);
 				if (data) {
 					setUserInfo(data);
+					setPrivatePassword('')
 					dispatch(loadUser());
 					toast.success('Profile edit successfully');
 				}
@@ -457,6 +461,39 @@ const EditUserDetailsPage = () => {
 							</div>
 						</div>
 					</div>
+
+					{userInfo.privatePassword && userInfo.privatePassword !== '' && (
+						<div className='mt-6 grid gap-y-6'>
+							<p className='text-2xl font-medium flex justify-between mb-4 md:mb-6'>
+								Change Media Private Password
+							</p>
+							<div className='gap-x-10 justify-stretch items-start md:justify-center gap-y-4 sm:gap-y-6'>
+								<div className='w-full flex justify-center'>
+									<div
+										className='flex flex-wrap justify-center rounded-md input_field mb-4 md:mb-6'
+										style={{ width: '50%' }}
+									>
+										<label
+											htmlFor='Country'
+											className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+										>
+											Password
+										</label>
+										<input
+											className='bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+											id='privatePassword'
+											type='password'
+											placeholder='Media Private Password'
+											onChange={e => setPrivatePassword(e.target.value)}
+											name='privatePassword'
+											value={privatePassword}
+										></input>
+									</div>
+								</div>
+							</div>
+						</div>
+					)}
+
 					<p className='text-2xl font-medium flex justify-between mb-4 md:mb-6'>
 						Details
 					</p>

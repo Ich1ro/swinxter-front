@@ -104,6 +104,7 @@ const UserDetailPage = ({ socket }) => {
 			console.log(e);
 		}
 	};
+	
 	const handleCancelRequest = async () => {
 		try {
 			setLoading(1);

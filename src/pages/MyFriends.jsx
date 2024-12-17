@@ -12,11 +12,12 @@ const MyFriends = () => {
 	const [friends, setFriends] = useState([]);
 
 	const getFriends = async () => {
-		const currentUser = await api.get(`/user_details/${userInfo._id}`);
-		currentUser.data.friends.map(async ele => {
-			const { data } = await api.get(`/user_details/${ele}`);
-			setFriends([...friends, data]);
-		});
+		if (user?.friends.length > 0) {
+			const { data } = await api.post(`/get-friends`, {
+				friendIds: user.friends,
+			});
+			setFriends(data);
+		}
 	};
 
 	useEffect(() => {

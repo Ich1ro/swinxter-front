@@ -55,6 +55,7 @@ const SinglePerson = () => {
 		personName: '',
 		state: '',
 		city: '',
+		country: ''
 	});
 	const { userId } = useParams();
 	const { state } = useLocation();
@@ -347,6 +348,7 @@ const SinglePerson = () => {
 			const location = {
 				city: form.city,
 				state: form.state,
+				country: form.country
 			};
 
 			const geometry = {
@@ -501,7 +503,7 @@ const SinglePerson = () => {
 										name='state'
 									/>
 								</div>
-								<div className='bg-[#202020] grid grid-cols-2 px-10 py-5'>
+								<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>
 									<span>City *</span>
 									<input
 										type='text'
@@ -510,6 +512,17 @@ const SinglePerson = () => {
 										onChange={handleInput}
 										value={form.city}
 										name='city'
+									/>
+								</div>
+								<div className='bg-[#202020] grid grid-cols-2 px-10 py-5'>
+									<span>Country *</span>
+									<input
+										type='text'
+										className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+										placeholder='Country'
+										onChange={handleInput}
+										value={form.country}
+										name='country'
 									/>
 								</div>
 

@@ -1,7 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { IoCloseCircleSharp } from 'react-icons/io5';
+import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom';
+import { loadUser } from '../redux/actions/auth'
+import { toast } from 'react-toastify'
 
 const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 	const [image, setImage] = useState();
@@ -12,6 +15,7 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 	const [desc, setDesc] = useState('');
 	const { userId } = useParams();
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
+	const dispatch = useDispatch()
 
 	const handleimage = async e => {
 		const file = e.target.files[0];
@@ -50,8 +54,11 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 				if (data) {
 					setUserInfo(data);
 					setIsSaving(false);
+					toast.success("Image save successfully!")
+					dispatch(loadUser());
 					console.log('success', data);
 				} else {
+					toast.error("Image save error!")
 					console.log('error', data);
 				}
 
@@ -73,8 +80,11 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 				if (data) {
 					setUserInfo(data);
 					setIsSaving(false);
+					toast.success("Video save successfully!")
+					dispatch(loadUser());
 					console.log('success', data);
 				} else {
+					toast.error("Video save error!")
 					console.log('error', data);
 				}
 
@@ -186,7 +196,7 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 				</label>
 			</div>
 
-			{!isPublic && user.privatePassword === '' && (
+			{(!isPublic && (user.privatePassword === '' || !user.privatePassword)) && (
 				<>
 					<h2 style={{ fontSize: '20px', marginBottom: '25px' }}>
 						Create password for private images*

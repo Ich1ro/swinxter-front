@@ -65,6 +65,7 @@ const CheckoutCard = ({ title, price, month_freq }) => {
           userId: user._id,
           amount: price.slice(1),
           month_freq,
+		  plan: title
         });
 				if(res.status === 200) {
 					if(res.data === 300) {

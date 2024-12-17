@@ -18,8 +18,8 @@
     border: 1px solid orangered;
     position: absolute;
     right: 8px;
-
-    font-size: 4px;
+    
+    font-size: 10px;
 }
 .dropdownList {
     position: absolute;
@@ -27,7 +27,7 @@
     background: #131313;
     padding: 15px 0;
     min-width: 350px;
-    left: 0%;
+    left: -160%;
     transform: translate(-50%, 0px);
     color: #fff;
     border-radius: 5px;
@@ -43,31 +43,43 @@
     display: block;
     position: absolute;
     top: -8px;
-    right: 42.5%;
+    right: 24%;
 }
-.dropdownList li a {
+.dropdownList button {
     padding: 10px 15px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    width: 100%;
+    border-bottom: 1px solid #333;
 }
-.dropdownList li a svg {
+.dropdownList button svg {
     max-width: 16px;
     height: 16px;
     flex: 0 0 auto;
 }
-.dropdownList li a span {
+.dropdownList button span {
     flex: 0 0  auto;
     width: calc(100% - 20px);
     padding-left: 10px;
     font-size: 14px;
 }
-.dropdownList li + li a {
+.dropdownList li + li button {
     border-top: 2px solid #333;
 }
-.dropdownList li a:hover {
+.dropdownList button:hover {
     background: #F79220;
 }
+
+.dropdownList button:disabled {
+    background-color: #333;
+    color: #a1a1a1;
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  
+  
 @media ( max-width: 1279px ){
     .mobile_db_header {
         transition: 0.3s;
