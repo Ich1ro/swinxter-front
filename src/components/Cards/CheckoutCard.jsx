@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import './css/checkoutCard.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import api from '../../utils/api';
+import { loadUser } from '../../redux/actions/auth';
 
 const CheckoutCard = ({ title, price, month_freq }) => {
 	const { user } = useSelector(state => state.auth);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const [details, setDetails] = useState({
 		name: '',
@@ -31,13 +33,13 @@ const CheckoutCard = ({ title, price, month_freq }) => {
 			.substring(2, 34);
 	}
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = async e => {
 		e.preventDefault();
 		if (!agreement) {
 			toast.error('You need to agree with the terms and conditions');
 			return;
 		}
-	
+
 		// Use toast.promise for better UX during async calls
 		toast.promise(
 			api.post('/create-subscription', {
@@ -52,18 +54,22 @@ const CheckoutCard = ({ title, price, month_freq }) => {
 			}),
 			{
 				loading: 'Processing your payment...',
-				success: (res) => {
+				success: res => {
 					if (res.status === 200) {
 						if (res.data === 300) {
-							throw new Error('The card number is invalid or has already been used.');
+							throw new Error(
+								'The card number is invalid or has already been used.'
+							);
 						} else if (res.data === 100) {
-							navigate('/success');
+							dispatch(loadUser()).then(() => {
+								navigate('/success');
+							});
 							return 'Success!';
 						}
 					}
 					return 'Unexpected response';
 				},
-				error: (error) => {
+				error: error => {
 					console.error('Request failed:', error.message);
 					return error.message || 'Something went wrong!';
 				},
