@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast, Toaster } from 'react-hot-toast';
 import BotMessage from '../../components/Floating_Btn/Bot';
 import api from '../../utils/api';
 import './css/signup_login.css';
@@ -65,74 +65,57 @@ const Signup = () => {
 
 	const handleSignup = async e => {
 		e.preventDefault();
+	
 		if (!form.profile_type) {
 			toast.error('Select profile type');
 			return;
 		}
+	
 		if (Object.keys(formErrors).length === 0) {
-			try {
-				if (!captcha) {
-					toast.warning('Fill the captcha');
-					return;
-				}
-				setLoading(true);
-				const { data } = await api.post('/register', form);
-				if (!data) {
-					setLoading(false);
-					toast.error('🦄 Failed to Create User!', {
-						position: 'top-right',
-						autoClose: 2000,
-						hideProgressBar: false,
-						closeOnClick: true,
-						pauseOnHover: true,
-						draggable: true,
-						progress: undefined,
-						theme: 'colored',
-					});
-				} else {
-					setLoading(false);
-					setForm({
-						email: '',
-						username: '',
-						password: '',
-						confirmpassword: '',
-						profile_type: '',
-					});
-					if (data.profile_type === 'single') {
-						navigate(`/single/${data?._id}`, { state: { email: data?.email } });
-					}
-					if (data.profile_type === 'couple') {
-						navigate(`/couple/${data?._id}`, { state: { email: data?.email } });
-					}
-				}
-			} catch (error) {
-				setLoading(false);
-				toast.error(error?.response?.data, {
-					position: 'top-right',
-					autoClose: 2000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-					theme: 'colored',
-				});
+			if (!captcha) {
+				toast.error('Fill the captcha');
+				return;
 			}
+	
+			toast.promise(
+				(async () => {
+					setLoading(true);
+					const { data } = await api.post('/register', form);
+	
+					if (!data) {
+						throw new Error('🦄 Failed to Create User!');
+					} else {
+						setForm({
+							email: '',
+							username: '',
+							password: '',
+							confirmpassword: '',
+							profile_type: '',
+						});
+	
+						if (data.profile_type === 'single') {
+							navigate(`/single/${data?._id}`, { state: { email: data?.email } });
+						}
+						if (data.profile_type === 'couple') {
+							navigate(`/couple/${data?._id}`, { state: { email: data?.email } });
+						}
+					}
+				})(),
+				{
+					loading: 'Creating account...',
+					success: '🦄 Account Created Successfully!',
+					error: err => {
+						setLoading(false)
+						return err.message || '🦄 Failed to Create User!'
+					},
+				}
+			);
 		} else {
 			setLoading(false);
-			toast.error('🦄 Please fill all the fields correctly!', {
-				position: 'top-right',
-				autoClose: 2000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: 'colored',
-			});
+			toast.error('🦄 Please fill all the fields correctly!');
 		}
-		setLoading(false);
 	};
+	
 
 	// const googleLogin = useGoogleLogin({
 	// 	onSuccess: async tokenResponse => {
@@ -161,7 +144,7 @@ const Signup = () => {
 
 	return (
 		<div className='sign_up__block pt-65px' style={{ marginTop: '225px' }}>
-			<ToastContainer />
+			<Toaster />
 			<div className='container mx-auto relative z-1'>
 				<div className='sign-up__body grid grid-cols-1 md:grid-cols-2 rounded-3xl md:rounded-t-58 md:rounded-r-58 bg-black mt-[-50px] md:rounded-58 relative  border-b-2 border-t-[1px] border-orange'>
 					<div className='sign-up__form flex flex-col justify-center gap-30 py-6 px-6 lg:py-11 lg:px-14'>

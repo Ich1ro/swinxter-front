@@ -7,7 +7,7 @@ import api from '../utils/api';
 import { useCustomChatContext } from '../Context/ChatContext';
 import Loading from '../components/M_used/Loading';
 import { AiFillLike } from 'react-icons/ai';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const UserDetailPage = ({ socket }) => {
 	const [age, setAge] = useState('');
@@ -104,7 +104,7 @@ const UserDetailPage = ({ socket }) => {
 			console.log(e);
 		}
 	};
-	
+
 	const handleCancelRequest = async () => {
 		try {
 			setLoading(1);
@@ -133,45 +133,49 @@ const UserDetailPage = ({ socket }) => {
 	const superlike = async () => {
 		console.log('clicked');
 		let currentDate = Date.now();
+	
 		if (
 			currentUser.superlike.sent.some(
 				obj =>
 					obj.userId === userInfo._id &&
-					(currentDate - new Date(Number(obj.cooldown))) /
-						(1000 * 60 * 60 * 24) <
-						30
+					(currentDate - new Date(Number(obj.cooldown))) / (1000 * 60 * 60 * 24) < 30
 			)
 		) {
 			toast.error('You can only superlike a user once in a month');
 			return;
 		}
-		try {
-			await api.post('/superlike', {
-				userId: user._id,
-				superlikeId: userInfo._id,
-				cooldown: Date.now(),
-			});
-			socket.emit('sendNotification', {
-				senderName: user.username,
-				senderId: user._id,
-				recieverId: userInfo._id,
-				recieverName: userInfo.username,
-				message: `${user.username} sent you a superlike`,
-				type: 'friendRequest',
-			});
-			const res = await api.post('/notifications', {
-				senderId: user._id,
-				recieverId: userInfo._id,
-				senderName: user.username,
-				recieverName: userInfo.username,
-				type: 'friendRequest',
-				message: `${user.username} sent you a superlike`,
-			});
-			toast.success(`${userInfo.username} has been superliked successfully.`);
-		} catch (e) {
-			console.log(e);
-		}
+	
+		const superlikeData = {
+			userId: user._id,
+			superlikeId: userInfo._id,
+			cooldown: Date.now(),
+		};
+	
+		const notificationData = {
+			senderId: user._id,
+			recieverId: userInfo._id,
+			senderName: user.username,
+			recieverName: userInfo.username,
+			message: `${user.username} sent you a superlike`,
+			type: 'superlike',
+		};
+	
+		toast.promise(
+			(async () => {
+				await api.post('/superlike', superlikeData);
+				
+				socket.emit('sendNotification', notificationData);
+				
+				await api.post('/notifications', notificationData);
+			})(),
+			{
+				loading: 'Sending superlike...',
+				success: `${userInfo.username} has been superliked successfully.`,
+				error: 'Failed to send superlike, please try again.',
+			}
+		);
 	};
+	
 
 	const RenderedStyle = {
 		color: `${
@@ -779,16 +783,24 @@ const UserDetailPage = ({ socket }) => {
 																	key={item._id}
 																	className='p-5 bg-light-grey rounded-2xl text-center'
 																>
-																	<img
-																		src={item.image}
-																		alt=''
-																		srcset=''
+																	<div
 																		style={{
+																			display: 'flex',
+																			alignItems: 'center',
+																			justifyContent: 'center',
 																			width: '250px',
 																			height: '200px',
+																			background: '#383b45',
 																			marginBottom: '12px',
 																		}}
-																	/>
+																	>
+																		<img
+																			src={item.image}
+																			alt=''
+																			srcset=''
+																			style={{}}
+																		/>
+																	</div>
 																	<p>{item.description}</p>
 																</div>
 															);
@@ -808,12 +820,14 @@ const UserDetailPage = ({ socket }) => {
 												</p>
 											</div>
 											{isPasswordCorrect ? (
-												<div style={{
-													display: 'flex',
-													flexWrap: 'wrap',
-													justifyContent: 'center',
-													gap: '10px',
-												}}>
+												<div
+													style={{
+														display: 'flex',
+														flexWrap: 'wrap',
+														justifyContent: 'center',
+														gap: '10px',
+													}}
+												>
 													{userInfo?.mymedia.filter(item => !item?.isPublic)
 														.length > 0 ? (
 														userInfo?.mymedia
@@ -926,12 +940,14 @@ const UserDetailPage = ({ socket }) => {
 												</p>
 											</div>
 											{isPasswordCorrect ? (
-												<div style={{
-													display: 'flex',
-													flexWrap: 'wrap',
-													justifyContent: 'center',
-													gap: '10px',
-												}}>
+												<div
+													style={{
+														display: 'flex',
+														flexWrap: 'wrap',
+														justifyContent: 'center',
+														gap: '10px',
+													}}
+												>
 													{userInfo?.videos.filter(item => !item?.isPublic)
 														.length > 0 ? (
 														userInfo?.videos

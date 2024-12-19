@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { IoCloseCircleSharp } from 'react-icons/io5';
 import { useNavigate } from "react-router";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import api from "../../utils/api";
 const EditEventPage = () => {
   const DEBOUNCE_DELAY = 300
@@ -179,27 +179,9 @@ const file = Array.from(e.target.files);
         formData
       );
       if (!data) {
-        toast.error("🦄 Failed to Edit Event!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        toast.error("🦄 Failed to Edit Event!");
       } else {
-        toast.success("Event Edited Successfully!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        toast.success("Event Edited Successfully!");
         setEvent({
           event_name: "",
           Startdate: "",

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BiChevronDown } from 'react-icons/bi';
 import { IoCloseCircleSharp } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { loadUser } from '../../../redux/actions/auth';
 import api from '../../../utils/api';
 import getCoordinatesFromAWS from '../../../utils/client-location';
@@ -207,6 +207,7 @@ const EditUserDetailsPage = () => {
 				setCountries(myJson);
 			});
 	};
+
 	const handleChange = e => {
 		const { name, value } = e.target;
 		setUserDetails({ ...userDetails, [name]: value });
@@ -223,105 +224,110 @@ const EditUserDetailsPage = () => {
 		const formData = new FormData();
 
 		formData.append('image', file);
-		try {
+		const uploadPromise = (async () => {
 			const config = {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
 			};
-			const { data } = await api.put(`/upload_image/${Id}`, formData, config);
-
+	
+			const { data } = await api.put(
+				`/upload_image/${userInfo?._id}`,
+				formData,
+				config
+			);
+	
 			if (data) {
 				setUserInfo(data);
 				dispatch(loadUser());
 			}
+			return data;
+		})();
+	
+		toast.promise(
+			uploadPromise,
+			{
+				loading: 'Uploading image...',
+				success: 'Image uploaded successfully!',
+				error: 'Failed to upload image.',
+			}
+		);
+	
+		try {
+			await uploadPromise;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	};
+
 	const handleSave = async e => {
 		e.preventDefault();
 		console.log(privatePassword);
+
+		const locationChanged =
+        userDetails?.city !== user?.location?.city ||
+        userDetails?.state !== user?.location?.state ||
+        userDetails?.country !== user?.location?.country ||
+        !user?.location?.city ||
+        !user?.location?.state ||
+        !user?.location?.country;
+
+		const dataForUpdate = {
+			...userDetails,
+		};
+
+		if (privatePassword !== '') {
+			dataForUpdate.privatePassword = privatePassword;
+		}
 		
+		if (locationChanged) {
+			dataForUpdate.location = {
+				city: userDetails?.city || '',
+				state: userDetails?.state || '',
+				country: userDetails?.country || '',
+			};
+	
+			delete dataForUpdate.city;
+			delete dataForUpdate.state;
+			delete dataForUpdate.country;
+	
+			const coords = await getCoordinatesFromAWS(userDetails.state, userDetails.city);
+			dataForUpdate.geometry = {
+				type: 'Point',
+				coordinates: coords,
+			};
+		}
+	
+		const updatePromise = api.put(
+			`/update-user`,
+			{ userId: Id, ...dataForUpdate },
+			{
+				headers: {
+					token: usertoken,
+				},
+			}
+		);
+	
+		toast.promise(
+			updatePromise,
+			{
+				loading: 'Saving profile changes...',
+				success: 'Profile edited successfully!',
+				error: 'Failed to edit profile.',
+			}
+		);
+	
 		try {
-			if (
-				userDetails?.city !== user?.location?.city ||
-				userDetails?.state !== user?.location?.state ||
-				userDetails?.country !== user?.location?.country ||
-				!user?.location?.city ||
-				!user?.location?.state ||
-				!user?.location?.country
-			) {
-				const dataForUpdate = {
-					...userDetails,
-					location: {
-						city: userDetails?.city || '',
-						state: userDetails?.state || '',
-						country: userDetails?.country || '',
-					},
-				};
-
-				delete dataForUpdate.city;
-				delete dataForUpdate.state;
-				delete dataForUpdate.country;
-				const coords = await getCoordinatesFromAWS(
-					userDetails.state,
-					userDetails.city
-				);
-
-				const geometry = {
-					type: 'Point',
-					coordinates: coords,
-				};
-				dataForUpdate.geometry = geometry;
-
-				if(privatePassword !== '') {
-					dataForUpdate.privatePassword = privatePassword
-				}
-				console.log(dataForUpdate);
-
-				const { data } = await api.put(
-					`/update-user`,
-					{ userId: Id, ...dataForUpdate },
-					{
-						headers: {
-							token: usertoken,
-						},
-					}
-				);
-				if (data) {
-					setUserInfo(data);
-					setPrivatePassword('')
-					dispatch(loadUser());
-					toast.success('Profile edit successfully');
-				}
-			} else {
-				const dataForUpdate = {
-					...userDetails,
-				};
-
-				if(privatePassword !== '') {
-					dataForUpdate.privatePassword = privatePassword
-				}
-				const { data } = await api.put(
-					`/update-user`,
-					{ userId: Id, ...dataForUpdate },
-					{
-						headers: {
-							token: usertoken,
-						},
-					}
-				);
-				if (data) {
-					setUserInfo(data);
-					setPrivatePassword('')
-					dispatch(loadUser());
-					toast.success('Profile edit successfully');
-				}
+			const { data } = await updatePromise;
+	
+			if (data) {
+				setUserInfo(data);
+				setPrivatePassword('');
+				dispatch(loadUser());
 			}
 		} catch (error) {
-			console.log(error);
-		}
+			console.error(error);
+		}	
 		// navigate("/user-detail");
 	};
 

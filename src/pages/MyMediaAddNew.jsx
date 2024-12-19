@@ -4,7 +4,7 @@ import { IoCloseCircleSharp } from 'react-icons/io5';
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom';
 import { loadUser } from '../redux/actions/auth'
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 
 const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 	const [image, setImage] = useState();
@@ -31,69 +31,59 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 
 	const handleSave = async () => {
 		setIsSaving(true);
-		if (privatePassword || user.privatePassword !== '' || isPublic) {
-			const config = {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
-			};
-			if (type === 'photos') {
-				const formData = new FormData();
-				formData.append('image', imageData);
-				formData.append('description', desc);
-				formData.append('isPublic', isPublic);
-				if (privatePassword) {
-					formData.append('privatePassword', privatePassword);
-				}
-
-				const { data } = await axios.put(
-					`${BASE_URL}/api/upload_media/${user._id}`,
-					formData,
-					config
-				);
-				if (data) {
-					setUserInfo(data);
-					setIsSaving(false);
-					toast.success("Image save successfully!")
-					dispatch(loadUser());
-					console.log('success', data);
-				} else {
-					toast.error("Image save error!")
-					console.log('error', data);
-				}
-
-				setAddNew(false);
-			} else {
-				const formData = new FormData();
-				formData.append('video', imageData);
-				formData.append('description', desc);
-				formData.append('isPublic', isPublic);
-				if (privatePassword) {
-					formData.append('privatePassword', privatePassword);
-				}
-
-				const { data } = await axios.put(
-					`${BASE_URL}/api/upload_video/${user._id}`,
-					formData,
-					config
-				);
-				if (data) {
-					setUserInfo(data);
-					setIsSaving(false);
-					toast.success("Video save successfully!")
-					dispatch(loadUser());
-					console.log('success', data);
-				} else {
-					toast.error("Video save error!")
-					console.log('error', data);
-				}
-
-				setAddNew(false);
-			}
+	
+		const config = {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		};
+	
+		const formData = new FormData();
+		formData.append('description', desc);
+		formData.append('isPublic', isPublic);
+		
+		if (privatePassword) {
+			formData.append('privatePassword', privatePassword);
 		}
-		// console.log(image);
-		// console.log(imageData);
+	
+		let uploadPromise;
+		let uploadUrl;
+	
+		if (type === 'photos') {
+			formData.append('image', imageData);
+			uploadUrl = `${BASE_URL}/api/upload_media/${user._id}`;
+		} else {
+			formData.append('video', imageData);
+			uploadUrl = `${BASE_URL}/api/upload_video/${user._id}`;
+		}
+	
+		const uploadMediaPromise = axios.put(uploadUrl, formData, config);
+	
+		toast.promise(
+			uploadMediaPromise,
+			{
+				loading: 'Uploading...',
+				success: type === 'photos' ? 'Image saved successfully!' : 'Video saved successfully!',
+				error: type === 'photos' ? 'Image save error!' : 'Video save error!',
+			}
+		);
+	
+		try {
+			const { data } = await uploadMediaPromise;
+	
+			if (data) {
+				setUserInfo(data);
+				dispatch(loadUser());
+				setIsSaving(false);
+				setAddNew(false);
+				console.log('success', data);
+			}
+		} catch (error) {
+			console.log('error', error);
+			setIsSaving(false);
+		}
 	};
+	
 
 	useEffect(() => {
 		console.log(user);

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import './signup_login.css';
 
 const ForgotPage = () => {
@@ -54,15 +54,23 @@ const ForgotPage = () => {
 
 	const sendOtp = async e => {
 		e.preventDefault();
+
+		const otpPromise = axios.post(`${BASE_URL}/api/forget`, { email });
+
+		toast.promise(otpPromise, {
+			loading: 'Sending OTP...',
+			success: 'OTP Sent successfully!',
+			error: 'Failed to send OTP.',
+		});
+
 		try {
-			const { data } = await axios.post(`${BASE_URL}/api/forget`, {
-				email: email,
-			});
+			const { data } = await otpPromise;
+
 			if (data) {
-				toast.success('OTP Sent');
+				console.log('OTP sent successfully:', data);
 			}
 		} catch (error) {
-			console.log(error);
+			console.error('Error sending OTP:', error);
 		}
 	};
 
@@ -89,21 +97,32 @@ const ForgotPage = () => {
 
 	const confirmOtp = async e => {
 		e.preventDefault();
+
 		const finalOtp =
 			otp.otp1 + otp.otp2 + otp.otp3 + otp.otp4 + otp.otp5 + otp.otp6;
 
+		const otpVerificationPromise = axios.post(`${BASE_URL}/api/verifyOtp`, {
+			email: email,
+			otp: finalOtp,
+		});
+
+		toast.promise(otpVerificationPromise, {
+			loading: 'Verifying OTP...',
+			success: 'OTP Verified successfully!',
+			error: 'Failed to verify OTP.',
+		});
+
 		try {
-			const { data } = await axios.post(`${BASE_URL}/api/verifyOtp`, {
-				email: email,
-				otp: finalOtp,
-			});
+			const { data } = await otpVerificationPromise;
+
 			if (data) {
 				setotpsend(true);
-				toast.success('OTP Verified');
 			}
 		} catch (error) {
-			console.log(error);
-			toast.error(error.response.data);
+			console.error('Error verifying OTP:', error);
+			if (error.response?.data) {
+				toast.error(error.response.data);
+			}
 		}
 	};
 
@@ -116,16 +135,32 @@ const ForgotPage = () => {
 		e.preventDefault();
 		if (Object.keys(formErrors).length === 0) {
 			if (confirmPassword.password === confirmPassword.cpassword) {
-				const { data } = await axios.post(`${BASE_URL}/api/reset_pass`, {
+				const resetPasswordPromise = axios.post(`${BASE_URL}/api/reset_pass`, {
 					email: email,
 					new_password: confirmPassword.password,
 					confirm_password: confirmPassword.cpassword,
 				});
-				if (data) {
-					toast.success('Password Successfully Changed');
-					navigate('/login');
+
+				toast.promise(resetPasswordPromise, {
+					loading: 'Changing password...',
+					success: 'Password successfully changed!',
+					error: 'Failed to change password.',
+				});
+
+				try {
+					const { data } = await resetPasswordPromise;
+
+					if (data) {
+						navigate('/login');
+					}
+				} catch (error) {
+					console.error('Error changing password:', error);
 				}
+			} else {
+				toast.error('Passwords do not match.');
 			}
+		} else {
+			toast.error('Please fix the form errors before submitting.');
 		}
 	};
 	return (

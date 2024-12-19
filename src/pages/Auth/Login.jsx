@@ -1,9 +1,10 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import BotMessage from '../../components/Floating_Btn/Bot';
 import { loadUser } from '../../redux/actions/auth';
 import { LOGIN_SUCCESS } from '../../redux/actions/types';
@@ -17,6 +18,8 @@ const Login = () => {
 	const [login, setLogin] = useState({ identifier: '', password: '' });
 	const [loginErrors, setLoginErrors] = useState({});
 	const [rememberMe, setRememberMe] = useState(false);
+	const [captcha, setCaptcha] = useState();
+	const Captcha_Key = process.env.REACT_APP_CAPTCHA_KEY;
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -24,6 +27,10 @@ const Login = () => {
 	const handleChange = e => {
 		const { name, value } = e.target;
 		setLogin({ ...login, [name]: value });
+	};
+
+	const onChangeCaptcha = value => {
+		setCaptcha(value);
 	};
 
 	useEffect(() => {
@@ -37,7 +44,10 @@ const Login = () => {
 		const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 		if (!value.identifier) {
 			errors.identifier = 'Username or email is required';
-		} else if (!emailRegex.test(value.identifier) && value.identifier.includes('@')) {
+		} else if (
+			!emailRegex.test(value.identifier) &&
+			value.identifier.includes('@')
+		) {
 			errors.identifier = 'Please enter a valid email';
 		}
 		if (!value.password) {
@@ -46,85 +56,145 @@ const Login = () => {
 		return errors;
 	};
 
+	// const handleLogin = async e => {
+	// 	e.preventDefault();
+	// 	if (Object.keys(loginErrors).length === 0) {
+	// 		try {
+	// 			setLoading(true);
+	// 			let ans;
+	// 			if (
+	// 				login.identifier === 'test@gmail.com' ||
+	// 				login.identifier === 'swinxter@gmail.com'
+	// 			) {
+	// 				const { data } = await api.post(`/login4`, login, {
+	// 					withCredentials: true,
+	// 				});
+	// 				ans = data;
+	// 			} else {
+	// 				const { data } = await api.post(`/login`, login, {
+	// 					withCredentials: true,
+	// 				});
+	// 				ans = data;
+	// 			}
+
+	// 			if (!ans.data) {
+	// 				setLoading(false);
+	// 				toast.error('🦄 Login Failed!', {
+	// 					position: 'top-right',
+	// 					autoClose: 2000,
+	// 					hideProgressBar: false,
+	// 					closeOnClick: true,
+	// 					pauseOnHover: true,
+	// 					draggable: true,
+	// 					progress: undefined,
+	// 					theme: 'colored',
+	// 				});
+	// 			} else {
+	// 				setLoading(false);
+	// 				dispatch({
+	// 					type: LOGIN_SUCCESS,
+	// 					payload: ans,
+	// 				});
+	// 				dispatch(loadUser());
+
+	// 				setLogin({ identifier: '', password: '' });
+	// 				setRememberMe(false);
+	// 				toast.success('🦄 Login Successful', {
+	// 					position: 'top-right',
+	// 					autoClose: 2000,
+	// 					hideProgressBar: false,
+	// 					closeOnClick: true,
+	// 					pauseOnHover: true,
+	// 					draggable: true,
+	// 					progress: undefined,
+	// 					theme: 'colored',
+	// 				});
+	// 				navigate(from, { replace: true });
+	// 			}
+	// 		} catch (error) {
+	// 			setLoading(false);
+	// 			toast.error(error?.response?.data, {
+	// 				position: 'top-right',
+	// 				autoClose: 2000,
+	// 				hideProgressBar: false,
+	// 				closeOnClick: true,
+	// 				pauseOnHover: true,
+	// 				draggable: true,
+	// 				progress: undefined,
+	// 				theme: 'colored',
+	// 			});
+	// 		}
+	// 	} else {
+	// 		toast.error('🦄 Please fill all the fields correctly!', {
+	// 			position: 'top-right',
+	// 			autoClose: 2000,
+	// 			hideProgressBar: false,
+	// 			closeOnClick: true,
+	// 			pauseOnHover: true,
+	// 			draggable: true,
+	// 			progress: undefined,
+	// 			theme: 'colored',
+	// 		});
+	// 	}
+	// };
+
 	const handleLogin = async e => {
 		e.preventDefault();
+
 		if (Object.keys(loginErrors).length === 0) {
-			try {
-				setLoading(true);
-				let ans;
-				if (
-					login.identifier === 'test@gmail.com' ||
-					login.identifier === 'swinxter@gmail.com'
-				) {
-					const { data } = await api.post(`/login4`, login, {
-						withCredentials: true,
-					});
-					ans = data;
-				} else {
-					const { data } = await api.post(`/login`, login, {
-						withCredentials: true,
-					});
-					ans = data;
-				}
-
-				if (!ans.data) {
-					setLoading(false);
-					toast.error('🦄 Login Failed!', {
-						position: 'top-right',
-						autoClose: 2000,
-						hideProgressBar: false,
-						closeOnClick: true,
-						pauseOnHover: true,
-						draggable: true,
-						progress: undefined,
-						theme: 'colored',
-					});
-				} else {
-					setLoading(false);
-					dispatch({
-						type: LOGIN_SUCCESS,
-						payload: ans,
-					});
-					dispatch(loadUser());
-
-					setLogin({ identifier: '', password: '' });
-					setRememberMe(false);
-					toast.success('🦄 Login Successful', {
-						position: 'top-right',
-						autoClose: 2000,
-						hideProgressBar: false,
-						closeOnClick: true,
-						pauseOnHover: true,
-						draggable: true,
-						progress: undefined,
-						theme: 'colored',
-					});
-					navigate(from, { replace: true });
-				}
-			} catch (error) {
-				setLoading(false);
-				toast.error(error?.response?.data, {
-					position: 'top-right',
-					autoClose: 2000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-					theme: 'colored',
-				});
+			if (!captcha) {
+				toast.error('Fill the captcha');
+				return;
 			}
+
+			toast.promise(
+				(async () => {
+					setLoading(true);
+					let ans;
+
+					if (
+						login.identifier === 'test@gmail.com' ||
+						login.identifier === 'swinxter@gmail.com'
+					) {
+						const { data } = await api.post(`/login4`, login, {
+							withCredentials: true,
+						});
+						ans = data;
+					} else {
+						const { data } = await api.post(`/login`, login, {
+							withCredentials: true,
+						});
+						ans = data;
+					}
+
+					if (!ans.data) {
+						setLoading(false);
+						throw new Error('🦄 Login Failed!');
+					} else {
+						setLoading(false);
+						dispatch({
+							type: LOGIN_SUCCESS,
+							payload: ans,
+						});
+						dispatch(loadUser());
+
+						setLogin({ identifier: '', password: '' });
+						setRememberMe(false);
+
+						navigate(from, { replace: true });
+					}
+				})(),
+				{
+					loading: 'Logging in...',
+					success: '🦄 Login Successful',
+					error: err => {
+						setLoading(false)
+						return err.message || '🦄 Login Failed!'
+					},
+				}
+			);
 		} else {
-			toast.error('🦄 Please fill all the fields correctly!', {
-				position: 'top-right',
-				autoClose: 2000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: 'colored',
-			});
+			toast.error('🦄 Please fill all the fields correctly!');
 		}
 	};
 
@@ -245,6 +315,7 @@ const Login = () => {
 									{loginErrors.password}
 								</p>
 							)}
+							
 							<div className='flex flex-wrap gap-y-5 items-center justify-between'>
 								<div className='flex items-center'>
 									<div className='flex items-center h-5'>
@@ -270,6 +341,9 @@ const Login = () => {
 								<p className='text-sm xl:text-lg font-normal leading-29 forgot-password-text bg-gradient-to-r from-orange to-red-500 bg-clip-text cursor-pointer'>
 									<Link to='/forgot'>Forgot Password?</Link>
 								</p>
+							</div>
+							<div className='flex items-center recaptcha_field mb-6'>
+								<ReCAPTCHA sitekey={Captcha_Key} onChange={onChangeCaptcha} />
 							</div>
 							{!loading ? (
 								<button

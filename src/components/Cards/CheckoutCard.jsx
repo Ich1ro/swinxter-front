@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import './css/checkoutCard.css';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import api from '../../utils/api';
 
 const CheckoutCard = ({ title, price, month_freq }) => {
 	const { user } = useSelector(state => state.auth);
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
 	const [details, setDetails] = useState({
 		name: '',
@@ -31,73 +31,44 @@ const CheckoutCard = ({ title, price, month_freq }) => {
 			.substring(2, 34);
 	}
 
-	const handleSubmit = async e => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (!agreement) {
 			toast.error('You need to agree with the terms and conditions');
-		} else {
-			// const postData = new URLSearchParams({
-			// 	security_key: '3CwAU9WRDuWYAz3gDTgKDjmv2rYe98Qj',
-			// 	action_type: 'sale',
-			// 	ccnumber: details.ccnumber,
-			// 	ccexp: expmm + expyy,
-			// 	cvv: details.cvv,
-			// 	amount: price.slice(1),
-			// 	currency: 'USD',
-			// });
-
-			try {
-				// const response = await fetch(
-				// 	'https://ick.transactiongateway.com/api/transact.php',
-				// 	{
-				// 		method: 'POST',
-				// 		headers: {
-				// 			'Content-Type': 'application/x-www-form-urlencoded',
-				// 		},
-				// 		body: postData,
-				// 	}
-				// );
-        const res = await api.post("/create-subscription",{
-          ccnumber: details.ccnumber,
-          expmm: details.expmonth,
-          expyy: details.expyear,
-          cvv: details.cvv,
-          userId: user._id,
-          amount: price.slice(1),
-          month_freq,
-		  plan: title
-        });
-				if(res.status === 200) {
-					if(res.data === 300) {
-						toast.error('The card number is invalid or has already been used.');
-					} else if (res.data === 100) {
-						toast.success("Success!")
-						navigate('/success')
-					}
-				}
-				console.log('Response data:', res);
-			} catch (error) {
-				console.error('Request failed:', error.message);
-			}
-			
-			// 	const res = await api.post(
-			// 		'https://ick.transactiongateway.com/api/transact.php',
-			// 		{
-			// 			type: 'sale',
-			// 			security_key: '3CwAU9WRDuWYAz3gDTgKDjmv2rYe98Qj',
-			// 			ccnumber: details.ccnumber,
-			//       ccexp: expmm + expyy,
-			//       cvv: details.cvv,
-			//       amount: price.slice(1),
-			//       currency: 'USD',
-			//       orderid: '1'
-			//       // transaction_session_id: generateSessionId(),
-			//       // transactionid: generateSessionId()
-			// 		}
-			// 	);
-
-			// 	console.log(res);
+			return;
 		}
+	
+		// Use toast.promise for better UX during async calls
+		toast.promise(
+			api.post('/create-subscription', {
+				ccnumber: details.ccnumber,
+				expmm: details.expmonth,
+				expyy: details.expyear,
+				cvv: details.cvv,
+				userId: user._id,
+				amount: price.slice(1),
+				month_freq,
+				plan: title,
+			}),
+			{
+				loading: 'Processing your payment...',
+				success: (res) => {
+					if (res.status === 200) {
+						if (res.data === 300) {
+							throw new Error('The card number is invalid or has already been used.');
+						} else if (res.data === 100) {
+							navigate('/success');
+							return 'Success!';
+						}
+					}
+					return 'Unexpected response';
+				},
+				error: (error) => {
+					console.error('Request failed:', error.message);
+					return error.message || 'Something went wrong!';
+				},
+			}
+		);
 	};
 
 	const date = new Date();

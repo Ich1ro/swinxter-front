@@ -4,7 +4,7 @@ import { BiChevronDown } from 'react-icons/bi';
 import { CiEdit } from 'react-icons/ci';
 import { IoCloseCircleSharp } from 'react-icons/io5';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import './signup.css';
 import getCoordinatesFromAWS from '../../utils/client-location';
 const SinglePerson = () => {
@@ -55,7 +55,7 @@ const SinglePerson = () => {
 		personName: '',
 		state: '',
 		city: '',
-		country: ''
+		country: '',
 	});
 	const { userId } = useParams();
 	const { state } = useLocation();
@@ -289,19 +289,31 @@ const SinglePerson = () => {
 		};
 		const formData = new FormData();
 		formData.append('image', file);
-		const { data } = await axios.put(
+
+		const uploadPromise = axios.put(
 			`${BASE_URL}/api/upload_image/${userId}`,
 			formData,
 			config
 		);
-		if (data) {
-			setIsPhotoUploaded(true);
-			toast.success('Image Uploaded');
-			toast(
-				"We kindly ask that the profile picture be a clear photo of your face. If it's a couple's profile, please use a photo that includes both of you together."
-			);
-		} else {
-			toast.error('failed to Upload Image');
+
+		toast.promise(uploadPromise, {
+			loading: 'Uploading Image...',
+			success: () => {
+				toast.success('Image Uploaded!');
+				toast(
+					"We kindly ask that the profile picture be a clear photo of your face. If it's a couple's profile, please use a photo that includes both of you together."
+				);
+			},
+			error: 'Failed to Upload Image',
+		});
+
+		try {
+			const data = await uploadPromise;
+			if (data) {
+				setIsPhotoUploaded(true);
+			}
+		} catch (error) {
+			console.error(error);
 		}
 	};
 
@@ -348,7 +360,7 @@ const SinglePerson = () => {
 			const location = {
 				city: form.city,
 				state: form.state,
-				country: form.country
+				country: form.country,
 			};
 
 			const geometry = {
@@ -394,11 +406,19 @@ const SinglePerson = () => {
 				withCredentials: true,
 			};
 
-			const { data } = await axios.put(
+			const updatePromise = axios.put(
 				`${BASE_URL}/api/update`,
 				formData,
 				config
 			);
+
+			toast.promise(updatePromise, {
+				loading: 'Updating profile...',
+				success: 'Profile updated successfully!',
+				error: 'Failed to update profile.',
+			});
+
+			const { data } = await updatePromise;
 
 			if (isGenderSelected && isPhotoUploaded) {
 				const userEmail = state?.email;
@@ -411,9 +431,12 @@ const SinglePerson = () => {
 					toast.error('Cannot Update');
 				}
 			} else {
-				isPhotoUploaded
-					? toast.error('Gender field is required')
-					: toast('Image is required');
+				if (!isGenderSelected) {
+					toast.error('Gender field is required');
+				}
+				if (!isPhotoUploaded) {
+					toast.error('Image is required');
+				}
 			}
 		} catch (error) {
 			console.error('Update failed:', error);

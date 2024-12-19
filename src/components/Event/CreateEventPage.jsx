@@ -10,7 +10,7 @@ import {
   getLatLng,
 } from "react-places-autocomplete";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import api from "../../utils/api";
 import { useSelector } from "react-redux";
 import Loading from "../M_used/Loading";
@@ -158,28 +158,10 @@ const CreateEventPage = () => {
       const data = await api.post(`/createEvent`, formData,config);
       if (!data) {
         setLoading(false)
-        toast.error("🦄 Failed to Create Event!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        toast.error("🦄 Failed to Create Event!");
       } else {
         setLoading(false)
-        toast.success("Event Created Successfully!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        toast.success("Event Created Successfully!");
         setEvent({
           event_name: "",
           Date: "",

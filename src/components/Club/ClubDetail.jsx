@@ -9,7 +9,7 @@ import { SlLocationPin } from "react-icons/sl";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Rating } from 'react-simple-star-rating';
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Context } from "../../Context/context";
 import api from "../../utils/api";
 import { FaArrowLeft } from "react-icons/fa6";

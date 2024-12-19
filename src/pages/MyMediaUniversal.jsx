@@ -102,28 +102,30 @@ const MyMediaUniversal = () => {
 											}}
 											key={i}
 										>
-											{type === 'photos' ? (
-												<img
-													src={item?.image || item}
-													alt=''
-													srcset=''
-													style={{
-														width: '250px',
-														height: '200px',
-													}}
-												/>
-											) : (
-												<video
-													controls
-													src={item?.video || item}
-													alt=''
-													srcset=''
-													style={{
-														width: '250px',
-														height: '200px',
-													}}
-												></video>
-											)}
+											<div style={{ width: '250px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+												{type === 'photos' ? (
+													<img
+														src={item?.image || item}
+														alt=''
+														srcset=''
+														style={{
+															// width: '250px',
+															// height: '200px',
+														}}
+													/>
+												) : (
+													<video
+														controls
+														src={item?.video || item}
+														alt=''
+														srcset=''
+														style={{
+															// width: '250px',
+															// height: '200px',
+														}}
+													></video>
+												)}
+											</div>
 											<div style={{ display: 'flex', marginTop: '20px' }}>
 												<button
 													style={{ marginRight: '10px' }}

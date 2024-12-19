@@ -49,13 +49,19 @@ const DbHeader = ({ socket }) => {
 	};
 
 	const handleNotification = async notification => {
+		console.log(notification);
+
 		// const res = await api.post(`set-notifications/${user._id}`, {count: 0})
 		const res = await api
 			.get(`/notifications-status/${notification._id}`)
 			.then(async () => {
 				await getDbNotifcations().then(() => {
 					toggleDropdown();
-					navigate('/recieved_request');
+					if (notification.type === 'superlike') {
+						navigate(`/user-detail?id=${notification.senderId}`);
+					} else if (notification.type === 'friendRequest') {
+						navigate('/recieved_request');
+					}
 				});
 			});
 		console.log(res);
@@ -220,10 +226,10 @@ const DbHeader = ({ socket }) => {
                 </svg>
               </div> */}
 							<div
-								className='notificationDrp relative ml-2 w-10 flex justify-center' ref={dropdownRef}
+								className='notificationDrp relative ml-2 w-10 flex justify-center'
+								ref={dropdownRef}
 							>
-								<div className='cursor-pointer' onClick={toggleDropdown}
-								>
+								<div className='cursor-pointer' onClick={toggleDropdown}>
 									{notificationCount > 0 ? (
 										<div className='notification_indicator'>
 											<p>{notificationCount}</p>
@@ -266,7 +272,7 @@ const DbHeader = ({ socket }) => {
 												<button
 													disabled={notification.read}
 													onClick={() => handleNotification(notification)}
-                          key={i}
+													key={i}
 												>
 													<svg
 														xmlns='http://www.w3.org/2000/svg'

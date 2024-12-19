@@ -4,7 +4,7 @@ import { BiChevronDown } from 'react-icons/bi';
 import { CiEdit } from 'react-icons/ci';
 import { IoCloseCircleSharp } from 'react-icons/io5';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import './signup.css';
 import getCoordinatesFromAWS from '../../utils/client-location';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -328,18 +328,28 @@ const SignUpCouple = () => {
 		};
 		const formData = new FormData();
 		formData.append('image', file);
-		const { data } = await axios.put(
+
+		const uploadPromise = axios.put(
 			`${BASE_URL}/api/upload_image/${userId}`,
 			formData,
 			config
 		);
-		if (data) {
-			toast.success('Image Uploaded');
-			toast(
-				"We kindly ask that the profile picture be a clear photo of your face. If it's a couple's profile, please use a photo that includes both of you together."
-			);
-		} else {
-			toast.error('failed to Upload Image');
+
+		toast.promise(uploadPromise, {
+			loading: 'Uploading Image...',
+			success: () => {
+				toast.success('Image Uploaded!');
+				toast(
+					"We kindly ask that the profile picture be a clear photo of your face. If it's a couple's profile, please use a photo that includes both of you together."
+				);
+			},
+			error: 'Failed to Upload Image',
+		});
+
+		try {
+			await uploadPromise;
+		} catch (error) {
+			console.error(error);
 		}
 	};
 
@@ -499,92 +509,113 @@ const SignUpCouple = () => {
 			formData.append('location', JSON.stringify(location));
 			formData.append('geometry', JSON.stringify(geometry));
 
-			const { data } = await axios.put(
+			const updatePromise = axios.put(
 				`${BASE_URL}/api/update`,
 				formData,
 				config
 			);
-			if (isGenderSelected && isGenderSelected_2 && isGenderSelected) {
+
+			toast.promise(updatePromise, {
+				loading: 'Updating profile...',
+				success: 'Profile updated successfully!',
+				error: 'Failed to update profile.',
+			});
+
+			const { data } = await updatePromise;
+
+			// const { data } = await axios.put(
+			// 	`${BASE_URL}/api/update`,
+			// 	formData,
+			// 	config
+			// );
+			if (isGenderSelected && isGenderSelected_2) {
 				if (data) {
 					navigate(`/verify_email/${userId}`, { state: state?.email });
-					setForm({
-						body_type: '',
-						height: '',
-						weight: '',
-						ethnic: '',
-						smoking: '',
-						piercing: '',
-						tattoo: '',
-						Drinking: '',
-						Drugs: '',
-						Relationship: '',
-						circumcised: '',
-						looks: '',
-						intelligence: '',
-						sexuality: '',
-						relationship: '',
-						experience: '',
-						image: '',
-						slogan: '',
-						introduction: '',
-						gender: '',
-						person1_Name: '',
-						city: '',
-						state: '',
-						country: '',
-					});
-					setForm2({
-						body_type_2: '',
-						height_2: '',
-						weight_2: '',
-						ethnic_2: '',
-						smoking_2: '',
-						piercing_2: '',
-						tattoo_2: '',
-						Drinking_2: '',
-						Drugs_2: '',
-						Relationship_2: '',
-						circumcised_2: '',
-						looks_2: '',
-						intelligence_2: '',
-						sexuality_2: '',
-						relationship_2: '',
-						experience_2: '',
-						gender_2: '',
-						person2_Name: '',
-					});
-					setPerson1({
-						Month: '',
-						Day: '',
-						Year: '',
-					});
-					setPerson2({
-						Month_p2: '',
-						Day_p2: '',
-						Year_p2: '',
-					});
-					SetBodyHair([]);
-					SetBodyHair2([]);
-					setInterest({
-						male: [],
-						male_male: [],
-						female: [],
-						female_female: [],
-						male_female: [],
-						transgender: [],
-					});
+					resetForms();
 				} else {
-					toast.error('cannot update');
+					toast.error('Cannot update profile');
 				}
 			} else {
-				isGenderSelected
-					? toast('Gender field is required')
-					: toast('Image is required');
+				toast.error(
+					!isGenderSelected ? 'Gender field is required' : 'Image is required'
+				);
 			}
 		} catch (error) {
-			console.log(error);
+			console.error(error);
+			toast.error('An unexpected error occurred.');
 		}
+	
 	};
+
+	const resetForms = () => {
+		setForm({
+			body_type: '',
+			height: '',
+			weight: '',
+			ethnic: '',
+			smoking: '',
+			piercing: '',
+			tattoo: '',
+			Drinking: '',
+			Drugs: '',
+			Relationship: '',
+			circumcised: '',
+			looks: '',
+			intelligence: '',
+			sexuality: '',
+			relationship: '',
+			experience: '',
+			image: '',
+			slogan: '',
+			introduction: '',
+			gender: '',
+			person1_Name: '',
+			city: '',
+			state: '',
+			country: '',
+		});
+		setForm2({
+			body_type_2: '',
+			height_2: '',
+			weight_2: '',
+			ethnic_2: '',
+			smoking_2: '',
+			piercing_2: '',
+			tattoo_2: '',
+			Drinking_2: '',
+			Drugs_2: '',
+			Relationship_2: '',
+			circumcised_2: '',
+			looks_2: '',
+			intelligence_2: '',
+			sexuality_2: '',
+			relationship_2: '',
+			experience_2: '',
+			gender_2: '',
+			person2_Name: '',
+		});
+		setPerson1({
+			Month: '',
+			Day: '',
+			Year: '',
+		});
+		setPerson2({
+			Month_p2: '',
+			Day_p2: '',
+			Year_p2: '',
+		});
+		SetBodyHair([]);
+		SetBodyHair2([]);
+		setInterest({
+			male: [],
+			male_male: [],
+			female: [],
+			female_female: [],
+			male_female: [],
+			transgender: [],
+		});
+	};
+
 	return (
 		<>
 			<div className='min-h-screen bg-black-20 text-white grid content-between'>

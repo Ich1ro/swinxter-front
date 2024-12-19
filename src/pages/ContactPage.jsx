@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Loading from '../components/M_used/Loading';
 import api from '../utils/api';
 
@@ -30,19 +30,28 @@ const ContactPage = () => {
 		setForm({ ...form, [name]: value });
 	};
 
-	const handleSubmit = e => {
+	const handleSubmit = async e => {
 		e.preventDefault();
 		setLoading(true);
-		api
-			.post('/contactUs', { ...form })
-			.then(res => {
+
+		const contactUsPromise = api.post('/contactUs', { ...form });
+
+		toast.promise(contactUsPromise, {
+			loading: 'Sending email...',
+			success: 'Email sent successfully!',
+			error: 'Failed to send email. Please try again.',
+		});
+
+		try {
+			const res = await contactUsPromise;
+
+			if (res) {
 				setLoading(false);
-				toast.success('Email sent successfully!');
-			})
-			.catch(err => {
-				setLoading(true);
-				console.log(err);
-			});
+			}
+		} catch (err) {
+			setLoading(false);
+			console.log(err);
+		}
 
 		setForm(fields);
 	};
@@ -52,9 +61,7 @@ const ContactPage = () => {
 		<>
 			<div className='py-10 container mx-auto contact-page'>
 				<div className='text-center max-w-6xl mx-auto'>
-					<h3 className='text-40px mb-5 mt-16'>
-						Contact Us
-					</h3>
+					<h3 className='text-40px mb-5 mt-16'>Contact Us</h3>
 					<p className='text-sm md:text-lg'>
 						{/* If you need immediate help, please call our Customer Service support
             line: (669) 208-0363 24 hours a day, seven days a week. For billing

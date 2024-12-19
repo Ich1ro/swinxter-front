@@ -3,7 +3,7 @@ import { BiChevronDown } from 'react-icons/bi';
 import { IoCloseCircleSharp } from 'react-icons/io5';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { loadUser } from '../../../redux/actions/auth';
 import api from '../../../utils/api';
 import getCoordinatesFromAWS from '../../../utils/client-location';
@@ -24,7 +24,7 @@ const CoupleEditDetailPage = () => {
 	const [location, setLocation] = useState({
 		city: '',
 		state: '',
-		country: ''
+		country: '',
 	});
 	const [userDetails, setUserDetails] = useState({
 		email: '',
@@ -192,7 +192,6 @@ const CoupleEditDetailPage = () => {
 
 	useEffect(() => {
 		console.log(location);
-		
 	}, [location]);
 
 	useEffect(() => {
@@ -298,12 +297,14 @@ const CoupleEditDetailPage = () => {
 		const formData = new FormData();
 
 		formData.append('image', file);
-		try {
+
+		const uploadPromise = (async () => {
 			const config = {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
 			};
+
 			const { data } = await api.put(
 				`/upload_image/${userInfo?._id}`,
 				formData,
@@ -314,8 +315,19 @@ const CoupleEditDetailPage = () => {
 				setUserInfo(data);
 				dispatch(loadUser());
 			}
+			return data;
+		})();
+
+		toast.promise(uploadPromise, {
+			loading: 'Uploading image...',
+			success: 'Image uploaded successfully!',
+			error: 'Failed to upload image.',
+		});
+
+		try {
+			await uploadPromise;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	};
 
@@ -407,62 +419,63 @@ const CoupleEditDetailPage = () => {
 			},
 		};
 
+		const locationChanged =
+			location.city !== user?.location?.city ||
+			location.state !== user?.location?.state ||
+			location.country !== user?.location?.country ||
+			!user?.location?.city ||
+			!user?.location?.state ||
+			!user?.location?.country;
+
 		try {
-			if (
-				location.city !== user?.location?.city ||
-				location.state !== user?.location?.state || location.country !== user?.location?.country || 
-				!user?.location?.city || !user?.location?.state || !user?.location?.country
-			) {
-				const locationData = {
-					city: location.city || '',
-					state: location.state || '',
-					country: location.country || '',
-				};
+			const updatePromise = (async () => {
+				if (locationChanged) {
+					const locationData = {
+						city: location.city || '',
+						state: location.state || '',
+						country: location.country || '',
+					};
 
-				const coords = await getCoordinatesFromAWS(
-					location?.state,
-					location?.city
-				);
+					const coords = await getCoordinatesFromAWS(
+						location?.state,
+						location?.city
+					);
 
-				const geometry = {
-					type: 'Point',
-					coordinates: coords,
-				};
+					const geometry = {
+						type: 'Point',
+						coordinates: coords,
+					};
 
-				const { data } = await api.put(`/update-user`, {
-					couple: couple,
-					userId: userInfo._id,
-					introduction: userDetails?.introduction,
-					slogan: userDetails.slogan,
-					location: locationData,
-					geometry: geometry,
-				});
-
-				if (data) {
-					dispatch(loadUser());
-					toast.success('Profile edit successfully');
+					return api.put(`/update-user`, {
+						couple: couple,
+						userId: userInfo._id,
+						introduction: userDetails?.introduction,
+						slogan: userDetails.slogan,
+						location: locationData,
+						geometry: geometry,
+					});
+				} else {
+					return api.put(`/update-user`, {
+						couple: couple,
+						userId: userInfo._id,
+						introduction: userDetails?.introduction,
+						slogan: userDetails.slogan,
+					});
 				}
-			} else {
-				// const locationData = {
-				// 	city: location.city || '',
-				// 	state: location.state || '',
-				// };
+			})();
 
-				const { data } = await api.put(`/update-user`, {
-					couple: couple,
-					userId: userInfo._id,
-					introduction: userDetails?.introduction,
-					slogan: userDetails.slogan,
-					// location: locationData,
-				});
+			toast.promise(updatePromise, {
+				loading: 'Saving profile changes...',
+				success: 'Profile edited successfully!',
+				error: 'Failed to save profile changes.',
+			});
 
-				if (data) {
-					dispatch(loadUser());
-					toast.success('Profile edit successfully');
-				}
+			const { data } = await updatePromise;
+			if (data) {
+				dispatch(loadUser());
 			}
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	};
 
@@ -543,7 +556,7 @@ const CoupleEditDetailPage = () => {
 							Location
 						</p>
 						<div className='grid md:grid-cols-2 gap-x-10 justify-stretch items-start md:justify-center gap-y-4 sm:gap-y-6'>
-						<div className='flex flex-wrap rounded-md input_field'>
+							<div className='flex flex-wrap rounded-md input_field'>
 								<label
 									htmlFor='City'
 									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'

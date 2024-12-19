@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import api from "../../utils/api";
 import { useSelector } from "react-redux";
@@ -169,28 +169,10 @@ const handleResultClick = (result) => {
       const data = await api.post(`/create_club`, formData);
       if (!data) {
         setLoading(false)
-        toast.error("🦄 Failed to Create Event!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        toast.error("🦄 Failed to Create Event!");
       } else {
         setLoading(false)
-        toast.success("🦄Club Created Successfully!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        toast.success("🦄Club Created Successfully!");
         setClub({
           club_name: "",
           Location: "",

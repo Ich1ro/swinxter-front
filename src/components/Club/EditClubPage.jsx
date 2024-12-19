@@ -3,7 +3,7 @@ import axios from "axios";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import api from "../../utils/api";
 function EditClubPage() {
 const[areaname,setAreaName]=useState([]);
@@ -181,28 +181,10 @@ const handleImageChange = (e) => {
         });
         setSelectedImage(null);
         setSelectedVideo(null);
-        toast.success("🦄Club Updated Successfully!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        toast.success("🦄Club Updated Successfully!");
         navigate("/club-page");
       } else {
-        toast.error("🦄 Failed to Update Event!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        toast.error("🦄 Failed to Update Event!");
       }
     } catch (error) {
       console.log(error);

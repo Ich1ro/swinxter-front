@@ -10,7 +10,7 @@ import {
 import { SlLocationPin } from "react-icons/sl";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Context } from "../../Context/context";
 import api from "../../utils/api";
 import { MidLoading } from "../M_used/Loading";

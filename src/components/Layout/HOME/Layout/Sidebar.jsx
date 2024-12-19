@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './sidebar.css';
 import api from '../../../../utils/api';
 import { LOGOUT } from '../../../../redux/actions/types';
+import toast from 'react-hot-toast'
 
 const Submenu = ({ items, isOpen }) => (
 	<ul className={`submenu ${isOpen ? 'open' : ''}`}>
@@ -116,6 +117,10 @@ const Sidebar = ({ unread, closeMenu }) => {
 	useEffect(() => {
 		setUserInfo(user);
 	}, [user]);
+
+	const testToast = () => {
+		toast.error("🦄 Failed to Create Event!");
+	}
 
 	const menuItems = [
 		{
@@ -255,6 +260,7 @@ const Sidebar = ({ unread, closeMenu }) => {
 				justifyContent: 'space-between',
 			}}
 		>
+			
 			<div>
 				<Link
 					to={'/user-detail'}
