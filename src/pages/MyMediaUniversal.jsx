@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../utils/api';
 import { useSelector } from 'react-redux';
 import MyMediaAddNew from './MyMediaAddNew';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const MyMediaUniversal = () => {
 	const { user } = useSelector(state => state.auth);
@@ -10,6 +10,9 @@ const MyMediaUniversal = () => {
 	const [addNew, setAddNew] = useState(false);
 	const [filteredMedia, setFilteredMedia] = useState([]);
 	const [isActivePublic, setIsActivePublic] = useState(true);
+	const [isHide, setIsHide] = useState(true);
+	const navigate = useNavigate()
+
 	const { type } = useParams();
 
 	useEffect(() => {
@@ -89,6 +92,20 @@ const MyMediaUniversal = () => {
 								Private
 							</button>
 						</div>
+						{!isActivePublic && (user.privatePassword !== '' && user.privatePassword) && (
+							<div
+								style={{
+									width: '100%',
+									display: 'flex',
+									justifyContent: 'center',
+									marginBottom: '20px',
+								}}
+							>
+								<p>Private Password: {!isHide ? user?.privatePassword : '*'.repeat(user?.privatePassword.length)}</p>
+								<button className='inline-flex rounded-md items-center gap-1 gradient text-sm sm:text-sm font-semibold cursor-pointer px-2 ml-3' onClick={() => setIsHide(!isHide)}>{isHide ? 'Show' : 'Hide'}</button>
+								<button className='inline-flex rounded-md items-center gap-1 gradient text-sm sm:text-sm font-semibold cursor-pointer px-2 ml-3' onClick={() => navigate('/edit-detail')}>Edit</button>
+							</div>
+						)}
 
 						<div style={{ display: 'flex', flexWrap: 'wrap' }}>
 							{filteredMedia.length > 0
@@ -102,16 +119,26 @@ const MyMediaUniversal = () => {
 											}}
 											key={i}
 										>
-											<div style={{ width: '250px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+											<div
+												style={{
+													width: '250px',
+													height: '200px',
+													display: 'flex',
+													alignItems: 'center',
+													justifyContent: 'center',
+												}}
+											>
 												{type === 'photos' ? (
 													<img
 														src={item?.image || item}
 														alt=''
 														srcset=''
-														style={{
-															// width: '250px',
-															// height: '200px',
-														}}
+														style={
+															{
+																// width: '250px',
+																// height: '200px',
+															}
+														}
 													/>
 												) : (
 													<video
@@ -119,10 +146,12 @@ const MyMediaUniversal = () => {
 														src={item?.video || item}
 														alt=''
 														srcset=''
-														style={{
-															// width: '250px',
-															// height: '200px',
-														}}
+														style={
+															{
+																// width: '250px',
+																// height: '200px',
+															}
+														}
 													></video>
 												)}
 											</div>

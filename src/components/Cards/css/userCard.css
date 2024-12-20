@@ -11,10 +11,19 @@
 }
 .user_photo{
     width: 40%;
-    height: 100%;
-    border-radius: 10px;
+    max-width: 130px;
+    height: 155px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border-radius: 10px; */
     overflow: hidden;
 }
+
+.user_photo > img {
+    border-radius:10px ;
+}
+
 .user_details{
     margin-left: 20px;
 }

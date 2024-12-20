@@ -843,7 +843,12 @@ const CoupleDetailPage = ({
 																	marginBottom: '12px',
 																}}
 															>
-																<img src={item.image} alt='' srcset='' />
+																<img
+																	src={item.image}
+																	alt=''
+																	srcset=''
+																	style={{ maxHeight: '200px' }}
+																/>
 															</div>
 															<p>{item.description}</p>
 														</div>
@@ -882,16 +887,24 @@ const CoupleDetailPage = ({
 																key={item._id}
 																className='p-5 bg-light-grey rounded-2xl text-center'
 															>
-																<img
-																	src={item.image}
-																	alt=''
-																	srcset=''
+																<div
 																	style={{
+																		display: 'flex',
+																		alignItems: 'center',
+																		justifyContent: 'center',
 																		width: '250px',
 																		height: '200px',
+																		background: '#383b45',
 																		marginBottom: '12px',
 																	}}
-																/>
+																>
+																	<img
+																		src={item.image}
+																		alt=''
+																		srcset=''
+																		style={{ maxHeight: '200px' }}
+																	/>
+																</div>
 																<p>{item.description}</p>
 															</div>
 														);

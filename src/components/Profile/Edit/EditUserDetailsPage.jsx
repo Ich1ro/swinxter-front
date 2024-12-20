@@ -469,7 +469,7 @@ const EditUserDetailsPage = () => {
 					</div>
 
 					{userInfo.privatePassword && userInfo.privatePassword !== '' && (
-						<div className='mt-6 grid gap-y-6'>
+						<div className='mt-6 grid gap-y-6' id='passwordChange'>
 							<p className='text-2xl font-medium flex justify-between mb-4 md:mb-6'>
 								Change Media Private Password
 							</p>

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { calculateAge } from '../utils/CalculateAge';
 import CoupleDetailPage from './CoupleDetailPage';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import api from '../utils/api';
 import { useCustomChatContext } from '../Context/ChatContext';
 import Loading from '../components/M_used/Loading';
 import { AiFillLike } from 'react-icons/ai';
 import { toast } from 'react-hot-toast';
+import { loadUser } from '../redux/actions/auth'
 
 const UserDetailPage = ({ socket }) => {
 	const [age, setAge] = useState('');
@@ -23,6 +24,7 @@ const UserDetailPage = ({ socket }) => {
 	const [blocked, setBlocked] = useState(0);
 	const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
 	const [isProfile, setIsProfile] = useState(true);
+	const dispatch = useDispatch()
 
 	const getUser = async () => {
 		const currentUser = await api.get(`/user_details/${user._id}`);
@@ -135,13 +137,12 @@ const UserDetailPage = ({ socket }) => {
 		let currentDate = Date.now();
 	
 		if (
-			currentUser.superlike.sent.some(
+			user.superlike.sent.some(
 				obj =>
-					obj.userId === userInfo._id &&
-					(currentDate - new Date(Number(obj.cooldown))) / (1000 * 60 * 60 * 24) < 30
+					obj.userId === userInfo._id
 			)
 		) {
-			toast.error('You can only superlike a user once in a month');
+			toast.error('You\'ve already superliked this user');
 			return;
 		}
 	
@@ -167,6 +168,8 @@ const UserDetailPage = ({ socket }) => {
 				socket.emit('sendNotification', notificationData);
 				
 				await api.post('/notifications', notificationData);
+
+				await dispatch(loadUser())
 			})(),
 			{
 				loading: 'Sending superlike...',
