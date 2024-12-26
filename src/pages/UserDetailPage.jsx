@@ -8,7 +8,7 @@ import { useCustomChatContext } from '../Context/ChatContext';
 import Loading from '../components/M_used/Loading';
 import { AiFillLike } from 'react-icons/ai';
 import { toast } from 'react-hot-toast';
-import { loadUser } from '../redux/actions/auth'
+import { loadUser } from '../redux/actions/auth';
 
 const UserDetailPage = ({ socket }) => {
 	const [age, setAge] = useState('');
@@ -24,7 +24,7 @@ const UserDetailPage = ({ socket }) => {
 	const [blocked, setBlocked] = useState(0);
 	const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
 	const [isProfile, setIsProfile] = useState(true);
-	const dispatch = useDispatch()
+	const dispatch = useDispatch();
 
 	const getUser = async () => {
 		const currentUser = await api.get(`/user_details/${user._id}`);
@@ -79,33 +79,74 @@ const UserDetailPage = ({ socket }) => {
 		}
 	};
 
-	const handleSendRequest = async () => {
-		try {
+	// const handleSendRequest = async () => {
+	// 	try {
+	// 		setLoading(1);
+	// 		await api.put(`/send_request/${user?._id}/${userInfo?._id}`);
+	// 		socket.emit('sendNotification', {
+	// 			senderName: user.username,
+	// 			senderId: user._id,
+	// 			recieverId: userInfo._id,
+	// 			recieverName: userInfo.username,
+	// 			message: `${user.username} sent you a friend request`,
+	// 			type: 'friendRequest',
+	// 		});
+	// 		const res = await api.post('/notifications', {
+	// 			senderId: user._id,
+	// 			recieverId: userInfo._id,
+	// 			senderName: user.username,
+	// 			recieverName: userInfo.username,
+	// 			type: 'friendRequest',
+	// 			message: `${user.username} sent you a friend request`,
+	// 		});
+	// 		console.log(res);
+	// 		setLoading(0);
+	// 		setSent(1);
+	// 	} catch (e) {
+	// 		console.log(e);
+	// 	}
+	// };
+
+	const handleSendRequest = () => {
+		const promise = new Promise(async (resolve, reject) => {
+		  try {
 			setLoading(1);
+			
 			await api.put(`/send_request/${user?._id}/${userInfo?._id}`);
+			
 			socket.emit('sendNotification', {
-				senderName: user.username,
-				senderId: user._id,
-				recieverId: userInfo._id,
-				recieverName: userInfo.username,
-				message: `${user.username} sent you a friend request`,
-				type: 'friendRequest',
+			  senderName: user.username,
+			  senderId: user._id,
+			  recieverId: userInfo._id,
+			  recieverName: userInfo.username,
+			  message: `${user.username} sent you a friend request`,
+			  type: 'friendRequest',
 			});
+			
 			const res = await api.post('/notifications', {
-				senderId: user._id,
-				recieverId: userInfo._id,
-				senderName: user.username,
-				recieverName: userInfo.username,
-				type: 'friendRequest',
-				message: `${user.username} sent you a friend request`,
+			  senderId: user._id,
+			  recieverId: userInfo._id,
+			  senderName: user.username,
+			  recieverName: userInfo.username,
+			  type: 'friendRequest',
+			  message: `${user.username} sent you a friend request`,
 			});
-			console.log(res);
+			
 			setLoading(0);
 			setSent(1);
-		} catch (e) {
-			console.log(e);
-		}
-	};
+			resolve(res);
+		  } catch (error) {
+			setLoading(0);
+			reject(error);
+		  }
+		});
+	  
+		toast.promise(promise, {
+		  loading: 'Sending friend request...',
+		  success: 'Friend request sent successfully!',
+		  error: 'Error when sending a request!'
+		});
+	  };
 
 	const handleCancelRequest = async () => {
 		try {
@@ -135,23 +176,18 @@ const UserDetailPage = ({ socket }) => {
 	const superlike = async () => {
 		console.log('clicked');
 		let currentDate = Date.now();
-	
-		if (
-			user.superlike.sent.some(
-				obj =>
-					obj.userId === userInfo._id
-			)
-		) {
-			toast.error('You\'ve already superliked this user');
+
+		if (user.superlike.sent.some(obj => obj.userId === userInfo._id)) {
+			toast.error("You've already superliked this user");
 			return;
 		}
-	
+
 		const superlikeData = {
 			userId: user._id,
 			superlikeId: userInfo._id,
 			cooldown: Date.now(),
 		};
-	
+
 		const notificationData = {
 			senderId: user._id,
 			recieverId: userInfo._id,
@@ -160,16 +196,16 @@ const UserDetailPage = ({ socket }) => {
 			message: `${user.username} sent you a superlike`,
 			type: 'superlike',
 		};
-	
+
 		toast.promise(
 			(async () => {
 				await api.post('/superlike', superlikeData);
-				
+
 				socket.emit('sendNotification', notificationData);
-				
+
 				await api.post('/notifications', notificationData);
 
-				await dispatch(loadUser())
+				await dispatch(loadUser());
 			})(),
 			{
 				loading: 'Sending superlike...',
@@ -178,7 +214,6 @@ const UserDetailPage = ({ socket }) => {
 			}
 		);
 	};
-	
 
 	const RenderedStyle = {
 		color: `${
@@ -198,6 +233,8 @@ const UserDetailPage = ({ socket }) => {
 
 		if (pass === userInfo.privatePassword) {
 			setIsPasswordCorrect(true);
+		} else {
+			toast.error("Incorrect password");
 		}
 	};
 
@@ -279,8 +316,9 @@ const UserDetailPage = ({ socket }) => {
 														marginRight: '10px',
 													}}
 													onClick={handleSendRequest}
+													disabled={loading}
 												>
-													{loading ? <Loading /> : 'Send Friend Request'}
+													{'Send Friend Request'}
 												</button>
 											)}
 											<button
@@ -822,18 +860,18 @@ const UserDetailPage = ({ socket }) => {
 													Private Images
 												</p>
 											</div>
-											{isPasswordCorrect ? (
-												<div
-													style={{
-														display: 'flex',
-														flexWrap: 'wrap',
-														justifyContent: 'center',
-														gap: '10px',
-													}}
-												>
-													{userInfo?.mymedia.filter(item => !item?.isPublic)
-														.length > 0 ? (
-														userInfo?.mymedia
+											{userInfo?.mymedia.filter(item => !item?.isPublic)
+												.length > 0 ? (
+												isPasswordCorrect ? (
+													<div
+														style={{
+															display: 'flex',
+															flexWrap: 'wrap',
+															justifyContent: 'center',
+															gap: '10px',
+														}}
+													>
+														{userInfo?.mymedia
 															.filter(item => !item?.isPublic)
 															.map(item => {
 																return (
@@ -854,41 +892,51 @@ const UserDetailPage = ({ socket }) => {
 																		<p>{item.description}</p>
 																	</div>
 																);
-															})
-													) : (
-														<p className='text-base sm:text-2xl'>
-															This user has no images
-														</p>
-													)}
-												</div>
-											) : (
-												<form onSubmit={handlePasswordSubmit} style={{}}>
-													<input
-														type='password'
-														name='pass'
-														className='outline-none border-none px-3 h-10 bg-grey rounded-xl'
-														placeholder='Password...'
-														style={{
-															marginBottom: '25px',
-															width: '250px',
-															backgroundColor: 'black',
-															marginRight: '15px',
-														}}
-													/>
+															})}
+													</div>
+												) : (
+													<form onSubmit={handlePasswordSubmit} style={{}}>
+														<input
+															type='password'
+															name='pass'
+															className='outline-none border-none px-3 h-10 bg-grey rounded-xl'
+															placeholder='Password...'
+															style={{
+																marginBottom: '25px',
+																width: '250px',
+																backgroundColor: 'black',
+																marginRight: '15px',
+															}}
+														/>
 
-													<button
-														style={{
-															width: '150px',
-															marginBottom: '20px',
-															background:
-																'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
-														}}
-														className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
-														type='submit'
-													>
-														Check
-													</button>
-												</form>
+														<button
+															style={{
+																width: '150px',
+																marginBottom: '20px',
+																background:
+																	'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
+															}}
+															className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
+															type='submit'
+														>
+															Check
+														</button>
+													</form>
+												)
+											) : (
+												<div
+													style={{
+														display: 'flex',
+														flexWrap: 'wrap',
+														justifyContent: 'center',
+														gap: '10px',
+														marginBottom: '20px',
+													}}
+												>
+													<p className='text-base sm:text-2xl'>
+														This user has no private images
+													</p>
+												</div>
 											)}
 										</div>
 										<div className='p-5 bg-black-20 rounded-2xl w-[100%] '>
@@ -942,18 +990,19 @@ const UserDetailPage = ({ socket }) => {
 													Private Videos
 												</p>
 											</div>
-											{isPasswordCorrect ? (
-												<div
-													style={{
-														display: 'flex',
-														flexWrap: 'wrap',
-														justifyContent: 'center',
-														gap: '10px',
-													}}
-												>
-													{userInfo?.videos.filter(item => !item?.isPublic)
-														.length > 0 ? (
-														userInfo?.videos
+											{userInfo?.videos?.length > 0 &&
+											userInfo?.videos.filter(item => !item?.isPublic).length >
+												0 ? (
+												isPasswordCorrect ? (
+													<div
+														style={{
+															display: 'flex',
+															flexWrap: 'wrap',
+															justifyContent: 'center',
+															gap: '10px',
+														}}
+													>
+														{userInfo?.videos
 															.filter(item => !item?.isPublic)
 															.map(item => {
 																return (
@@ -975,41 +1024,51 @@ const UserDetailPage = ({ socket }) => {
 																		<p>{item.description}</p>
 																	</div>
 																);
-															})
-													) : (
-														<p className='text-base sm:text-2xl'>
-															This user has no videos
-														</p>
-													)}
-												</div>
-											) : (
-												<form onSubmit={handlePasswordSubmit} style={{}}>
-													<input
-														type='password'
-														name='pass'
-														className='outline-none border-none px-3 h-10 bg-grey rounded-xl'
-														placeholder='Password...'
-														style={{
-															marginBottom: '25px',
-															width: '250px',
-															backgroundColor: 'black',
-															marginRight: '15px',
-														}}
-													/>
+															})}
+													</div>
+												) : (
+													<form onSubmit={handlePasswordSubmit} style={{}}>
+														<input
+															type='password'
+															name='pass'
+															className='outline-none border-none px-3 h-10 bg-grey rounded-xl'
+															placeholder='Password...'
+															style={{
+																marginBottom: '25px',
+																width: '250px',
+																backgroundColor: 'black',
+																marginRight: '15px',
+															}}
+														/>
 
-													<button
-														style={{
-															width: '150px',
-															marginBottom: '20px',
-															background:
-																'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
-														}}
-														className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
-														type='submit'
-													>
-														Check
-													</button>
-												</form>
+														<button
+															style={{
+																width: '150px',
+																marginBottom: '20px',
+																background:
+																	'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
+															}}
+															className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
+															type='submit'
+														>
+															Check
+														</button>
+													</form>
+												)
+											) : (
+												<div
+													style={{
+														display: 'flex',
+														flexWrap: 'wrap',
+														justifyContent: 'center',
+														gap: '10px',
+														marginBottom: '20px',
+													}}
+												>
+													<p className='text-base sm:text-2xl'>
+														This user has no private videos
+													</p>
+												</div>
 											)}
 										</div>
 									</div>

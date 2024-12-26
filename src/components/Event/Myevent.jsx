@@ -18,14 +18,16 @@ const Myevents = () => {
 	const { searchquery } = useContext(Context);
 	const navigate = useNavigate();
 	const getEvent = async () => {
-		const { data } = await api.get(`/events?q=${searchquery}`);
-		const allEvents = data.data;
+		const { data } = await api.get(`/events?q=${userInfo?._id}`);
+		// const allEvents = data.data;
 
-		const verifiedEvents = allEvents.filter(
-			event => event.userId === userInfo._id
-		);
-		const newestPostFirst = verifiedEvents.reverse();
-		setEvent(newestPostFirst);
+		// const verifiedEvents = allEvents.filter(
+		// 	event => event.userId === userInfo._id
+		// );
+		// const newestPostFirst = verifiedEvents.reverse();
+		console.log(data);
+		
+		setEvent(data.data);
 	};
 	useEffect(() => {
 		getEvent();

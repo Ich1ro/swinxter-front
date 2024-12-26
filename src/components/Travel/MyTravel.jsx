@@ -21,12 +21,14 @@ export default function MyTravel() {
 		setUserInfo(user);
 	}, []);
 	useEffect(() => {
-		api.get(`/search_travel?q=`).then(res => {
-			const data = res.data;
-			const filterData = data.filter(data => data.userId._id === userInfo._id);
-			setTravel(filterData);
-		});
-	}, []);
+		if (userInfo?._id) {
+			api.get(`/search_travel?q=${userInfo?._id}`).then(res => {
+				const data = res.data;
+				// const filterData = data.filter(data => data.userId._id === userInfo._id);
+				setTravel(data);
+			});
+		}
+	}, [userInfo]);
 
 	console.log(travel, 'yyy');
 

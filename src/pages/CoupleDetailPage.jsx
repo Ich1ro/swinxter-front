@@ -172,8 +172,9 @@ const CoupleDetailPage = ({
 												marginRight: '10px',
 											}}
 											onClick={handleSendRequest}
+											disabled={loading}
 										>
-											{loading ? <Loading /> : 'Send Friend Request'}
+											{'Send Friend Request'}
 										</button>
 									)}
 									{/* <div style={{display: "flex", width: "300px"}}> */}
@@ -868,18 +869,18 @@ const CoupleDetailPage = ({
 											Private Images
 										</p>
 									</div>
-									{isPasswordCorrect ? (
-										<div
-											style={{
-												display: 'flex',
-												flexWrap: 'wrap',
-												justifyContent: 'center',
-												gap: '10px',
-											}}
-										>
-											{userInfo?.mymedia.filter(item => !item?.isPublic)
-												.length > 0 ? (
-												userInfo?.mymedia
+									{userInfo?.mymedia.filter(item => !item?.isPublic).length >
+									0 ? (
+										isPasswordCorrect ? (
+											<div
+												style={{
+													display: 'flex',
+													flexWrap: 'wrap',
+													justifyContent: 'center',
+													gap: '10px',
+												}}
+											>
+												{userInfo?.mymedia
 													.filter(item => !item?.isPublic)
 													.map(item => {
 														return (
@@ -908,41 +909,51 @@ const CoupleDetailPage = ({
 																<p>{item.description}</p>
 															</div>
 														);
-													})
-											) : (
-												<p className='text-base sm:text-2xl'>
-													This user has no images
-												</p>
-											)}
-										</div>
-									) : (
-										<form onSubmit={handlePasswordSubmit} style={{}}>
-											<input
-												type='password'
-												name='pass'
-												className='outline-none border-none px-3 h-10 bg-grey rounded-xl'
-												placeholder='Password...'
-												style={{
-													marginBottom: '25px',
-													width: '250px',
-													backgroundColor: 'black',
-													marginRight: '15px',
-												}}
-											/>
+													})}
+											</div>
+										) : (
+											<form onSubmit={handlePasswordSubmit} style={{}}>
+												<input
+													type='password'
+													name='pass'
+													className='outline-none border-none px-3 h-10 bg-grey rounded-xl'
+													placeholder='Password...'
+													style={{
+														marginBottom: '25px',
+														width: '250px',
+														backgroundColor: 'black',
+														marginRight: '15px',
+													}}
+												/>
 
-											<button
-												style={{
-													width: '150px',
-													marginBottom: '20px',
-													background:
-														'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
-												}}
-												className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
-												type='submit'
-											>
-												Check
-											</button>
-										</form>
+												<button
+													style={{
+														width: '150px',
+														marginBottom: '20px',
+														background:
+															'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
+													}}
+													className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
+													type='submit'
+												>
+													Check
+												</button>
+											</form>
+										)
+									) : (
+										<div
+											style={{
+												display: 'flex',
+												flexWrap: 'wrap',
+												justifyContent: 'center',
+												gap: '10px',
+												marginBottom: '20px',
+											}}
+										>
+											<p className='text-base sm:text-2xl'>
+												This user has no private images
+											</p>
+										</div>
 									)}
 								</div>
 								<div className='p-5 bg-black-20 rounded-2xl w-[100%] '>
@@ -996,18 +1007,19 @@ const CoupleDetailPage = ({
 											Private Videos
 										</p>
 									</div>
-									{isPasswordCorrect ? (
-										<div
-											style={{
-												display: 'flex',
-												flexWrap: 'wrap',
-												justifyContent: 'center',
-												gap: '10px',
-											}}
-										>
-											{userInfo?.videos.filter(item => !item?.isPublic).length >
-											0 ? (
-												userInfo?.videos
+									{userInfo?.videos?.length > 0 &&
+									userInfo?.videos.filter(item => !item?.isPublic).length >
+										0 ? (
+										isPasswordCorrect ? (
+											<div
+												style={{
+													display: 'flex',
+													flexWrap: 'wrap',
+													justifyContent: 'center',
+													gap: '10px',
+												}}
+											>
+												{userInfo?.videos
 													.filter(item => !item?.isPublic)
 													.map(item => {
 														return (
@@ -1029,41 +1041,51 @@ const CoupleDetailPage = ({
 																<p>{item.description}</p>
 															</div>
 														);
-													})
-											) : (
-												<p className='text-base sm:text-2xl'>
-													This user has no videos
-												</p>
-											)}
-										</div>
-									) : (
-										<form onSubmit={handlePasswordSubmit} style={{}}>
-											<input
-												type='password'
-												name='pass'
-												className='outline-none border-none px-3 h-10 bg-grey rounded-xl'
-												placeholder='Password...'
-												style={{
-													marginBottom: '25px',
-													width: '250px',
-													backgroundColor: 'black',
-													marginRight: '15px',
-												}}
-											/>
+													})}
+											</div>
+										) : (
+											<form onSubmit={handlePasswordSubmit} style={{}}>
+												<input
+													type='password'
+													name='pass'
+													className='outline-none border-none px-3 h-10 bg-grey rounded-xl'
+													placeholder='Password...'
+													style={{
+														marginBottom: '25px',
+														width: '250px',
+														backgroundColor: 'black',
+														marginRight: '15px',
+													}}
+												/>
 
-											<button
-												style={{
-													width: '150px',
-													marginBottom: '20px',
-													background:
-														'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
-												}}
-												className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
-												type='submit'
-											>
-												Check
-											</button>
-										</form>
+												<button
+													style={{
+														width: '150px',
+														marginBottom: '20px',
+														background:
+															'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
+													}}
+													className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
+													type='submit'
+												>
+													Check
+												</button>
+											</form>
+										)
+									) : (
+										<div
+											style={{
+												display: 'flex',
+												flexWrap: 'wrap',
+												justifyContent: 'center',
+												gap: '10px',
+												marginBottom: '20px',
+											}}
+										>
+											<p className='text-base sm:text-2xl'>
+												This user has no private videos
+											</p>
+										</div>
 									)}
 								</div>
 							</div>

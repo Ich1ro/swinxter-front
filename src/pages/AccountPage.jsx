@@ -4,6 +4,7 @@ import api from '../utils/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOGOUT } from '../redux/actions/types';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast'
 
 const AccountPage = () => {
 	const [success, setSuccess] = useState(false);
@@ -34,11 +35,64 @@ const AccountPage = () => {
 	};
 
 	const handleDelete = async () => {
-		await api.delete(`delete_user/${user._id}`).then(() =>
-			dispatch({ type: LOGOUT }).then(() => {
-				navigate('/login');
-			})
+		toast(
+			t => (
+				<div>
+					<p style={{ marginBottom: '10px' }}>
+						Are you sure you want to delete this user?
+					</p>
+					<div
+						style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px' }}
+					>
+						<button
+							onClick={async () => {
+								await toast.promise(await api.delete(`delete_user/${user._id}`).then(() =>
+									dispatch({ type: LOGOUT }).then(() => {
+										navigate('/login');
+									})
+								), {
+									loading: 'User deletion...',
+									success: 'User successfully deleted!',
+									error: err => `${err}`,
+								});
+								toast.dismiss(t.id);
+							}}
+							style={{
+								padding: '2px 8px',
+								backgroundColor: '#b64a4a',
+								color: '#fff',
+								border: 'none',
+								borderRadius: '4px',
+								cursor: 'pointer',
+							}}
+						>
+							Yes
+						</button>
+						<button
+							onClick={() => toast.dismiss(t.id)}
+							style={{
+								padding: '2px 8px',
+								backgroundColor: '#4caf50',
+								color: '#fff',
+								border: 'none',
+								borderRadius: '4px',
+								cursor: 'pointer',
+							}}
+						>
+							No
+						</button>
+					</div>
+				</div>
+			),
+			{
+				duration: Infinity,
+			}
 		);
+		// await api.delete(`delete_user/${user._id}`).then(() =>
+		// 	dispatch({ type: LOGOUT }).then(() => {
+		// 		navigate('/login');
+		// 	})
+		// );
 	};
 
 	const convertDate = dateStr => {
