@@ -1,27 +1,28 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { toast } from 'react-hot-toast';
+import React, { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 import { IoCloseCircleSharp } from 'react-icons/io5';
-import api from '../../utils/api';
 import { useSelector } from 'react-redux';
-import Loading from '../M_used/Loading';
-import { BackBtn } from '../M_used/BackBtn';
-import getCoordinatesFromAWS from '../../utils/client-location'
-const CreateClubPage = () => {
-	const [club, setClub] = useState({
+import { useNavigate, useParams } from 'react-router-dom';
+import api from '../utils/api';
+import getCoordinatesFromAWS from '../utils/client-location';
+import Loading from '../components/M_used/Loading';
+// import image from '/images/gallery-icon.png';
+
+const RegisterBusiness = () => {
+	const [form, setForm] = useState({
 		business_name: '',
-    city: '',
-    state:'',
-    country: '',
-    address: '',
+		Location: '',
 		introduction: '',
 		Description: '',
 		website: '',
 		email: '',
 		contact: '',
 		business_type: '',
-
+		state: '',
+		city: '',
+		country: '',
+		address: '',
+		// club_type: '',
 	});
 	const [clubimages, setclubimages] = useState([]);
 	const [clubvideo, setclubvideo] = useState([]);
@@ -31,6 +32,7 @@ const CreateClubPage = () => {
 	const [coverImage, setCoverImage] = useState(null);
 	const [formErrors, setformErrors] = useState({});
 	const navigate = useNavigate();
+	const { userId } = useParams();
 	const [areaname, setAreaName] = useState([]);
 	const [selectlocation, setSelectedLocation] = useState([]);
 	const { user } = useSelector(state => state.auth);
@@ -41,59 +43,6 @@ const CreateClubPage = () => {
 	const debouncedSearch = useRef(null);
 	const [showResults, setShowResults] = useState(false);
 	const DEBOUNCE_DELAY = 300;
-
-	const handleLocation = e => {
-		const value = e.target.value;
-		setClub({ ...club, ['Location']: value });
-		setShowResults(true);
-
-		if (debouncedSearch.current) {
-			clearTimeout(debouncedSearch.current);
-		}
-
-		debouncedSearch.current = setTimeout(async () => {
-			try {
-				const url = value
-					? `https://us1.locationiq.com/v1/search?key=pk.9f0f98671dda49d28f0fdd64e6aa2634&q=${value}&format=json`
-					: '';
-
-				if (url) {
-					const res = await axios.get(url);
-					setAreaName(res.data);
-				} else {
-					setAreaName([]);
-				}
-			} catch (err) {
-				console.log(err);
-			}
-		}, DEBOUNCE_DELAY);
-	};
-
-	const handleResultClick = result => {
-		setClub({ ...club, ['Location']: result });
-		setShowResults(false);
-	};
-
-	const validate = value => {
-		let errors = {};
-		const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-		if (!value.email) {
-			errors.email = 'email is required';
-		} else if (!regex.test(value.email)) {
-			errors.email = 'Please enter the valid email';
-		}
-		return errors;
-	};
-	useEffect(() => {
-		if (club.email) {
-			setformErrors(validate(club));
-		}
-	}, [club]);
-
-	const handleChange = e => {
-		const { name, value } = e.target;
-		setClub({ ...club, [name]: value });
-	};
 
 	const handleCoverImage = e => {
 		const file = e.target.files[0];
@@ -140,17 +89,23 @@ const CreateClubPage = () => {
 		setclubvideo(update);
 	};
 
+	const handleInput = e => {
+		e.preventDefault();
+		const { name, value } = e.target;
+		setForm({ ...form, [name]: value });
+	};
+
 	const handleClub = async e => {
 		e.preventDefault();
 		const formData = new FormData();
 
-		const coords = await getCoordinatesFromAWS(club.state, club.city);
+		const coords = await getCoordinatesFromAWS(form.state, form.city);
 
 		const location = {
-			city: club.city,
-			state: club.state,
-			country: club.country,
-			address: club.address,
+			city: form.city,
+			state: form.state,
+			country: form.country,
+			address: form.address,
 		};
 
 		const geometry = {
@@ -158,15 +113,15 @@ const CreateClubPage = () => {
 			coordinates: coords,
 		};
 
-		formData.append('business_name', club.business_name);
-		formData.append('business_type', club.business_type);
-		formData.append('description', club.Description);
-		formData.append('website', club.website);
-		formData.append('email', club.email);
-		formData.append('contact', club.contact);
+		formData.append('business_name', form.business_name);
+		formData.append('business_type', form.business_type);
+		formData.append('description', form.Description);
+		formData.append('website', form.website);
+		formData.append('email', form.email);
+		formData.append('contact', form.contact);
 		formData.append('mainImage', coverImage);
-		formData.append('introduction', club.introduction);
-		formData.append('ownerId', user._id);
+		formData.append('introduction', form.introduction);
+		formData.append('ownerId', userId);
 		formData.append('location', JSON.stringify(location));
 		formData.append('geometry', JSON.stringify(geometry));
 
@@ -179,7 +134,7 @@ const CreateClubPage = () => {
 			} else {
 				setLoading(false);
 				toast.success('🦄Club Created Successfully!');
-				setClub({
+				setForm({
 					business_name: '',
 					introduction: '',
 					Description: '',
@@ -194,7 +149,7 @@ const CreateClubPage = () => {
 				});
 				setSelectedImage([]);
 				setSelectedVideo([]);
-				navigate('/club-page', { state: { email: data.email } });
+				navigate(`/verify_email/${userId}`);
 			}
 		} catch (error) {
 			toast.error('Something went wrong!');
@@ -204,55 +159,87 @@ const CreateClubPage = () => {
 	};
 
 	return (
-		<div className='bg-white rounded-40px'>
-			<div className='text-center p-5 py-10 text-black px-10 relative'>
-				<BackBtn />
-				<h3 className='text-2xl sm:text-4xl mb-2'>Create your Business</h3>
-				<p className='text-lg'>Let’s Create a Notorious Business</p>
-			</div>
-			<div className='flex flex-wrap bg-black rounded-40px '>
-				<div className='w-full md:w-3/5 xl:w-full 2xl:w-3/5 '>
-					<div className='sign-up__form flex flex-col justify-center gap-30 py-6 px-6 lg:py-11 lg:px-14'>
-						<h2 className='text-white text-2xl sm:text-3xl xl:text-5xl text-center xl:text-start font-bold mb-6'>
-							Business Details
-						</h2>
+		<div className='min-h-screen bg-black-20 text-white grid content-between'>
+			<div className='overflow-hidden'>
+				{/* <Header /> */}
+				<div className='sign_up__block pt-65px mt-40 mb-40'>
+					<div className='container mx-auto relative z-1'>
+						<div className='sign-up__header pt-10 pb-20 bg-white flex flex-col justify-center items-center rounded-t-3xl md:rounded-t-86'>
+							<p className='text-2xl sm:text-3xl xl:text-40px text-black  font-normal'>
+								Register Your Business
+							</p>
+							<p className='text-lg text-black  font-body_font'>
+								Get Started it’s easy
+							</p>
+						</div>
+						<div className='sign-up__body px-5 lg:px-10 rounded-3xl md:rounded-t-58 md:rounded-r-58 bg-black mt-[-50px] md:rounded-58 relative  border-b-2 border-t-[1px] border-orange py-5'>
+							<h1 className='text-white text-2xl sm:text-3xl xl:text-5xl text-center xl:text-start font-bold mb-4'>
+								LOCATION
+							</h1>
 
-						<form
-							className='flex flex-col justify-center gap-y-4 sm:gap-y-6'
-							autoComplete='off'
-						>
-							<div className='flex flex-wrap rounded-md input_field_2'>
-								<label
-									htmlFor='club_name'
-									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
-                                          lg:text-start'
-								>
-									Business Name*
-								</label>
+							<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>
+								<span>State *</span>
 								<input
 									type='text'
-									id='club_name'
-									name='club_name'
-									value={club.business_name}
-									onChange={handleChange}
-									autoComplete='off'
-									className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
-									required
+									className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+									placeholder='State'
+									onChange={handleInput}
+									value={form.state}
+									name='state'
 								/>
 							</div>
-              <div className='flex flex-wrap rounded-md input_field'>
-								<label
-									htmlFor='business_type'
-									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
-								>
-									Business Type
-								</label>
+							<div className='bg-[#202020] grid grid-cols-2 px-10 pt-5'>
+								<span>City *</span>
+								<input
+									type='text'
+									className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+									placeholder='City'
+									onChange={handleInput}
+									value={form.city}
+									name='city'
+								/>
+							</div>
+							<div className='bg-[#202020] grid grid-cols-2 px-10 py-5'>
+								<span>Country *</span>
+								<input
+									type='text'
+									className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+									placeholder='Country'
+									onChange={handleInput}
+									value={form.country}
+									name='country'
+								/>
+							</div>
+
+							<h1 className='text-white text-2xl sm:text-3xl xl:text-5xl text-center xl:text-start font-bold mb-4 py-3'>
+								Main Info
+							</h1>
+
+							<div
+								className='bg-[#202020] flex align-middle justify-between px-10 py-5'
+								style={{ paddingBottom: '0' }}
+							>
+								<span>Bsiness Name *</span>
+								<input
+									type='text'
+									className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+									placeholder='Business Name'
+									onChange={handleInput}
+									value={form.business_name}
+									name='business_name'
+								/>
+							</div>
+
+							<div
+								className='bg-[#202020] grid grid-cols-2 px-10 pt-5 py-5'
+								style={{ paddingBottom: '0' }}
+							>
+								<span>Business Type *</span>
 								<select
+									className='bg-[#202020] text-white text-end'
 									name='business_type'
-									id='business_type'
-									className='bg-black border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
-									value={club.business_type}
-									onChange={handleChange}
+									value={form.business_type}
+									onChange={handleInput}
 								>
 									<option value=''>Please Select</option>
 									<option value='Club'> Club</option>
@@ -266,96 +253,117 @@ const CreateClubPage = () => {
 								</select>
 							</div>
 
-							<div className='flex flex-wrap rounded-md input_field_2'>
-								<label
-									htmlFor='state'
-									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
-                            lg:text-start'
-								>
-									State/Province
-								</label>
+							<div
+								className='bg-[#202020] flex align-middle justify-between px-10 py-5'
+								style={{ paddingBottom: '0' }}
+							>
+								<span>Introduction *</span>
 								<input
 									type='text'
-									id='state'
-									name='state'
-									onChange={handleChange}
-									value={club.state}
-									autocomplete='off'
-									className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
-									required
+									className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+									// placeholder='Country'
+									onChange={handleInput}
+									value={form.introduction}
+									name='introduction'
 								/>
 							</div>
-							<div className='flex flex-wrap rounded-md input_field_2'>
-								<label
-									htmlFor='city'
-									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
-                            lg:text-start'
-								>
-									City
-								</label>
+
+							<div
+								className='bg-[#202020] flex align-middle justify-between px-10 py-5'
+								style={{ paddingBottom: '0' }}
+							>
+								<span>Contact *</span>
 								<input
 									type='text'
-									id='city'
-									name='city'
-									onChange={handleChange}
-									value={club.city}
-									autocomplete='off'
-									className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
-									required
+									className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+									placeholder='Enter contact number'
+									onChange={handleInput}
+									value={form.contact}
+									name='contact'
 								/>
 							</div>
-							<div className='flex flex-wrap rounded-md input_field_2'>
-								<label
-									htmlFor='country'
-									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
-                            lg:text-start'
-								>
-									Country
-								</label>
+
+							<div
+								className='bg-[#202020] flex align-middle justify-between px-10 py-5'
+								style={{ paddingBottom: '0' }}
+							>
+								<span>Email *</span>
+								<input
+									type='email'
+									className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+									placeholder='name@flowbite.com'
+									onChange={handleInput}
+									value={form.email}
+									name='email'
+								/>
+							</div>
+
+							<div
+								className='bg-[#202020] flex align-middle justify-between px-10 py-5'
+								style={{ paddingBottom: '0' }}
+							>
+								<span>Website URL *</span>
 								<input
 									type='text'
-									id='country'
-									name='country'
-									onChange={handleChange}
-									value={club.country}
-									autocomplete='off'
-									className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
-									required
+									className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'
+									placeholder='https://your-business.com'
+									onChange={handleInput}
+									value={form.website}
+									name='website'
 								/>
 							</div>
-							<div className='flex flex-wrap rounded-md input_field_2'>
-								<label
-									htmlFor='address'
-									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
-                            lg:text-start'
-								>
-									Address
-								</label>
-								<input
-									type='text'
-									id='address'
-									name='address'
-									onChange={handleChange}
-									value={club.address}
-									autocomplete='off'
-									className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
-									required
-								/>
-							</div>
-							<div className='flex flex-wrap rounded-md input_field_2'>
+
+							<div
+								className='bg-[#202020] px-10 py-5 w-full'
+								style={{ paddingBottom: '20px', marginBottom: '20px' }}
+							>
+								<div className='grid sm:grid-cols-2 gap-4 items-start'>
+									<label className='flex w-full bg-gray-900 py-[10px] px-4 text-lg items-center cursor-pointer rounded-md'>
+										<span className='w-6 block mr-2'>
+											<img src='/images/gallery-icon.png' alt='gallery-icon' />
+										</span>
+										Upload Cover Image
+										<input
+											type='file'
+											className='hidden'
+											onChange={e => handleCoverImage(e)}
+										/>
+									</label>
+
+									<div className='relative w-full'>
+										{coverImage && (
+											<div className='preview_img relative z-[1] bg-white/50 rounded-md'>
+												<div>
+													<img
+														className='w-full object-contain max-h-[100px]'
+														src={URL.createObjectURL(coverImage)}
+													/>
+													<span
+														className='preview_close absolute top-0 transform translate-x-[40%] -translate-y-[50%] right-0 object-contain text-xl z-[1] w-5 h-5 rounded-full bg-orange text-black'
+														onClick={clearCoverImage}
+													>
+														<IoCloseCircleSharp />
+													</span>
+												</div>
+											</div>
+										)}
+									</div>
+								</div>
+
+								{/* <div className='flex flex-wrap rounded-md input_field_2'>
 								<label
 									htmlFor='introduction'
 									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
-                                          lg:text-start'
+																	  lg:text-start'
 								>
 									Introduction
-								</label>
-								<input
+									</label>
+									<input
 									type='text'
 									id='introduction'
 									name='introduction'
-									value={club.introduction}
-									onChange={handleChange}
+									// value={club.introduction}
+									// onChange={handleChange}
 									autoComplete='off'
 									style={{ whiteSpace: 'pre-line' }}
 									className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
@@ -366,7 +374,7 @@ const CreateClubPage = () => {
 								<label
 									htmlFor='contact'
 									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
-                                          lg:text-start'
+																	  lg:text-start'
 								>
 									Contact
 								</label>
@@ -379,8 +387,8 @@ const CreateClubPage = () => {
 										}
 									}}
 									name='contact'
-									value={club.contact}
-									onChange={handleChange}
+									// value={club.contact}
+									// onChange={handleChange}
 									autoComplete='off'
 									className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
 									placeholder='Enter contact number'
@@ -392,7 +400,7 @@ const CreateClubPage = () => {
 									<label
 										htmlFor='email'
 										className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
-                                          lg:text-start'
+																	  lg:text-start'
 									>
 										Email
 									</label>
@@ -400,8 +408,8 @@ const CreateClubPage = () => {
 										type='text'
 										id='email'
 										name='email'
-										value={club.email}
-										onChange={handleChange}
+										//   value={club.email}
+										//   onChange={handleChange}
 										autoComplete='off'
 										className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
 										placeholder='name@flowbite.com'
@@ -418,7 +426,7 @@ const CreateClubPage = () => {
 								<label
 									htmlFor='website'
 									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
-                                          lg:text-start'
+																	  lg:text-start'
 								>
 									Website URL
 								</label>
@@ -426,15 +434,32 @@ const CreateClubPage = () => {
 									type='text'
 									id='website'
 									name='website'
-									value={club.website}
-									onChange={handleChange}
+									// value={club.website}
+									// onChange={handleChange}
 									autoComplete='off'
 									className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
 									placeholder='https://hot-date.vercel.app'
 									required
 								/>
+							</div> */}
+
+								<div
+								className='bg-[#202020] flex flex-col items-center justify-center px-10 py-5'
+								style={{ paddingBottom: '0' }}
+							>
+								<span style={{ marginBottom: '20px'}}>Description</span>
+								<textarea
+									type='text'
+									className='w-full border-2 border-orange rounded-[5px] h-[100px] text-black px-5 font-light'
+									// placeholder='Country'
+									onChange={handleInput}
+									value={form.Description}
+									name='Description'
+									style={{ marginBottom: '20px'}}
+								/>
 							</div>
-							<div className='flex flex-col gap-30'>
+
+							{/* <div className='flex flex-col gap-30'>
 								<label
 									htmlFor='Description'
 									className='gradient w-full h-[49px] flex items-center justify-center text-lg text-white  font-normal leading-29 rounded-md mb-6'
@@ -447,45 +472,14 @@ const CreateClubPage = () => {
 										id='Description'
 										rows={3}
 										name='Description'
-										value={club.Description}
-										onChange={handleChange}
+										//   value={club.Description}
+										//   onChange={handleChange}
 										style={{ whiteSpace: 'pre-line' }}
 										className='bg-black focus:outline-none focus-visible:none w-full border-gradient3 text-gray font-normal xl:text-lg rounded-md text-sm px-2 xl:px-4 py-2.5 text-center md:text-start items-center flex justify-between'
 										required
 									></textarea>
 								</div>
-							</div>
-							<div className='grid sm:grid-cols-2 gap-4 items-start'>
-								<label className='flex w-full bg-gray-900 py-[10px] px-4 text-lg items-center cursor-pointer rounded-md'>
-									<span className='w-6 block mr-2'>
-										<img src='images/gallery-icon.png' alt='gallery-icon' />
-									</span>
-									Upload Cover Image
-									<input
-										type='file'
-										className='hidden'
-										onChange={e => handleCoverImage(e)}
-									/>
-								</label>
-
-								<div className='relative w-full'>
-									{coverImage && (
-										<div className='preview_img relative z-[1] bg-white/50 rounded-md'>
-											<div>
-												<img
-													className='w-full object-contain max-h-[100px]'
-													src={URL.createObjectURL(coverImage)}
-												/>
-												<span
-													className='preview_close absolute top-0 transform translate-x-[40%] -translate-y-[50%] right-0 object-contain text-xl z-[1] w-5 h-5 rounded-full bg-orange text-black'
-													onClick={clearCoverImage}
-												>
-													<IoCloseCircleSharp />
-												</span>
-											</div>
-										</div>
-									)}
-								</div>
+							</div> */}
 
 								{/* <label className='flex w-full bg-gray-900 py-[10px] px-4 text-lg items-center cursor-pointer rounded-md'>
 									<span className='w-6 block mr-2'>
@@ -496,25 +490,25 @@ const CreateClubPage = () => {
 										type='file'
 										className='hidden'
 										multiple
-										onChange={e => handleClubimages(e)}
+										  onChange={(e) => handleClubimages(e)}
 									/>
-								</label> */}
+								</label>
 
-								{/* <div className="grid grid-cols-2 gap-2">
-                {SelectedImage.map((el, i) => (
-                  <div key={i} className="preview_img relative z-[1] bg-white/50 rounded-md">
-                    <img className="w-full object-contain max-h-[100px]" src={el.url} />
-                    {SelectedImage && (
-                      <span
-                        className="preview_close absolute top-0 transform translate-x-[40%] -translate-y-[50%] right-0 object-contain text-xl z-[1] w-5 h-5 rounded-full bg-orange text-black"
-                        onClick={(i) => removeImage(i)}
-                      >
-                        <IoCloseCircleSharp />
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div> */}
+								<div className="grid grid-cols-2 gap-2">
+											{SelectedImage.map((el, i) => (
+											  <div key={i} className="preview_img relative z-[1] bg-white/50 rounded-md">
+												<img className="w-full object-contain max-h-[100px]" src={el.url} />
+												{SelectedImage && (
+												  <span
+													className="preview_close absolute top-0 transform translate-x-[40%] -translate-y-[50%] right-0 object-contain text-xl z-[1] w-5 h-5 rounded-full bg-orange text-black"
+													onClick={(i) => removeImage(i)}
+												  >
+													<IoCloseCircleSharp />
+												  </span>
+												)}
+											  </div>
+											))}
+										  </div> */}
 
 								{/* <div className='gap-2 preview_img_wrapper'>
 									{clubimages.map((el, i) => (
@@ -531,7 +525,7 @@ const CreateClubPage = () => {
 														/>
 														<span
 															className='preview_close absolute top-0 transform translate-x-[40%] -translate-y-[50%] right-0 object-contain text-xl z-[1] w-5 h-5 rounded-full bg-orange text-black'
-															onClick={() => removeImage(i)}
+															  onClick={() => removeImage(i)}
 														>
 															<IoCloseCircleSharp />
 														</span>
@@ -554,11 +548,11 @@ const CreateClubPage = () => {
 										type='file'
 										className='hidden'
 										multiple
-										onChange={e => handleVideoChange(e)}
+										  onChange={(e)=>handleVideoChange(e)}
 									/>
-								</label> */}
+								</label>
 
-								{/* <div className='preview_img_wrapper'>
+								<div className='preview_img_wrapper'>
 									{clubvideo.map((el, i) => (
 										<div
 											key={i}
@@ -588,8 +582,8 @@ const CreateClubPage = () => {
 										className='hidden'
 										name='club_type'
 										value='Private Place'
-										checked={club.club_type === 'Private Place'}
-										onChange={handleChange}
+										//   checked={club.club_type === "Private Place"}
+										//   onChange={handleChange}
 									/>
 									<label htmlFor='private_place'>
 										<span className='radio_circle'></span>
@@ -603,8 +597,8 @@ const CreateClubPage = () => {
 										className='hidden'
 										name='club_type'
 										value='Public Place'
-										checked={club.club_type === 'Public Place'}
-										onChange={handleChange}
+										//   checked={club.club_type === "Public Place"}
+										//   onChange={handleChange}
 									/>
 									<label htmlFor='public_place'>
 										<span className='radio_circle'></span>
@@ -618,8 +612,8 @@ const CreateClubPage = () => {
 										className='hidden'
 										name='club_type'
 										value='Virtual Date'
-										checked={club.club_type === 'Virtual Date'}
-										onChange={handleChange}
+										//   checked={club.club_type === "Virtual Date"}
+										//   onChange={handleChange}
 									/>
 									<label htmlFor='virtual_date'>
 										<span className='radio_circle'></span>
@@ -638,19 +632,12 @@ const CreateClubPage = () => {
 							) : (
 								<Loading />
 							)}
-						</form>
+						</div>
 					</div>
-				</div>
-				<div className='md:w-2/5 xl:w-full 2xl:w-2/5'>
-					<img
-						src='images/create-club-mod.png'
-						alt='Create-club'
-						className='block w-full rounded-t-40px md:p-0 p-5 rounded-b-40px md:rounded-b-none md:rounded-br-40px md:rounded-r-40px xl:rounded-b-40px xl:rounded-tl-40px 2xl:rounded-l-none 2xl:rounded-r-40px object-cover object-center aspect-square md:aspect-auto xl:aspect-square 2xl:md:aspect-auto'
-					/>
 				</div>
 			</div>
 		</div>
 	);
 };
 
-export default CreateClubPage;
+export default RegisterBusiness;

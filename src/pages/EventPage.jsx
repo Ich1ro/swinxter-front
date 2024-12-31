@@ -111,8 +111,8 @@ const EventPage = () => {
 				});
 			}
 			if (filter.distance) {
-				const userLatitude = savedCred?.lat;
-				const userLongitude = savedCred?.long;
+				const userLatitude = user?.geometry?.coordinates[1];
+				const userLongitude = user?.geometry?.coordinates[0];
 				const location = filtered.map(event => event?.location);
 
 				const filteredByDistance = filtered.filter(event => {
@@ -152,7 +152,7 @@ const EventPage = () => {
 	const currentPost = event.slice(firstPostIndex, lastPostIndex);
 
 	return (
-		<div className='bg-black pt-0 sm:pt-8 py-8 px-6 rounded-2xl xl:rounded-r-none min-h-full'>
+		<div className='bg-black pt-0 sm:pt-8 py-8 px-6 rounded-2xl min-h-full'>
 			{user.payment?.membership ? (
 				<>
 					{!loading ? (
@@ -160,17 +160,19 @@ const EventPage = () => {
 							<div className='sticky top-0 bg-black z-[9] py-5 flex justify-between'>
 								<div className='flex flex-wrap gap-2 sm:gap-5 flex-1 justify-end'>
 									<div className='flex gap-8 items-center'>
-										<div
-											className='inline-flex gap-1 items-center cursor-pointer'
-											onClick={() => navigate('/create_event')}
-										>
-											<img
-												src='images/add-icon.png'
-												alt='add-icon'
-												className='max-w-full cursor-pointer w-5'
-											/>
-											<span>Add Event</span>
-										</div>
+										{user.role === 'business' && (
+											<div
+												className='inline-flex gap-1 items-center cursor-pointer'
+												onClick={() => navigate('/create_event')}
+											>
+												<img
+													src='images/add-icon.png'
+													alt='add-icon'
+													className='max-w-full cursor-pointer w-5'
+												/>
+												<span>Add Event</span>
+											</div>
+										)}
 										<div className='inline-flex gap-1 items-center relative '>
 											<span
 												className='inline-flex gap-1 items-center cursor-pointer'

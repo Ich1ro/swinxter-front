@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './sidebar.css';
 import api from '../../../../utils/api';
 import { LOGOUT } from '../../../../redux/actions/types';
-import toast from 'react-hot-toast'
+import toast from 'react-hot-toast';
 
 const Submenu = ({ items, isOpen }) => (
 	<ul className={`submenu ${isOpen ? 'open' : ''}`}>
@@ -58,7 +58,14 @@ const MenuItem = ({
 	};
 
 	return (
-		<li className={(title === 'My Photos' || title === 'My Videos') ? 'menu-item-media' : `menu-item`} style={{ position: 'relative' }}>
+		<li
+			className={
+				title === 'My Photos' || title === 'My Videos'
+					? 'menu-item-media'
+					: `menu-item`
+			}
+			style={{ position: 'relative' }}
+		>
 			<span
 				className={`title_submenu ${activeMenuItem === title ? 'active' : ''}`}
 				onClick={toggleSubmenu}
@@ -67,7 +74,7 @@ const MenuItem = ({
 				{submenus.length > 0 && (
 					<i
 						className={`fas fa-chevron-down`}
-						style={{ transform: `${showSubmenu ? 'scaleY(-1)' : ''}`}}
+						style={{ transform: `${showSubmenu ? 'scaleY(-1)' : ''}` }}
 					></i>
 				)}
 			</span>
@@ -119,8 +126,8 @@ const Sidebar = ({ unread, closeMenu }) => {
 	}, [user]);
 
 	const testToast = () => {
-		toast.error("🦄 Failed to Create Event!");
-	}
+		toast.error('🦄 Failed to Create Event!');
+	};
 
 	const menuItems = [
 		{
@@ -128,59 +135,65 @@ const Sidebar = ({ unread, closeMenu }) => {
 			submenus: [],
 			path: '/home',
 		},
-		{
-			title: 'My Interactions',
-			submenus: [
-				{ title: 'My Friends', submenus: [], path: '/my_friends' },
-				{ title: 'Sent', submenus: [], path: '/sent_request' },
-				{ title: 'Received', submenus: [], path: '/recieved_request' },
-			],
-			// {
-			//   title: "Hot List",
-			//   submenus: [
-			//     { title: "Sent", submenus: [], path: "/sent_superlike" },
-			//     { title: "Received", submenus: [], path: "/recieved_superlike" },
-			//   ],
-			// },
-			// {
-			//   title: "Gifts/Tips",
-			//   submenus: [
-			//     { title: "Sent", submenus: [] },
-			//     { title: "Received", submenus: [] },
-			//   ],
-			// },
-		},
-		{
-			title: 'Live Chat',
-			submenus: [],
-			path: '/live-chat',
-		},
-		{
-			title: 'Messages',
-			submenus: [],
-			path: '/messaging',
-		},
-		{
-			title: 'Search',
-			submenus: [
-				{ title: 'Search Users', submenus: [], path: '/allusers' },
-				{ title: 'Advanced Search', submenus: [], path: '/advanced-search' },
-				{
-					title: 'Who Viewed Me',
-					submenus: [],
-					path: '/visited-users',
-				},
-				{ title: 'New Members', submenus: [], path: '/recentuser' },
-				{ title: 'Near Members', submenus: [], path: '/nearusers' },
-				{ title: 'Who Is On', submenus: [], path: '/onlineusers' },
-			],
-		},
+		...(user?.role !== 'business'
+			? [
+					{
+						title: 'My Interactions',
+						submenus: [
+							{ title: 'My Friends', submenus: [], path: '/my_friends' },
+							{ title: 'Sent', submenus: [], path: '/sent_request' },
+							{ title: 'Received', submenus: [], path: '/recieved_request' },
+						],
+					},
+			  ]
+			: []),
+		...(user?.role !== 'business'
+			? [
+					{
+						title: 'Live Chat',
+						submenus: [],
+						path: '/live-chat',
+					},
+			  ]
+			: []),
+		...(user?.role !== 'business'
+			? [
+					{
+						title: 'Messages',
+						submenus: [],
+						path: '/messaging',
+					},
+			  ]
+			: []),
+		...(user?.role !== 'business'
+			? [
+					{
+						title: 'Search',
+						submenus: [
+							{ title: 'Search Users', submenus: [], path: '/allusers' },
+							{
+								title: 'Advanced Search',
+								submenus: [],
+								path: '/advanced-search',
+							},
+							{
+								title: 'Who Viewed Me',
+								submenus: [],
+								path: '/visited-users',
+							},
+							{ title: 'New Members', submenus: [], path: '/recentuser' },
+							{ title: 'Near Members', submenus: [], path: '/nearusers' },
+							{ title: 'Who Is On', submenus: [], path: '/onlineusers' },
+						],
+					},
+			  ]
+			: []),
 		{
 			title: 'Actions',
 			submenus: [
 				{ title: 'Events', submenus: [], path: '/event-page' },
 				{ title: 'My Events', submenus: [], path: '/my-event' },
-				{ title: 'Clubs', submenus: [], path: '/club-page' },
+				{ title: 'Businesses', submenus: [], path: '/club-page' },
 				// {
 				//   title: "Live Action",
 				//   submenus: [
@@ -194,10 +207,10 @@ const Sidebar = ({ unread, closeMenu }) => {
 			title: 'FAQ',
 			submenus: [{ title: 'Know Your Kinky FAQ!', submenus: [], path: '/faq' }],
 		},
-		{
-			title: 'Shop',
-			submenus: [],
-		},
+		// {
+		// 	title: 'Shop',
+		// 	submenus: [],
+		// },
 		{
 			title: 'Situationship',
 			submenus: [],
@@ -207,31 +220,49 @@ const Sidebar = ({ unread, closeMenu }) => {
 		{
 			title: 'Setting',
 			submenus: [
-				{ title: 'My Profile', submenus: [], path: '/user-detail' },
+				...(user?.role !== 'business'
+					? [
+							{ title: 'My Profile', submenus: [], path: '/user-detail' },
+							{
+								title: 'Edit Profile',
+								submenus: [],
+								path:
+									userInfo?.profile_type === 'couple'
+										? '/editcouple-detail'
+										: '/edit-detail',
+							},
+							{
+								title: 'Media',
+								submenus: [
+									{
+										title: 'My Photos',
+										submenus: [],
+										path: '/my-media/photos',
+									},
+									{
+										title: 'My Videos',
+										submenus: [],
+										path: '/my-media/videos',
+									},
+								],
+							},
+					  ]
+					: []),
+
 				// { title: "My Posts", submenus: [] },
-				{
-					title: 'Edit Profile',
-					submenus: [],
-					path:
-						userInfo?.profile_type === 'couple'
-							? '/editcouple-detail'
-							: '/edit-detail',
-				},
 				// { title: 'My Media', submenus: [], path: '/my-media' },
-				{
-					title: 'Media',
-					submenus: [
-						{ title: 'My Photos', submenus: [], path: '/my-media/photos' },
-						{ title: 'My Videos', submenus: [], path: '/my-media/videos' },
-					],
-				},
+
 				{ title: 'Account', submenus: [], path: '/myaccount' },
 				// {
 				//   title: "My Points",
 				//   submenus: [{ title: "Top up points", submenus: [] }],
 				// },
-				{ title: 'About', submenus: [], path: '/about' },
-				{ title: 'Blocked', submenus: [], path: '/blocked_users' },
+				...(user?.role !== 'business'
+					? [
+							{ title: 'About', submenus: [], path: '/about' },
+							{ title: 'Blocked', submenus: [], path: '/blocked_users' },
+					  ]
+					: []),
 			],
 		},
 	];
@@ -260,7 +291,6 @@ const Sidebar = ({ unread, closeMenu }) => {
 				justifyContent: 'space-between',
 			}}
 		>
-			
 			<div>
 				<Link
 					to={'/user-detail'}
@@ -291,18 +321,18 @@ const Sidebar = ({ unread, closeMenu }) => {
 				<div className='pt-0 pb-8 xl:py-4'>
 					<Link to={'/user-detail'}>
 						<h3 className='font-semibold text-22px mb-3 '>
-							{userInfo.username}
+							{userInfo?.username}
 						</h3>
 					</Link>
 					<p className='flex items-center justify-between gap-4 mb-3 hover:text-orange font-body_font text-lg'>
 						{userInfo?.location
 							? `${userInfo?.location?.city}, ${
-									(userInfo?.location?.state && userInfo?.location?.state !== '')
+									userInfo?.location?.state && userInfo?.location?.state !== ''
 										? `${userInfo?.location?.state}`
 										: ''
 							  }${
-									(userInfo?.location?.country &&
-									userInfo?.location?.country !== '')
+									userInfo?.location?.country &&
+									userInfo?.location?.country !== ''
 										? `, ${userInfo?.location?.country}`
 										: ''
 							  }`

@@ -66,6 +66,7 @@ import {io} from "socket.io-client";
 import SuccessPaymentPage from './pages/SuccessPaymentPage'
 import AdvancedSearch from './pages/AdvancedSearch'
 import MyMediaUniversal from './pages/MyMediaUniversal'
+import RegisterBusiness from './pages/RegisterBusiness'
 
 function App() {
 const {isAuthenticated} = useSelector((state)=>state.auth);
@@ -131,6 +132,7 @@ useEffect(() => {
         <Route path="forgot" element={<Layout><ForgotPassword /></Layout>} />
         <Route path="/single/:userId" element={<SinglePerson/>} />
         <Route path="/couple/:userId" element={<SignUpCouple/>} />
+        <Route path="/business/:userId" element={<RegisterBusiness/>} />
         <Route path="/verify_email/:userId" element={<Layout><VerifyEmail/></Layout>} />
         <Route path="/verified/:id" element={<Layout><EmailVerified/></Layout>} />
         <Route path="/forgot" element={<Layout><ForgotPassword/></Layout>} />

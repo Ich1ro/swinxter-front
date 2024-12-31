@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const EventParticipants = () => {
   const navigate = useNavigate()
   return (
-    <div className="bg-black pt-0 sm:pt-8 py-8 px-6 rounded-2xl xl:rounded-r-none min-h-full">
+    <div className="bg-black pt-0 sm:pt-8 py-8 px-6 rounded-2xl min-h-full">
       <span className="primary_btn cursor-pointer !text-sm !py-2 !px-3 !leading-none !py-3" onClick={()=>navigate(-1)}>
         <span className="text-sm inline-flex items-center mr-2"><FaArrowLeft /></span>Back
       </span>

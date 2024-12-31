@@ -48,6 +48,7 @@ const CheckoutCard = ({ title, price, month_freq }) => {
 				expyy: details.expyear,
 				cvv: details.cvv,
 				userId: user._id,
+				role: user.role,
 				amount: price.slice(1),
 				month_freq,
 				plan: title,

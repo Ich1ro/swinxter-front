@@ -55,7 +55,7 @@ const Main_Layout = ({ socket }) => {
 							className={`${
 								layout === 'layout-1'
 									? 'w-full xl:w-4/5 sm:px-5'
-									: 'w-full xl:w-4/5 sm:px-5 xl:pr-0'
+									: 'w-full xl:w-4/5 sm:px-5'
 							}`}
 							style={{ width: '100%' }}
 						>

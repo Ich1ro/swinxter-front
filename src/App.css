@@ -351,7 +351,7 @@ h1::first-letter,h2::first-letter,h3::first-letter,h4::first-letter,h5::first-le
 }
 
 .radio_btn_wrapper .radio_field {
-  @apply w-full max-w-[200px]
+  @apply max-w-[200px]
 }
 
 .radio_text {

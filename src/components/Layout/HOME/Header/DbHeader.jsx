@@ -68,7 +68,7 @@ const DbHeader = ({ socket }) => {
 	};
 
 	useEffect(() => {
-		if (user?._id) {
+		if (user?._id && user.role !== 'business') {
 			getDbNotifcations();
 		}
 	}, [user]);

@@ -104,7 +104,7 @@ export default function MyTravel() {
 
 	return (
 		<>
-			<div className='bg-black py-8 px-6 rounded-2xl xl:rounded-r-none'>
+			<div className='bg-black py-8 px-6 rounded-2xl'>
 				<div className='flex gap-2 flex-wrap justify-between mb-5'>
 					<span
 						className='primary_btn cursor-pointer !text-sm  !px-3 !leading-2 !py-3'

@@ -99,6 +99,9 @@ const Signup = () => {
 						if (data.profile_type === 'couple') {
 							navigate(`/couple/${data?._id}`, { state: { email: data?.email } });
 						}
+						if (data.profile_type === 'business') {
+							navigate(`/business/${data?._id}`, { state: { email: data?.email } });
+						}
 					}
 				})(),
 				{
@@ -153,7 +156,7 @@ const Signup = () => {
 						</h2>
 
 						<form className='flex flex-col justify-center' autoComplete='off'>
-							<div className='signup_radio mb-5 flex flex-wrap gap-y-5'>
+							<div className='signup_radio mb-5 flex flex-wrap gap-y-5 justify-between'>
 								<p
 									className='w-auto'
 									style={{ display: 'flex', alignItems: 'center' }}
@@ -191,7 +194,7 @@ const Signup = () => {
 											<span className='radio_text'>Single</span>
 										</label>
 									</div>
-									{/* <div className='radio_field'>
+									<div className='radio_field'>
 										<input
 											type='radio'
 											id='virtual_date'
@@ -205,7 +208,7 @@ const Signup = () => {
 											<span className='radio_circle'></span>
 											<span className='radio_text'>Business</span>
 										</label>
-									</div> */}
+									</div>
 								</div>
 							</div>
 							<div>

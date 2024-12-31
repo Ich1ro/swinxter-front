@@ -33,13 +33,15 @@ const [desc,setdesc]= useState("")
   const data = useParams()
   const clubid = data.id
   const calculatePreciseDistance = (fLong, sLong, fLat, sLat) => {
-    var pdis = getPreciseDistance(
-      { latitude: Number(fLat), longitude: Number(fLong) },
-      { latitude: Number(sLat), longitude: Number(sLong) }
-    );
-    const factor = 0.621371;
-    return ((pdis / 100) * factor).toFixed(2);
-  };
+        var pdis = getPreciseDistance(
+          { latitude: Number(fLat), longitude: Number(fLong) },
+          { latitude: Number(sLat), longitude: Number(sLong) }
+        );
+        const factor = 0.621371;
+        const result = ((pdis / 1000) * factor).toFixed(0);
+        
+        return `${isNaN(result) ? '' : result + 'miles'}`;
+      };
 const {user} = useSelector((state)=>state.auth);
 const [userInfo,setUserInfo]=useState(user);
 const [commentRender,setCommentRender] = useState(true);
@@ -95,7 +97,7 @@ useEffect(()=>{
   console.log(clubData);
 
   return (
-    <div className="bg-black pt-0 sm:pt-8 py-8 px-6 rounded-2xl xl:rounded-r-none min-h-full">
+    <div className="bg-black pt-0 sm:pt-8 py-8 px-6 rounded-2xl min-h-full">
       {
         writeReview?<WriteReview  productId={clubData._id} userInfo={userInfo} setCommentRender={() => {setCommentRender(!commentRender)}} close={() => {setWriteReview(0)}} editComment={editComment}/>:null
       }
@@ -104,16 +106,16 @@ useEffect(()=>{
       </span>
       <div className="flex justify-between items-center max-w-7xl">
         <h3 className="clipped_text bg-gradient-to-r from-orange to-red-500 bg-clip-text text-base sm:text-3xl md:text-5xl font-bold mb-5 pt-5">
-          Club Details
+          Business Details
         </h3>
         <div className="flex flex-wrap gap-4 justify-end">
 
           <span onClick={() => {setWriteReview(1)}} className="primary_btn cursor-pointer !text-sm !py-2">
             Write a review
           </span>
-          <span className="primary_btn cursor-pointer !text-sm !py-2">
+          {/* <span className="primary_btn cursor-pointer !text-sm !py-2">
             Messages
-          </span>
+          </span> */}
         </div>
       </div>
       <div className="flex flex-wrap items-stretch max-w-7xl">
@@ -129,7 +131,7 @@ useEffect(()=>{
             <div className="p-5">
               <div className="flex items-center justify-between gap-5 mb-4">
                 <h3 className="text-2xl sm:text-4xl font-semibold">
-                  {clubData?.clubname}
+                  {clubData?.business_name}
                 </h3>
 
 
@@ -159,33 +161,38 @@ useEffect(()=>{
                   <SlLocationPin />
                 </span>
 
-                {clubData?.location?.display_name}
+                {`${clubData?.location?.city}, ${clubData?.location?.state}, ${clubData?.location?.country}, ${clubData?.location?.address}`}
               </div>
 
               <div className="my-4">
                 <p className="text-lg text-orange font-semibold">Distance</p>
                 {calculatePreciseDistance(
-                  clubData?.location?.lon,
-                  savedCred.long,
-                  clubData?.location?.lat,
-                  savedCred.lat
-                ).slice(0, 3)}  miles
+                   clubData?.geometry?.coordinates[0],
+                   user?.geometry?.coordinates[0],
+                  clubData?.geometry?.coordinates[1],
+                  user?.geometry?.coordinates[1]
+                )}
               </div>
 
               <div>
                 <p className="text-lg font-semibold pb-2 border-b border-white">
                   INFORMATION
                 </p>
+                <div className="text-base my-2">
+                  <span >Business Type</span> : <span className="font-body_font">
+                    {clubData?.business_type}
+                  </span>
+                </div>
 
                 <p className="text-base my-2">
 
-                  {clubData?.clubtype === "Public Place" ? (
+                  {/* {clubData?.clubtype === "Public Place" ? (
                     <span className="text-red-500">{clubData?.clubtype} </span>
                   ) : (
                     <span className="text-green-500">{clubData?.clubtype} </span>
-                  )}
+                  )} */}
                   <span className="font-body_font">
-                    by : {clubData.ownerId?.username}
+                    by : {clubData.owner_name}
 
                   </span>
                 </p>

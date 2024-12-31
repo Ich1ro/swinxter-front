@@ -124,7 +124,7 @@ console.log(filterKeywords)
 
 
   return (
-    <div className="bg-black py-8 px-6 rounded-2xl xl:rounded-r-none">
+    <div className="bg-black py-8 px-6 rounded-2xl">
       {
         user.payment?.membership?
         <>
