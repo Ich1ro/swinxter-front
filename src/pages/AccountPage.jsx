@@ -46,6 +46,7 @@ const AccountPage = () => {
 					>
 						<button
 							onClick={async () => {
+								toast.dismiss(t.id);
 								try {
 									await toast.promise(
 										api.delete(`delete_user/${user._id}`),
@@ -57,7 +58,6 @@ const AccountPage = () => {
 									);
 									dispatch({ type: LOGOUT });
 									navigate('/login');
-									toast.dismiss(t.id);
 								} catch (error) {
 									console.error('Error deleting user:', error);
 								}
