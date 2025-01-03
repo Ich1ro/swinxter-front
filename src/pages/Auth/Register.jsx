@@ -147,7 +147,7 @@ const Signup = () => {
 
 	return (
 		<div className='sign_up__block pt-65px' style={{ marginTop: '225px' }}>
-			<Toaster />
+			{/* <Toaster /> */}
 			<div className='container mx-auto relative z-1'>
 				<div className='sign-up__body grid grid-cols-1 md:grid-cols-2 rounded-3xl md:rounded-t-58 md:rounded-r-58 bg-black mt-[-50px] md:rounded-58 relative  border-b-2 border-t-[1px] border-orange'>
 					<div className='sign-up__form flex flex-col justify-center gap-30 py-6 px-6 lg:py-11 lg:px-14'>
