@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { IoCloseCircleSharp } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import api from '../utils/api';
 import getCoordinatesFromAWS from '../utils/client-location';
 import Loading from '../components/M_used/Loading';
@@ -37,6 +37,7 @@ const RegisterBusiness = () => {
 	const [selectlocation, setSelectedLocation] = useState([]);
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
+	const { state } = useLocation();
 	useEffect(() => {
 		setUserInfo(user);
 	}, []);
@@ -90,8 +91,11 @@ const RegisterBusiness = () => {
 	};
 
 	const handleInput = e => {
+		
 		e.preventDefault();
 		const { name, value } = e.target;
+		console.log(name);
+		console.log(value);
 		setForm({ ...form, [name]: value });
 	};
 
@@ -126,6 +130,7 @@ const RegisterBusiness = () => {
 		formData.append('geometry', JSON.stringify(geometry));
 
 		try {
+			const userEmail = state?.email;
 			setLoading(true);
 			const data = await api.post(`/create_club`, formData);
 			if (!data) {
@@ -149,7 +154,7 @@ const RegisterBusiness = () => {
 				});
 				setSelectedImage([]);
 				setSelectedVideo([]);
-				navigate(`/verify_email/${userId}`);
+				navigate(`/verify_email/${userId}`, { state: { email: userEmail }})
 			}
 		} catch (error) {
 			toast.error('Something went wrong!');
@@ -219,7 +224,7 @@ const RegisterBusiness = () => {
 								className='bg-[#202020] flex align-middle justify-between px-10 py-5'
 								style={{ paddingBottom: '0' }}
 							>
-								<span>Bsiness Name *</span>
+								<span>Business Name *</span>
 								<input
 									type='text'
 									className='w-80 border-2 border-orange rounded-[5px] h-[27px] text-black px-5 font-light'

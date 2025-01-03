@@ -418,9 +418,9 @@ const SinglePerson = () => {
 				error: 'Failed to update profile.',
 			});
 
-			const { data } = await updatePromise;
-
+			
 			if (isGenderSelected && isPhotoUploaded) {
+				const { data } = await updatePromise;
 				const userEmail = state?.email;
 				console.log(userEmail);
 				console.log(state);

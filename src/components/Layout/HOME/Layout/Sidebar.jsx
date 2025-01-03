@@ -324,57 +324,60 @@ const Sidebar = ({ unread, closeMenu }) => {
 							{userInfo?.username}
 						</h3>
 					</Link>
-					<p className='flex items-center justify-between gap-4 mb-3 hover:text-orange font-body_font text-lg'>
-						{userInfo?.location
-							? `${userInfo?.location?.city}, ${
-									userInfo?.location?.state && userInfo?.location?.state !== ''
-										? `${userInfo?.location?.state}`
-										: ''
-							  }${
-									userInfo?.location?.country &&
-									userInfo?.location?.country !== ''
-										? `, ${userInfo?.location?.country}`
-										: ''
-							  }`
-							: 'Country name'}
-						<Link className='cursor-pointer'>
-							<svg
-								xmlns='http://www.w3.org/2000/svg'
-								width='18'
-								height='19'
-								viewBox='0 0 18 19'
-								fill='none'
-							>
-								<mask
-									id='mask0_47_207'
-									style={{ maskType: 'luminance' }}
-									maskUnits='userSpaceOnUse'
-									x='0'
-									y='0'
+					{user?.role !== 'business' && (
+						<p className='flex items-center justify-between gap-4 mb-3 hover:text-orange font-body_font text-lg'>
+							{userInfo?.location
+								? `${userInfo?.location?.city}, ${
+										userInfo?.location?.state &&
+										userInfo?.location?.state !== ''
+											? `${userInfo?.location?.state}`
+											: ''
+								  }${
+										userInfo?.location?.country &&
+										userInfo?.location?.country !== ''
+											? `, ${userInfo?.location?.country}`
+											: ''
+								  }`
+								: 'Country name'}
+							<Link className='cursor-pointer'>
+								<svg
+									xmlns='http://www.w3.org/2000/svg'
 									width='18'
 									height='19'
+									viewBox='0 0 18 19'
+									fill='none'
 								>
-									<path d='M0 0.5H18V18.5H0V0.5Z' fill='white' />
-								</mask>
-								<g mask='url(#mask0_47_207)'>
-									<path
-										d='M9 17.9727C6.89063 14.8086 3.19922 10.5195 3.19922 6.82812C3.19922 3.62957 5.80145 1.02734 9 1.02734C12.1986 1.02734 14.8008 3.62957 14.8008 6.82812C14.8008 10.5195 11.1094 14.8086 9 17.9727Z'
-										stroke='white'
-										strokeMiterlimit='10'
-										strokeLinecap='round'
-										strokeLinejoin='round'
-									/>
-									<path
-										d='M9 9.46484C7.54618 9.46484 6.36328 8.28194 6.36328 6.82812C6.36328 5.37431 7.54618 4.19141 9 4.19141C10.4538 4.19141 11.6367 5.37431 11.6367 6.82812C11.6367 8.28194 10.4538 9.46484 9 9.46484Z'
-										stroke='white'
-										strokeMiterlimit='10'
-										strokeLinecap='round'
-										strokeLinejoin='round'
-									/>
-								</g>
-							</svg>
-						</Link>
-					</p>
+									<mask
+										id='mask0_47_207'
+										style={{ maskType: 'luminance' }}
+										maskUnits='userSpaceOnUse'
+										x='0'
+										y='0'
+										width='18'
+										height='19'
+									>
+										<path d='M0 0.5H18V18.5H0V0.5Z' fill='white' />
+									</mask>
+									<g mask='url(#mask0_47_207)'>
+										<path
+											d='M9 17.9727C6.89063 14.8086 3.19922 10.5195 3.19922 6.82812C3.19922 3.62957 5.80145 1.02734 9 1.02734C12.1986 1.02734 14.8008 3.62957 14.8008 6.82812C14.8008 10.5195 11.1094 14.8086 9 17.9727Z'
+											stroke='white'
+											strokeMiterlimit='10'
+											strokeLinecap='round'
+											strokeLinejoin='round'
+										/>
+										<path
+											d='M9 9.46484C7.54618 9.46484 6.36328 8.28194 6.36328 6.82812C6.36328 5.37431 7.54618 4.19141 9 4.19141C10.4538 4.19141 11.6367 5.37431 11.6367 6.82812C11.6367 8.28194 10.4538 9.46484 9 9.46484Z'
+											stroke='white'
+											strokeMiterlimit='10'
+											strokeLinecap='round'
+											strokeLinejoin='round'
+										/>
+									</g>
+								</svg>
+							</Link>
+						</p>
+					)}
 				</div>
 			</div>
 			<nav className='menu'>

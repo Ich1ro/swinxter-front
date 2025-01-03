@@ -37,6 +37,10 @@ const UserDetailPage = ({ socket }) => {
 		} else {
 			setSent(0);
 		}
+
+		if (currentUser.data._id !== data._id) {
+            await api.post(`/add_visitor/${id}`, { visitorId: currentUser.data._id });
+        }
 	};
 	console.log(currentUser);
 	useEffect(() => {

@@ -46,16 +46,21 @@ const AccountPage = () => {
 					>
 						<button
 							onClick={async () => {
-								await toast.promise(await api.delete(`delete_user/${user._id}`).then(() =>
-									dispatch({ type: LOGOUT }).then(() => {
-										navigate('/login');
-									})
-								), {
-									loading: 'User deletion...',
-									success: 'User successfully deleted!',
-									error: err => `${err}`,
-								});
-								toast.dismiss(t.id);
+								try {
+									await toast.promise(
+										api.delete(`delete_user/${user._id}`),
+										{
+											loading: 'User deletion...',
+											success: 'User successfully deleted!',
+											error: (err) => `${err}`,
+										}
+									);
+									dispatch({ type: LOGOUT });
+									navigate('/login');
+									toast.dismiss(t.id);
+								} catch (error) {
+									console.error('Error deleting user:', error);
+								}
 							}}
 							style={{
 								padding: '2px 8px',

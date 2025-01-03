@@ -521,14 +521,13 @@ const SignUpCouple = () => {
 				error: 'Failed to update profile.',
 			});
 
-			const { data } = await updatePromise;
-
 			// const { data } = await axios.put(
 			// 	`${BASE_URL}/api/update`,
 			// 	formData,
 			// 	config
 			// );
 			if (isGenderSelected && isGenderSelected_2) {
+				const { data } = await updatePromise;
 				if (data) {
 					navigate(`/verify_email/${userId}`, { state: state?.email });
 					resetForms();
@@ -544,7 +543,6 @@ const SignUpCouple = () => {
 			console.error(error);
 			toast.error('An unexpected error occurred.');
 		}
-	
 	};
 
 	const resetForms = () => {

@@ -12,11 +12,11 @@ const VisitedUser = () => {
 	const [userInfo, setUserInfo] = useState(user || null);
 
 	const getVisitedUsers = async () => {
-		console.log(userInfo.visited);
+		console.log(userInfo?.viewedMe);
 		if (userInfo) {
 			const { data } = await api.post(
 				`/visited-users`,
-				{ visitedUserIds: userInfo.visited },
+				{ visitedUserIds: userInfo?.viewedMe },
 				{ withCredentials: true }
 			);
 			setUsers(data);
@@ -24,7 +24,7 @@ const VisitedUser = () => {
 	};
 
 	useEffect(() => {
-		if (userInfo && userInfo.visited) {
+		if (userInfo && userInfo?.viewedMe) {
 			getVisitedUsers();
 		}
 	}, []);
@@ -33,7 +33,7 @@ const VisitedUser = () => {
 
 	return (
 		<div className='home_page bg-black py-8 px-6 rounded-2xl'>
-			{user.payment?.membership ? (
+			{user?.payment?.membership ? (
 				<div className='mb-20'>
 					<div className='flex justify-between flex-wrap gap-5 items-center mb-5 sm:mb-8'>
 						<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
@@ -49,8 +49,8 @@ const VisitedUser = () => {
                 <EventCard key={i} event={el} />
                 </div>
               ))} */}
-						{users ? (
-							users.map((user, i) => (
+						{users && Array.isArray(users) ? (
+							users?.map((user, i) => (
 								<div className='h-full bg-light-grey rounded-2xl'>
 									<UserCard key={i} userInfo={user} />
 								</div>

@@ -21,6 +21,24 @@ html {
 	text-align: justify;
 }
 
+@media (max-height: 800px) {
+	.gap_lists {
+		height: 300px;
+	}
+}
+
+@media (max-height: 715px) {
+	.gap_lists {
+		height: 250px;
+	}
+}
+
+@media (max-height: 615px) {
+	.gap_lists {
+		height: 150px;
+	}
+}
+
 .menu {
 	list-style: none;
 	padding: 0;

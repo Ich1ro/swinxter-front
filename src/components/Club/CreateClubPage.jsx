@@ -91,7 +91,11 @@ const CreateClubPage = () => {
 	}, [club]);
 
 	const handleChange = e => {
+
 		const { name, value } = e.target;
+		console.log(name);
+		console.log(value);
+		
 		setClub({ ...club, [name]: value });
 	};
 
@@ -223,7 +227,7 @@ const CreateClubPage = () => {
 						>
 							<div className='flex flex-wrap rounded-md input_field_2'>
 								<label
-									htmlFor='club_name'
+									htmlFor='business_name'
 									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
                                           lg:text-start'
 								>
@@ -231,8 +235,8 @@ const CreateClubPage = () => {
 								</label>
 								<input
 									type='text'
-									id='club_name'
-									name='club_name'
+									id='business_name'
+									name='business_name'
 									value={club.business_name}
 									onChange={handleChange}
 									autoComplete='off'
