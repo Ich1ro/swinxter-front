@@ -130,10 +130,10 @@ useEffect(() => {
         <Route path="signup" element={<Layout><Signup /> </Layout>} />
         <Route path="login" element={<Layout><Login/></Layout>} />
         <Route path="forgot" element={<Layout><ForgotPassword /></Layout>} />
-        <Route path="/single/:userId" element={<SinglePerson/>} />
-        <Route path="/couple/:userId" element={<SignUpCouple/>} />
-        <Route path="/business/:userId" element={<RegisterBusiness/>} />
-        <Route path="/verify_email/:userId" element={<Layout><VerifyEmail/></Layout>} />
+        <Route path="/single/:userId/:email" element={<SinglePerson/>} />
+        <Route path="/couple/:userId/:email" element={<SignUpCouple/>} />
+        <Route path="/business/:userId/:email" element={<RegisterBusiness/>} />
+        <Route path="/verify_email/:userId/:email" element={<Layout><VerifyEmail/></Layout>} />
         <Route path="/verified/:id" element={<Layout><EmailVerified/></Layout>} />
         <Route path="/forgot" element={<Layout><ForgotPassword/></Layout>} />
     

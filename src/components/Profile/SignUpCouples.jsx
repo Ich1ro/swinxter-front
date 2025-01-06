@@ -13,7 +13,7 @@ const SignUpCouple = () => {
 	const [image, setImage] = useState();
 	const [terms, setTerms] = useState(false);
 	const [popup, setPopup] = useState(false);
-	const { userId } = useParams();
+	const { userId, email } = useParams();
 	const { state } = useLocation();
 	const [isActive, setIsActive] = useState(false);
 	const [isActive2, setIsActive2] = useState(false);
@@ -529,7 +529,7 @@ const SignUpCouple = () => {
 			if (isGenderSelected && isGenderSelected_2) {
 				const { data } = await updatePromise;
 				if (data) {
-					navigate(`/verify_email/${userId}`, { state: state?.email });
+					navigate(`/verify_email/${userId}/${email}`, { state: email });
 					resetForms();
 				} else {
 					toast.error('Cannot update profile');

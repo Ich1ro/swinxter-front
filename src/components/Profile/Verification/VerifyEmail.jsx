@@ -6,7 +6,7 @@ import { useLocation, useParams } from 'react-router-dom';
 
 const VerifyEmail = () => {
 	const { state } = useLocation();
-	const { userId } = useParams();
+	const { userId, email } = useParams();
 	const navigate = useNavigate()
 	const [isVerify, setIsVerify] = useState(false)
 
@@ -42,7 +42,7 @@ const VerifyEmail = () => {
 				<div className='container mx-auto pb-20 text-center'>
 					<h3 className='text-40px'>Verify Email</h3>
 					<p className='text-lg'>
-						We've sent an email to {state.email} to verify your email address and
+						We've sent an email to {email} to verify your email address and
 						activate your account. The link in the email will expire in 24 hrs
 					</p>
 				</div>

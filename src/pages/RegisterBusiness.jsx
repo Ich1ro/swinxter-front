@@ -32,7 +32,7 @@ const RegisterBusiness = () => {
 	const [coverImage, setCoverImage] = useState(null);
 	const [formErrors, setformErrors] = useState({});
 	const navigate = useNavigate();
-	const { userId } = useParams();
+	const { userId, email } = useParams();
 	const [areaname, setAreaName] = useState([]);
 	const [selectlocation, setSelectedLocation] = useState([]);
 	const { user } = useSelector(state => state.auth);
@@ -154,7 +154,7 @@ const RegisterBusiness = () => {
 				});
 				setSelectedImage([]);
 				setSelectedVideo([]);
-				navigate(`/verify_email/${userId}`, { state: { email: userEmail }})
+				navigate(`/verify_email/${userId}/${email}`, { state: { email: email }})
 			}
 		} catch (error) {
 			toast.error('Something went wrong!');

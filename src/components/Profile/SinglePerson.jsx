@@ -57,7 +57,7 @@ const SinglePerson = () => {
 		city: '',
 		country: '',
 	});
-	const { userId } = useParams();
+	const { userId, email } = useParams();
 	const { state } = useLocation();
 
 	const navigate = useNavigate();
@@ -406,27 +406,26 @@ const SinglePerson = () => {
 				withCredentials: true,
 			};
 
-			const updatePromise = axios.put(
-				`${BASE_URL}/api/update`,
-				formData,
-				config
-			);
-
-			toast.promise(updatePromise, {
-				loading: 'Updating profile...',
-				success: 'Profile updated successfully!',
-				error: 'Failed to update profile.',
-			});
-
 			
 			if (isGenderSelected && isPhotoUploaded) {
+				const updatePromise = axios.put(
+					`${BASE_URL}/api/update`,
+					formData,
+					config
+				);
+				toast.promise(updatePromise, {
+					loading: 'Updating profile...',
+					success: 'Profile updated successfully!',
+					error: 'Failed to update profile.',
+				});
 				const { data } = await updatePromise;
-				const userEmail = state?.email;
-				console.log(userEmail);
-				console.log(state);
+				// const userEmail = state?.email;
+				console.log(isGenderSelected);
+				console.log(isPhotoUploaded);
+				
 
 				if (data) {
-					navigate(`/verify_email/${userId}`, { state: { email: userEmail } });
+					navigate(`/verify_email/${userId}/${email}`, { state: { email: email } });
 				} else {
 					toast.error('Cannot Update');
 				}

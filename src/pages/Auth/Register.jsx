@@ -94,13 +94,13 @@ const Signup = () => {
 						});
 	
 						if (data.profile_type === 'single') {
-							navigate(`/single/${data?._id}`, { state: { email: data?.email } });
+							navigate(`/single/${data?._id}/${data?.email}`, { state: { email: data?.email } });
 						}
 						if (data.profile_type === 'couple') {
-							navigate(`/couple/${data?._id}`, { state: { email: data?.email } });
+							navigate(`/couple/${data?._id}/${data?.email}`, { state: { email: data?.email } });
 						}
 						if (data.profile_type === 'business') {
-							navigate(`/business/${data?._id}`, { state: { email: data?.email } });
+							navigate(`/business/${data?._id}/${data?.email}`, { state: { email: data?.email } });
 						}
 					}
 				})(),

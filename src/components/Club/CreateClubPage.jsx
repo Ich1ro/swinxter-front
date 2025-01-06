@@ -198,7 +198,7 @@ const CreateClubPage = () => {
 				});
 				setSelectedImage([]);
 				setSelectedVideo([]);
-				navigate('/club-page', { state: { email: data.email } });
+				navigate(`/club-page`, { state: { email: data.email } });
 			}
 		} catch (error) {
 			toast.error('Something went wrong!');
