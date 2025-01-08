@@ -4,11 +4,11 @@ import { BsChevronRight } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { getPreciseDistance } from 'geolib';
 import { Context } from '../../Context/context';
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 
 const ClubCard = ({ clubs }) => {
 	const { savedCred } = useContext(Context);
-  const { user } = useSelector(state => state.auth);
+	const { user } = useSelector(state => state.auth);
 	const navigate = useNavigate();
 	const handleClick = id => {
 		navigate(`/club-detail/${id}`);
@@ -30,7 +30,7 @@ const ClubCard = ({ clubs }) => {
 		);
 		const factor = 0.621371;
 		const result = ((pdis / 1000) * factor).toFixed(0);
-    
+
 		return `${isNaN(result) ? '' : result + 'miles'}`;
 	};
 
@@ -41,7 +41,6 @@ const ClubCard = ({ clubs }) => {
 					src={clubs.mainImage}
 					alt='event-img'
 					className='w-full object-cover aspect-11/10 rounded-t-2xl'
-          
 					onClick={() => handleClick(clubs._id)}
 				/>
 				<div className='bg-light-grey p-4 pb-0 rounded-b-2xl grid content-between gap-1'>
@@ -59,8 +58,10 @@ const ClubCard = ({ clubs }) => {
 								</span>
 							</p>
 							<div className='flex flex-wrap justify-between gap-y-2 text-sm -mx-2'>
-								<p className='flex w-[50%] items-start gap-1 font-light text-sm font-body_font px-2 truncate' style={{WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', display: '-webkit-box'}}>
-									<span className='w-40px' style={{marginRight: '10px'}}>
+								<div
+									className='px-1 flex w-[50%] items-start gap-1 font-light text-sm font-body_font'
+								>
+									<span className='w-40px' style={{ marginRight: '5px' }}>
 										<svg
 											xmlns='http://www.w3.org/2000/svg'
 											width='15'
@@ -97,9 +98,11 @@ const ClubCard = ({ clubs }) => {
 											</g>
 										</svg>
 									</span>
-									{`${clubs.location.city}, ${clubs.location.state}, ${clubs.location.country}, ${clubs.location.address}`}
-								</p>
-								<p className='w-[35%] px-2'>
+									<p style={{ textOverflow: 'ellipsis', height: '21px', maxWidth: '170px', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+										{`${clubs.location.city}, ${clubs.location.state}, ${clubs.location.country}, ${clubs.location.address}`}
+									</p>
+								</div>
+								<p className='px-2'>
 									{calculatePreciseDistance(
 										clubs?.geometry?.coordinates[0],
 										user?.geometry?.coordinates[0],

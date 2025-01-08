@@ -39,8 +39,8 @@ const UserDetailPage = ({ socket }) => {
 		}
 
 		if (currentUser.data._id !== data._id) {
-            await api.post(`/add_visitor/${id}`, { visitorId: currentUser.data._id });
-        }
+			await api.post(`/add_visitor/${id}`, { visitorId: currentUser.data._id });
+		}
 	};
 	console.log(currentUser);
 	useEffect(() => {
@@ -113,44 +113,44 @@ const UserDetailPage = ({ socket }) => {
 
 	const handleSendRequest = () => {
 		const promise = new Promise(async (resolve, reject) => {
-		  try {
-			setLoading(1);
-			
-			await api.put(`/send_request/${user?._id}/${userInfo?._id}`);
-			
-			socket.emit('sendNotification', {
-			  senderName: user.username,
-			  senderId: user._id,
-			  recieverId: userInfo._id,
-			  recieverName: userInfo.username,
-			  message: `${user.username} sent you a friend request`,
-			  type: 'friendRequest',
-			});
-			
-			const res = await api.post('/notifications', {
-			  senderId: user._id,
-			  recieverId: userInfo._id,
-			  senderName: user.username,
-			  recieverName: userInfo.username,
-			  type: 'friendRequest',
-			  message: `${user.username} sent you a friend request`,
-			});
-			
-			setLoading(0);
-			setSent(1);
-			resolve(res);
-		  } catch (error) {
-			setLoading(0);
-			reject(error);
-		  }
+			try {
+				setLoading(1);
+
+				await api.put(`/send_request/${user?._id}/${userInfo?._id}`);
+
+				socket.emit('sendNotification', {
+					senderName: user.username,
+					senderId: user._id,
+					recieverId: userInfo._id,
+					recieverName: userInfo.username,
+					message: `${user.username} sent you a friend request`,
+					type: 'friendRequest',
+				});
+
+				const res = await api.post('/notifications', {
+					senderId: user._id,
+					recieverId: userInfo._id,
+					senderName: user.username,
+					recieverName: userInfo.username,
+					type: 'friendRequest',
+					message: `${user.username} sent you a friend request`,
+				});
+
+				setLoading(0);
+				setSent(1);
+				resolve(res);
+			} catch (error) {
+				setLoading(0);
+				reject(error);
+			}
 		});
-	  
+
 		toast.promise(promise, {
-		  loading: 'Sending friend request...',
-		  success: 'Friend request sent successfully!',
-		  error: 'Error when sending a request!'
+			loading: 'Sending friend request...',
+			success: 'Friend request sent successfully!',
+			error: 'Error when sending a request!',
 		});
-	  };
+	};
 
 	const handleCancelRequest = async () => {
 		try {
@@ -238,7 +238,7 @@ const UserDetailPage = ({ socket }) => {
 		if (pass === userInfo.privatePassword) {
 			setIsPasswordCorrect(true);
 		} else {
-			toast.error("Incorrect password");
+			toast.error('Incorrect password');
 		}
 	};
 
@@ -843,7 +843,8 @@ const UserDetailPage = ({ socket }) => {
 																			src={item.image}
 																			alt=''
 																			srcset=''
-																			style={{}}
+																			className='media-image'
+																			style={{ maxHeight: '200px' }}
 																		/>
 																	</div>
 																	<p>{item.description}</p>
@@ -883,16 +884,25 @@ const UserDetailPage = ({ socket }) => {
 																		key={item._id}
 																		className='p-5 bg-light-grey rounded-2xl text-center'
 																	>
-																		<img
-																			src={item.image}
-																			alt=''
-																			srcset=''
+																		<div
 																			style={{
+																				display: 'flex',
+																				alignItems: 'center',
+																				justifyContent: 'center',
 																				width: '250px',
 																				height: '200px',
+																				background: '#383b45',
 																				marginBottom: '12px',
 																			}}
-																		/>
+																		>
+																			<img
+																				src={item.image}
+																				alt=''
+																				className='media-image'
+																				srcset=''
+																				style={{ maxHeight: '200px' }}
+																			/>
+																		</div>
 																		<p>{item.description}</p>
 																	</div>
 																);

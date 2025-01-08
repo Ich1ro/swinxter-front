@@ -26,7 +26,7 @@ const Myevents = () => {
 		// );
 		// const newestPostFirst = verifiedEvents.reverse();
 		console.log(data);
-		
+
 		setEvent(data.data);
 	};
 	useEffect(() => {
@@ -36,6 +36,10 @@ const Myevents = () => {
 	const lastPostIndex = currentPage * recordsPerPage;
 	const firstPostIndex = lastPostIndex - recordsPerPage;
 	const currentPost = event.slice(firstPostIndex, lastPostIndex);
+
+	useEffect(() => {
+		console.log(currentPost);
+	}, [currentPost]);
 
 	return (
 		<div className='bg-black pt-0 sm:pt-8 py-8 px-6 rounded-2xl min-h-full'>
@@ -70,12 +74,16 @@ const Myevents = () => {
 							<EventCard key={i} event={el} />
 						))}
 					</div>
-					<Pagination
-						totalPosts={event.length}
-						postsPerPage={recordsPerPage}
-						setCurrentPage={setCurrentPage}
-						currentPage={currentPage}
-					/>
+					{currentPost && currentPost?.length !== 0 ? (
+						<Pagination
+							totalPosts={event.length}
+							postsPerPage={recordsPerPage}
+							setCurrentPage={setCurrentPage}
+							currentPage={currentPage}
+						/>
+					) : (
+						<p className='w-full text-center p-8 text-lg'>You don't have events</p>
+					)}
 				</>
 			) : (
 				<div

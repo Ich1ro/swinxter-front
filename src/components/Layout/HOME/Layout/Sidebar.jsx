@@ -20,6 +20,8 @@ const Submenu = ({ items, isOpen }) => (
 
 const MenuItem = ({
 	title,
+	openMenuItem,
+	setOpenMenuItem,
 	submenus,
 	path,
 	activeMenuItem,
@@ -38,10 +40,18 @@ const MenuItem = ({
 			setActiveMenuItem(title);
 			return;
 		}
-	}, [currentPath]);
+	}, [currentPath, path]);
+
+	useEffect(() => {
+		if (openMenuItem !== title && openMenuItem !== 'Media') {
+			setShowSubmenu(false);
+		}
+	}, [openMenuItem]);
 
 	const toggleSubmenu = () => {
 		if (submenus.length !== 0) {
+			console.log(title);
+			setOpenMenuItem(title);
 			setShowSubmenu(!showSubmenu);
 		}
 
@@ -85,6 +95,8 @@ const MenuItem = ({
 							submenus.map((submenu, index) => (
 								<MenuItem
 									key={index}
+									setOpenMenuItem={setOpenMenuItem}
+									openMenuItem={openMenuItem}
 									setActiveMenuItem={setActiveMenuItem}
 									activeMenuItem={activeMenuItem}
 									title={submenu.title}
@@ -120,6 +132,8 @@ const Sidebar = ({ unread, closeMenu }) => {
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
 	console.log(user);
+
+	const [openMenuItem, setOpenMenuItem] = useState(null);
 
 	useEffect(() => {
 		setUserInfo(user);
@@ -188,12 +202,13 @@ const Sidebar = ({ unread, closeMenu }) => {
 					},
 			  ]
 			: []),
+
 		{
-			title: 'Actions',
+			title: 'Parties & Events ',
 			submenus: [
-				{ title: 'Events', submenus: [], path: '/event-page' },
-				{ title: 'My Events', submenus: [], path: '/my-event' },
-				{ title: 'Businesses', submenus: [], path: '/club-page' },
+				{ title: 'Parties & Events', submenus: [], path: '/event-page' },
+				{ title: 'Add my Event', submenus: [], path: '/my-event' },
+				// { title: 'Businesses', submenus: [], path: '/club-page' },
 				// {
 				//   title: "Live Action",
 				//   submenus: [
@@ -203,6 +218,24 @@ const Sidebar = ({ unread, closeMenu }) => {
 				// },
 			],
 		},
+
+		{ title: 'Businesses', submenus: [], path: '/club-page' },
+
+		// {
+		// 	title: 'Parties & Events',
+		// 	submenus: [
+		// 		{ title: 'Events', submenus: [], path: '/event-page' },
+		// 		{ title: 'My Events', submenus: [], path: '/my-event' },
+		// 		{ title: 'Businesses', submenus: [], path: '/club-page' },
+		// 		// {
+		// 		//   title: "Live Action",
+		// 		//   submenus: [
+		// 		//     { title: "Member Webcam", submenus: [] },
+		// 		//     { title: "Model Webcam", submenus: [] },
+		// 		//   ],
+		// 		// },
+		// 	],
+		// },
 		{
 			title: 'FAQ',
 			submenus: [{ title: 'Know Your Kinky FAQ!', submenus: [], path: '/faq' }],
@@ -258,14 +291,15 @@ const Sidebar = ({ unread, closeMenu }) => {
 				//   submenus: [{ title: "Top up points", submenus: [] }],
 				// },
 				...(user?.role !== 'business'
-					? [
-							{ title: 'About', submenus: [], path: '/about' },
-							{ title: 'Blocked', submenus: [], path: '/blocked_users' },
-					  ]
+					? [{ title: 'Blocked', submenus: [], path: '/blocked_users' }]
 					: []),
 			],
 		},
 	];
+
+	useEffect(() => {
+		console.log(openMenuItem);
+	}, [openMenuItem]);
 
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
 	const navigate = useNavigate();
@@ -382,21 +416,27 @@ const Sidebar = ({ unread, closeMenu }) => {
 			</div>
 			<nav className='menu'>
 				<ul className='gap_lists'>
-					{menuItems.map((menuItem, index) => (
-						<MenuItem
-							key={index}
-							setActiveMenuItem={setActiveMenuItem}
-							activeMenuItem={activeMenuItem}
-							title={menuItem.title}
-							path={menuItem.path}
-							submenus={menuItem.submenus}
-							externalPath={
-								menuItem.externalPath ? menuItem.externalPath : null
-							}
-							unread={unread}
-							closeMenu={closeMenu} // Pass closeMenu correctly here
-						/>
-					))}
+					{menuItems.map((menuItem, index) => {
+						console.log(menuItem);
+
+						return (
+							<MenuItem
+								key={index}
+								setOpenMenuItem={setOpenMenuItem}
+								openMenuItem={openMenuItem}
+								setActiveMenuItem={setActiveMenuItem}
+								activeMenuItem={activeMenuItem}
+								title={menuItem.title}
+								path={menuItem.path}
+								submenus={menuItem.submenus}
+								externalPath={
+									menuItem.externalPath ? menuItem.externalPath : null
+								}
+								unread={unread}
+								closeMenu={closeMenu} // Pass closeMenu correctly here
+							/>
+						);
+					})}
 					<li>
 						<button
 							className='menu-item primary_btn logout_btn !p-3 !flex !justify-start !text-sm sm:!text-base w-full'

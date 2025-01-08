@@ -6,9 +6,11 @@ import { toast } from 'react-hot-toast';
 import { loadUser } from '../../../redux/actions/auth';
 import api from '../../../utils/api';
 import getCoordinatesFromAWS from '../../../utils/client-location';
+import { useNavigate } from 'react-router-dom'
 
 const EditUserDetailsPage = () => {
 	const [image, setImage] = useState();
+	const navigate = useNavigate()
 	const [countries, setCountries] = useState([]);
 	const [newData] = useState([]);
 	const [ctmSelect, setCtmSelect] = useState(false);
@@ -323,7 +325,9 @@ const EditUserDetailsPage = () => {
 			if (data) {
 				setUserInfo(data);
 				setPrivatePassword('');
-				dispatch(loadUser());
+				dispatch(loadUser()).then(() => {
+					navigate('/home');
+				});
 			}
 		} catch (error) {
 			console.error(error);

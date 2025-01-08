@@ -902,6 +902,7 @@ const CoupleDetailPage = ({
 																	<img
 																		src={item.image}
 																		alt=''
+																		className='media-image'
 																		srcset=''
 																		style={{ maxHeight: '200px' }}
 																	/>

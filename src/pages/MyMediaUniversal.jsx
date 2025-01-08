@@ -133,12 +133,8 @@ const MyMediaUniversal = () => {
 														src={item?.image || item}
 														alt=''
 														srcset=''
-														style={
-															{
-																// width: '250px',
-																// height: '200px',
-															}
-														}
+														className='main-image'
+														style={{ maxHeight: '200px' }}
 													/>
 												) : (
 													<video

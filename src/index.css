@@ -77,3 +77,12 @@ svg {
 .main-image:hover {
 	transform: scale(1.2, 1.2);
 }
+
+.media-image {
+	transform: scale(1, 1);
+	transition: 1s;
+}
+
+.media-image:hover {
+	transform: scale(1.75, 1.75);
+}
