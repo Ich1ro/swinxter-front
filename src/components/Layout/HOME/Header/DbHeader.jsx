@@ -24,9 +24,6 @@ const DbHeader = ({ socket }) => {
 	const [notificationCount, setNotificationCount] = useState(null);
 	const navigate = useNavigate();
 
-	let dbNotificationCount =
-		user?.notifications?.length - user?.lastNotificationCount;
-
 	useEffect(() => {
 		setUserInfo(user);
 	}, []);
@@ -77,7 +74,7 @@ const DbHeader = ({ socket }) => {
 		function handleClickOutside(event) {
 			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
 				setIsOpen(false);
-				setNotificationCount(0);
+				// setNotificationCount(0);
 			}
 		}
 
@@ -94,12 +91,20 @@ const DbHeader = ({ socket }) => {
 	}, [socket]);
 
 	useEffect(() => {
-		setNotificationCount(realtimeNotification.length);
+		console.log(realtimeNotification);
+
+		// if (realtimeNotification && realtimeNotification?.length > 0) {
+		// 	getDbNotifcations();
+		// }
 	}, [realtimeNotification]);
 
 	useEffect(() => {
-		console.log('notificationCount', notificationCount);
-	}, [notificationCount]);
+		if (notifications) {
+			setNotificationCount(
+				notifications?.filter(notification => !notification?.read)?.length
+			);
+		}
+	}, [notifications]);
 
 	const toggleDropdown = () => {
 		setIsOpen(!isOpen);
@@ -107,7 +112,9 @@ const DbHeader = ({ socket }) => {
 
 	return (
 		<header className='py-8 bg-black-20 sticky top-0 z-[99] xl:static xl:bg-transparent xl:py-0 mb-4'>
-			<div className='flex justify-between xl:justify-center items-center xl:items-start px-5'>
+			<div className='flex justify-between xl:justify-center items-center xl:items-start px-5' style={{
+							alignItems: 'center',
+						}}>
 				<div className='w-1/5 pr-5 flex justify-end'>
 					<Link
 						to={user ? '/home' : '/'}
@@ -116,7 +123,8 @@ const DbHeader = ({ socket }) => {
 						<img
 							src='/landingPage/images/SwinxterLogo-bg.svg'
 							alt='Logo'
-							className='cursor-pointer max-w-100px block'
+							className='cursor-pointer block'
+							style={{maxWidth: '70px'}}
 							height={'auto'}
 						/>
 					</Link>
@@ -132,7 +140,12 @@ const DbHeader = ({ socket }) => {
 						menuOpen ? 'mobile_db_header_open' : ''
 					}`}
 				>
-					<div className='flex-wrap grid xl:flex content-start xl:items-start mobile_db_header_inner relative'>
+					<div
+						className='flex-wrap grid xl:flex content-start xl:items-start mobile_db_header_inner relative'
+						style={{
+							alignItems: 'center',
+						}}
+					>
 						<span
 							className='text-xl text-white absolute top-3 right-5 flex z-9 xl:hidden cursor-pointer'
 							onClick={() => setMenuOpen(false)}
@@ -150,7 +163,7 @@ const DbHeader = ({ socket }) => {
 							/>
 						</Link>
 						<div className='xl:w-4/5'>
-							<form onSubmit={handleSubmit}>
+							{/* <form onSubmit={handleSubmit}>
 								<div className='relative text-white '>
 									<span className='absolute top-1/2 left-5 transform -translate-y-1/2 text-2xl flex items-center'>
 										<IoSearchOutline />
@@ -162,9 +175,9 @@ const DbHeader = ({ socket }) => {
 										value={searchquery}
 									/>
 								</div>
-							</form>
+							</form> */}
 							<div className='db_header_nav w-full px-[50px]'>
-								<ul className='xl:flex items-center justify-between mt-8 grid gap-y-2'>
+								<ul className='xl:flex items-center justify-between grid gap-y-2'>
 									<li
 										className={`${
 											pathname === '/home'
@@ -196,7 +209,7 @@ const DbHeader = ({ socket }) => {
 							</div>
 						</div>
 						<div
-							className='xl:w-1/5 flex justify-end items-center xl:pl-5 flex-wrap order-first xl:order-2 mt-8 xl:mt-0 xl:mb-0 mb-5'
+							className='xl:w-1/5 flex justify-end items-center xl:pl-5 flex-wrap order-first xl:order-2 xl:mt-0 xl:mb-0 mb-5'
 							style={{ position: 'relative' }}
 						>
 							{/* <div className="cursor-pointer w-10 flex justify-center">
