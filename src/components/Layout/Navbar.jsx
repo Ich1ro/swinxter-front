@@ -64,7 +64,7 @@ const Navbar = ({ Lplayout, isBack }) => {
 								</span>
 							</div>
 							<ul className='max-w-full block lg:flex justify-end items-center'>
-								{(pathname === '/faq' || pathname === '/live-chat' || pathname === '/edit-detail' || pathname === '/user-detail' || pathname === '/about') && (
+								{(pathname === '/faq' || pathname === '/live-chat' || pathname === '/edit-detail' || pathname === '/user-detail' || pathname === '/about' || pathname === '/editcouple-detail') && (
 									<li
 										className={`${
 											pathname === '/'

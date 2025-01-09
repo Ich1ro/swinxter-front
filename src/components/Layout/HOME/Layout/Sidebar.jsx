@@ -335,7 +335,7 @@ const Sidebar = ({ unread, closeMenu }) => {
 							src={
 								userInfo?.image ? userInfo?.image : 'images/couple-avatar.jpg'
 							}
-							className='main-image'
+							className='hidden aspect-square object-cover xl:block main-image'
 						/>
 					) : (
 						<img

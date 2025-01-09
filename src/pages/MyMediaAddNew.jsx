@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { IoCloseCircleSharp } from 'react-icons/io5';
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { loadUser } from '../redux/actions/auth'
-import { toast } from 'react-hot-toast'
+import { loadUser } from '../redux/actions/auth';
 
 const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 	const [image, setImage] = useState();
@@ -15,7 +15,7 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 	const [desc, setDesc] = useState('');
 	const { userId } = useParams();
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
-	const dispatch = useDispatch()
+	const dispatch = useDispatch();
 
 	const handleimage = async e => {
 		const file = e.target.files[0];
@@ -31,24 +31,24 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 
 	const handleSave = async () => {
 		setIsSaving(true);
-	
+
 		const config = {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 			},
 		};
-	
+
 		const formData = new FormData();
 		formData.append('description', desc);
 		formData.append('isPublic', isPublic);
-		
+
 		if (privatePassword) {
 			formData.append('privatePassword', privatePassword);
 		}
-	
+
 		let uploadPromise;
 		let uploadUrl;
-	
+
 		if (type === 'photos') {
 			formData.append('image', imageData);
 			uploadUrl = `${BASE_URL}/api/upload_media/${user._id}`;
@@ -56,21 +56,21 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 			formData.append('video', imageData);
 			uploadUrl = `${BASE_URL}/api/upload_video/${user._id}`;
 		}
-	
+
 		const uploadMediaPromise = axios.put(uploadUrl, formData, config);
-	
-		toast.promise(
-			uploadMediaPromise,
-			{
-				loading: 'Uploading...',
-				success: type === 'photos' ? 'Image saved successfully!' : 'Video saved successfully!',
-				error: type === 'photos' ? 'Image save error!' : 'Video save error!',
-			}
-		);
-	
+
+		toast.promise(uploadMediaPromise, {
+			loading: 'Uploading...',
+			success:
+				type === 'photos'
+					? 'Image saved successfully!'
+					: 'Video saved successfully!',
+			error: type === 'photos' ? 'Image save error!' : 'Video save error!',
+		});
+
 		try {
 			const { data } = await uploadMediaPromise;
-	
+
 			if (data) {
 				setUserInfo(data);
 				dispatch(loadUser());
@@ -83,7 +83,6 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 			setIsSaving(false);
 		}
 	};
-	
 
 	useEffect(() => {
 		console.log(user);
@@ -105,16 +104,28 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 			</h1>
 			<div>
 				<label htmlFor='add_photos'>
-					<input
-						id='add_photos'
-						type='file'
-						className='hidden'
-						name='image'
-						onChange={handleimage}
-					/>
+					{type === 'photos' ? (
+						<input
+							id='add_photos'
+							type='file'
+							className='hidden'
+							name='image'
+							accept='.jpg, .jpeg, .png'
+							onChange={handleimage}
+						/>
+					) : (
+						<input
+							id='add_photos'
+							type='file'
+							className='hidden'
+							name='image'
+							accept='video/*'
+							onChange={handleimage}
+						/>
+					)}
 					{
 						<span
-							className='primary_btn gradient  px-8 bg-gradient-to-r from-[#F79220]
+							className='primary_btn gradient  px-8 bg-gradient-to-r from-[#D4AF37]
  to-[#F94A2B] rounded-lg py-2'
 						>
 							{type === 'photos' ? 'Add Photo *' : 'Add Video *'}
@@ -186,7 +197,7 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 				</label>
 			</div>
 
-			{(!isPublic && (user.privatePassword === '' || !user.privatePassword)) && (
+			{!isPublic && (user.privatePassword === '' || !user.privatePassword) && (
 				<>
 					<h2 style={{ fontSize: '20px', marginBottom: '25px' }}>
 						Create password for private images*
