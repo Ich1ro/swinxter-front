@@ -142,7 +142,7 @@ console.log(filterKeywords)
                 </span>
                 Situationship Plan
               </span>
-              <span className="inline-flex rounded-md items-center gap-1 p-2 px-6 bg-red-color text-sm 2xl:text-xl font-semibold cursor-pointer">
+              {/* <span className="inline-flex rounded-md items-center gap-1 p-2 px-6 bg-red-color text-sm 2xl:text-xl font-semibold cursor-pointer">
                 <span className="flex items-center">
                   <img
                     src="images/map-icon.png"
@@ -151,7 +151,7 @@ console.log(filterKeywords)
                   />
                 </span>{" "}
                 Map
-              </span>
+              </span> */}
               {isUserTravelPlan && (
                 <Link to="/my-travel" className="gradient inline-flex rounded-md items-center gap-1 p-2 px-6 bg-orange 2xl:text-xl text-sm font-semibold cursor-pointer">
                   My Situationship Plans
