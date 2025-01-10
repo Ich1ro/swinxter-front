@@ -111,7 +111,7 @@ const DbHeader = ({ socket }) => {
 	};
 
 	return (
-		<header className='py-8 bg-black-20 sticky top-0 z-[99] xl:static xl:bg-transparent xl:py-0 mb-4'>
+		<header className='py-8 bg-black-20 sticky top-0 xl:static xl:bg-transparent xl:py-0 mb-4'>
 			<div className='flex justify-between xl:justify-center items-center xl:items-start px-5' style={{
 							alignItems: 'center',
 						}}>
