@@ -125,7 +125,7 @@ const MyMediaAddNew = ({ user, type, setAddNew, setUserInfo }) => {
 					)}
 					{
 						<span
-							className='primary_btn gradient  px-8 bg-gradient-to-r from-[#D4AF37]
+							className='primary_btn gradient  px-8 bg-gradient-to-r from-[#F79220]
  to-[#F94A2B] rounded-lg py-2'
 						>
 							{type === 'photos' ? 'Add Photo *' : 'Add Video *'}

@@ -814,6 +814,14 @@ const CoupleDetailPage = ({
 								<div className='p-5 bg-black-20 rounded-2xl w-[100%] '>
 									<div className='flex justify-between gap-3 font-normal pb-3 mb-3 border-b border-orange'>
 										<p className='text-base sm:text-2xl'>Public Images</p>
+										{location.search.length > 0 ? null : (
+											<Link
+												to='/my-media/photos'
+												className='cursor-pointer text-xs sm:text-lg'
+											>
+												Edit
+											</Link>
+										)}
 									</div>
 									<div
 										style={{
@@ -960,6 +968,14 @@ const CoupleDetailPage = ({
 								<div className='p-5 bg-black-20 rounded-2xl w-[100%] '>
 									<div className='flex justify-between gap-3 font-normal pb-3 mb-3 border-b border-orange'>
 										<p className='text-base sm:text-2xl'>Public Videos</p>
+										{location.search.length > 0 ? null : (
+											<Link
+												to='/my-media/videos'
+												className='cursor-pointer text-xs sm:text-lg'
+											>
+												Edit
+											</Link>
+										)}
 									</div>
 									<div
 										style={{

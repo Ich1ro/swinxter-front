@@ -411,7 +411,7 @@ const UserDetailPage = ({ socket }) => {
 								style={{
 									width: '100%',
 									height: '2px',
-									backgroundColor: '#D4AF37',
+									backgroundColor: '#F79220',
 									marginTop: '16px',
 								}}
 							></div>
@@ -433,13 +433,13 @@ const UserDetailPage = ({ socket }) => {
 									style={
 										isProfile
 											? {
-													backgroundColor: '#D4AF37',
+													backgroundColor: '#F79220',
 													marginRight: '5px',
 											  }
 											: {
 													backgroundColor: 'rgb(32 32 32)',
 													color: 'white',
-													border: '1px solid #D4AF37',
+													border: '1px solid #F79220',
 													borderBottom: '0',
 													marginRight: '5px',
 											  }
@@ -456,11 +456,11 @@ const UserDetailPage = ({ socket }) => {
 									className='inline-block py-3 px-8 text-lg rounded-t-lg text-black min-w-[200px] text-center'
 									style={
 										!isProfile
-											? { backgroundColor: '#D4AF37' }
+											? { backgroundColor: '#F79220' }
 											: {
 													backgroundColor: 'rgb(32 32 32)',
 													color: 'white',
-													border: '1px solid #D4AF37',
+													border: '1px solid #F79220',
 													borderBottom: '0',
 											  }
 									}
@@ -474,7 +474,7 @@ const UserDetailPage = ({ socket }) => {
 								</button>
 							</div>
 							<div
-								style={{ backgroundColor: '#D4AF37' }}
+								style={{ backgroundColor: '#F79220' }}
 								className='rounded-lg py-10 px-3 lg:px-8 items-start'
 							>
 								{isProfile ? (
@@ -936,7 +936,7 @@ const UserDetailPage = ({ socket }) => {
 																width: '150px',
 																marginBottom: '20px',
 																background:
-																	'linear-gradient(46deg, #D4AF37 55.15%, #F94A2B 82%)',
+																	'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
 															}}
 															className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
 															type='submit'
@@ -1076,7 +1076,7 @@ const UserDetailPage = ({ socket }) => {
 																width: '150px',
 																marginBottom: '20px',
 																background:
-																	'linear-gradient(46deg, #D4AF37 55.15%, #F94A2B 82%)',
+																	'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
 															}}
 															className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
 															type='submit'

@@ -213,7 +213,7 @@ const LegalPage = () => {
 									style={{
 										padding: '8px 20px',
 										background:
-											'linear-gradient(46deg, #D4AF37 55.15%, #F94A2B 82%)',
+											'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
 										marginTop: '20px',
 										width: '413px',
 									}}
@@ -251,7 +251,7 @@ const LegalPage = () => {
 										<h4
 											style={{
 												fontWeight: '600',
-												color: '#D4AF37',
+												color: '#F79220',
 												marginBottom: '5px',
 											}}
 										>
@@ -322,7 +322,7 @@ const LegalPage = () => {
 								<h4
 									style={{
 										fontWeight: '600',
-										color: '#D4AF37',
+										color: '#F79220',
 										marginBottom: '5px',
 									}}
 								>
@@ -391,7 +391,7 @@ const LegalPage = () => {
 										<h4
 											style={{
 												fontWeight: '600',
-												color: '#D4AF37',
+												color: '#F79220',
 												marginBottom: '5px',
 											}}
 										>
@@ -443,7 +443,7 @@ const LegalPage = () => {
 								<h4
 									style={{
 										fontWeight: '600',
-										color: '#D4AF37',
+										color: '#F79220',
 										marginBottom: '5px',
 									}}
 								>
@@ -484,7 +484,7 @@ const LegalPage = () => {
 								<h4
 									style={{
 										fontWeight: '600',
-										color: '#D4AF37',
+										color: '#F79220',
 										marginBottom: '5px',
 										marginTop: '10px',
 									}}
@@ -501,7 +501,7 @@ const LegalPage = () => {
 								<h4
 									style={{
 										fontWeight: '600',
-										color: '#D4AF37',
+										color: '#F79220',
 										marginBottom: '5px',
 										marginTop: '10px',
 									}}
