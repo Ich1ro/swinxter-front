@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { calculateAge } from '../utils/CalculateAge';
-import CoupleDetailPage from './CoupleDetailPage';
+import { toast } from 'react-hot-toast';
+import { AiFillLike } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-import api from '../utils/api';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCustomChatContext } from '../Context/ChatContext';
 import Loading from '../components/M_used/Loading';
-import { AiFillLike } from 'react-icons/ai';
-import { toast } from 'react-hot-toast';
 import { loadUser } from '../redux/actions/auth';
+import { calculateAge } from '../utils/CalculateAge';
+import api from '../utils/api';
+import CoupleDetailPage from './CoupleDetailPage';
 
 const UserDetailPage = ({ socket }) => {
 	const [age, setAge] = useState('');
@@ -411,7 +411,7 @@ const UserDetailPage = ({ socket }) => {
 								style={{
 									width: '100%',
 									height: '2px',
-									backgroundColor: '#f79220',
+									backgroundColor: '#D4AF37',
 									marginTop: '16px',
 								}}
 							></div>
@@ -433,13 +433,13 @@ const UserDetailPage = ({ socket }) => {
 									style={
 										isProfile
 											? {
-													backgroundColor: 'rgb(247 146 32)',
+													backgroundColor: '#D4AF37',
 													marginRight: '5px',
 											  }
 											: {
 													backgroundColor: 'rgb(32 32 32)',
 													color: 'white',
-													border: '1px solid rgb(247 146 32)',
+													border: '1px solid #D4AF37',
 													borderBottom: '0',
 													marginRight: '5px',
 											  }
@@ -456,11 +456,11 @@ const UserDetailPage = ({ socket }) => {
 									className='inline-block py-3 px-8 text-lg rounded-t-lg text-black min-w-[200px] text-center'
 									style={
 										!isProfile
-											? { backgroundColor: 'rgb(247 146 32)' }
+											? { backgroundColor: '#D4AF37' }
 											: {
 													backgroundColor: 'rgb(32 32 32)',
 													color: 'white',
-													border: '1px solid rgb(247 146 32)',
+													border: '1px solid #D4AF37',
 													borderBottom: '0',
 											  }
 									}
@@ -474,7 +474,7 @@ const UserDetailPage = ({ socket }) => {
 								</button>
 							</div>
 							<div
-								style={{ backgroundColor: 'rgb(247 146 32)' }}
+								style={{ backgroundColor: '#D4AF37' }}
 								className='rounded-lg py-10 px-3 lg:px-8 items-start'
 							>
 								{isProfile ? (
@@ -809,6 +809,14 @@ const UserDetailPage = ({ socket }) => {
 										<div className='p-5 bg-black-20 rounded-2xl w-[100%] '>
 											<div className='flex justify-between gap-3 font-normal pb-3 mb-3 border-b border-orange'>
 												<p className='text-base sm:text-2xl'>Public Images</p>
+												{location.search.length > 0 ? null : (
+													<Link
+														to='/my-media/photos'
+														className='cursor-pointer text-xs sm:text-lg'
+													>
+														Edit
+													</Link>
+												)}
 											</div>
 											<div
 												style={{
@@ -928,7 +936,7 @@ const UserDetailPage = ({ socket }) => {
 																width: '150px',
 																marginBottom: '20px',
 																background:
-																	'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
+																	'linear-gradient(46deg, #D4AF37 55.15%, #F94A2B 82%)',
 															}}
 															className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
 															type='submit'
@@ -956,6 +964,14 @@ const UserDetailPage = ({ socket }) => {
 										<div className='p-5 bg-black-20 rounded-2xl w-[100%] '>
 											<div className='flex justify-between gap-3 font-normal pb-3 mb-3 border-b border-orange'>
 												<p className='text-base sm:text-2xl'>Public Videos</p>
+												{location.search.length > 0 ? null : (
+													<Link
+														to='/my-media/videos'
+														className='cursor-pointer text-xs sm:text-lg'
+													>
+														Edit
+													</Link>
+												)}
 											</div>
 											<div
 												style={{
@@ -1060,7 +1076,7 @@ const UserDetailPage = ({ socket }) => {
 																width: '150px',
 																marginBottom: '20px',
 																background:
-																	'linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%)',
+																	'linear-gradient(46deg, #D4AF37 55.15%, #F94A2B 82%)',
 															}}
 															className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
 															type='submit'
