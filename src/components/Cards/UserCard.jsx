@@ -55,7 +55,7 @@ const UserAge = ({ userInfo }) => {
 			}
 
 			if (couple.person2.gender === 'male') {
-				styles.push({ color: '#3a97fe' })
+				styles.push({ color: '#3a97fe' });
 			} else if (couple.person2.gender === 'female') {
 				styles.push({ color: '#ff00ff' });
 			} else {
@@ -98,7 +98,7 @@ const UserAge = ({ userInfo }) => {
 							overflow: 'hidden',
 							textOverflow: 'ellipsis',
 							maxWidth: '70px',
-              marginBottom: '10px'
+							marginBottom: '10px',
 						}}
 					>
 						{calculateAge(couple.person1.DOB)}
@@ -162,7 +162,53 @@ const UserCard = ({ userInfo }) => {
 				<p>{userInfo.username}</p>
 				<UserAge userInfo={userInfo} />
 				{userInfo?.profile_type === 'couple' ? (
-					<img src='images/malefemale.png' alt='' srcset='' />
+					(() => {
+						if (
+							userInfo?.couple?.person1?.gender === 'male' &&
+							userInfo?.couple?.person2?.gender === 'male'
+						) {
+							return (
+								<img src='/images/men_men.png' alt='Male/Male Couple' />
+							);
+						} else if (
+							userInfo?.couple?.person1?.gender === 'female' &&
+							userInfo?.couple?.person2?.gender === 'female'
+						) {
+							return (
+								<img
+									src='/images/girl_girl.png'
+									alt='Female/Female Couple'
+								/>
+							);
+						} else if (
+							userInfo?.couple?.person1?.gender === 'male' &&
+							userInfo?.couple?.person2?.gender === 'female'
+						) {
+							return (
+								<img
+									src='/images/men_girl.png'
+									alt='Female/Female Couple'
+								/>
+							);
+						} else if (
+							userInfo?.couple?.person1?.gender === 'female' &&
+							userInfo?.couple?.person2?.gender === 'male'
+						) {
+							return (
+								<img
+									src='/images/girl_men.png'
+									alt='Female/Female Couple'
+								/>
+							);
+						} else {
+							return (
+								<img
+									src='/images/girl_men.png'
+									alt='Female/Female Couple'
+								/>
+							);
+						}
+					})()
 				) : (
 					<img
 						src={
@@ -173,15 +219,14 @@ const UserCard = ({ userInfo }) => {
 								: '/images/Trans.png'
 						}
 						alt=''
-						srcset=''
 					/>
 				)}
-				<p style={{ fontSize: '14px' }}>
+				{/* <p style={{ fontSize: '14px' }}>
 					In publishing and graphic design, Lorem ipsum is a placeholder text
 					commonly used to demonstrate the visual form of a document or a
 					typeface without relying on meaningful content. Lorem ipsum may be
 					used as a placeholder before final copy is available.
-				</p>
+				</p> */}
 			</div>
 		</div>
 	);

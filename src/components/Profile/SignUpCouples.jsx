@@ -723,7 +723,7 @@ const SignUpCouple = () => {
 									</h1>
 
 									<form>
-										<div className='grid grid-cols-3 mb-5'>
+										{/* <div className='grid grid-cols-3 mb-5'>
 											<span className='text-sm font-light '>
 												Select all that apply
 											</span>
@@ -733,7 +733,7 @@ const SignUpCouple = () => {
 											<span className='text-sm font-normal text-center'>
 												HOOKUPS / MEETUPS
 											</span>
-										</div>
+										</div> */}
 
 										<div className='grid grid-cols-3 mt-3'>
 											<span className='text-sm font-semi-bold'>
@@ -754,7 +754,7 @@ const SignUpCouple = () => {
 													className='check__box'
 												></label>
 											</div>
-											<div className='it_checkbox'>
+											{/* <div className='it_checkbox'>
 												<input
 													type='checkbox'
 													id='Hookups'
@@ -764,7 +764,7 @@ const SignUpCouple = () => {
 													checked={interest.male_female.includes('hookup')}
 												/>
 												<label htmlFor='Hookups' className='check__box'></label>
-											</div>
+											</div> */}
 										</div>
 										<div className='grid grid-cols-3 mt-3'>
 											<span className='text-sm font-semi-bold'>
@@ -785,7 +785,7 @@ const SignUpCouple = () => {
 													className='check__box'
 												></label>
 											</div>
-											<div className='it_checkbox'>
+											{/* <div className='it_checkbox'>
 												<input
 													type='checkbox'
 													id='Hookups1'
@@ -798,7 +798,7 @@ const SignUpCouple = () => {
 													htmlFor='Hookups1'
 													className='check__box'
 												></label>
-											</div>
+											</div> */}
 										</div>
 										<div className='grid grid-cols-3 mt-3'>
 											<span className='text-sm font-semi-bold'>
@@ -818,7 +818,7 @@ const SignUpCouple = () => {
 													className='check__box'
 												></label>
 											</div>
-											<div className='it_checkbox'>
+											{/* <div className='it_checkbox'>
 												<input
 													type='checkbox'
 													id='Hookups2'
@@ -831,7 +831,7 @@ const SignUpCouple = () => {
 													htmlFor='Hookups2'
 													className='check__box'
 												></label>
-											</div>
+											</div> */}
 										</div>
 										<div className='grid grid-cols-3 mt-3'>
 											<span className='text-sm font-semi-bold'>Female</span>
@@ -849,7 +849,7 @@ const SignUpCouple = () => {
 													className='check__box'
 												></label>
 											</div>
-											<div className='it_checkbox'>
+											{/* <div className='it_checkbox'>
 												<input
 													type='checkbox'
 													id='Hookups3'
@@ -862,7 +862,7 @@ const SignUpCouple = () => {
 													htmlFor='Hookups3'
 													className='check__box'
 												></label>
-											</div>
+											</div> */}
 										</div>
 										<div className='grid grid-cols-3 mt-3'>
 											<span className='text-sm font-semi-bold'>Male</span>
@@ -880,7 +880,7 @@ const SignUpCouple = () => {
 													className='check__box'
 												></label>
 											</div>
-											<div className='it_checkbox'>
+											{/* <div className='it_checkbox'>
 												<input
 													type='checkbox'
 													id='Hookups4'
@@ -893,7 +893,7 @@ const SignUpCouple = () => {
 													htmlFor='Hookups4'
 													className='check__box'
 												></label>
-											</div>
+											</div> */}
 										</div>
 										<div className='grid grid-cols-3 mt-3 '>
 											<span className='text-sm font-semi-bold'>
@@ -913,7 +913,7 @@ const SignUpCouple = () => {
 													className='check__box'
 												></label>
 											</div>
-											<div className='it_checkbox'>
+											{/* <div className='it_checkbox'>
 												<input
 													type='checkbox'
 													id='Hookups5'
@@ -926,7 +926,7 @@ const SignUpCouple = () => {
 													htmlFor='Hookups5'
 													className='check__box'
 												></label>
-											</div>
+											</div> */}
 										</div>
 									</form>
 								</div>

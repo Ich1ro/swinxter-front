@@ -109,7 +109,9 @@ const Signup = () => {
 					success: '🦄 Account Created Successfully!',
 					error: err => {
 						setLoading(false)
-						return err.message || '🦄 Failed to Create User!'
+						console.log(err);
+						
+						return err.response.data || '🦄 Failed to Create User!'
 					},
 				}
 			);

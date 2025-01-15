@@ -189,7 +189,7 @@ const Login = () => {
 					success: '🦄 Login Successful',
 					error: err => {
 						setLoading(false)
-						return err.message || '🦄 Login Failed!'
+						return err.response.data || '🦄 Login Failed!'
 					},
 				}
 			);
