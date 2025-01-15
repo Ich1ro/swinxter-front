@@ -35,7 +35,7 @@ const BlockCard = ({data,forceRender}) => {
           />:(data?.gender==="male"?(<img src="/images/boy-avatar.jpg" alt="boy" />):data?.gender==="female"? (<img src="/images/girl-avatar.jpg" alt="girl"  />):(<img src="/images/trans avatar.png" alt="trans"  />))
         }
         </div>
-        <h1 style={{fontSize: "20px", fontWeight: "600", display: "flex", justifyContent: "center", marginTop: "50px"}}>{data.username}</h1>  
+        <h1 style={{fontSize: "20px", fontWeight: "600", display: "flex", justifyContent: "center"}}>{data.username}</h1>  
         <div className='friends_card_actionbox'>
         <div className="grid justify-stretch gap-2 mt-3 event_card_button_wrap items-start" style={{width: "200px", margin: "20px auto"}}>
                 <button

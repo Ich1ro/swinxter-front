@@ -269,7 +269,7 @@ const Login = () => {
 								<div className='flex flex-wrap rounded-md input_field'>
 									<label
 										htmlFor='identifier'
-										className='rounded-l-md sm:w-[100px] xl:w-[195px] mb-1 sm:mb-0 sm:h-[49px] flex items-center justify-center lg:justify-start ps-0 lg:ps-4 text-sm xl:text-lg text-white font-normal leading-5 xl:leading-29 text-center lg:text-start'
+										className='input-title rounded-l-md sm:w-[150px] xl:w-[195px] mb-1 sm:mb-0 sm:h-[49px] flex items-center justify-center lg:justify-start ps-0 lg:ps-4 text-sm xl:text-lg text-white font-normal leading-5 xl:leading-29 text-center lg:text-start'
 									>
 										Username/Email
 									</label>
@@ -280,7 +280,7 @@ const Login = () => {
 										type='text'
 										id='identifier'
 										autoComplete='off'
-										className='bg-black border rounded-md sm:border-none sm:border-l-2 border-orange focus:outline-none focus-visible:none w-full sm:w-[calc(100%-100px)] xl:w-[calc(100%-195px)] h-[49px] border-gradient3 text-gray font-normal xl:text-lg sm:rounded-none sm:rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+										className='bg-black border rounded-md sm:border-none sm:border-l-2 border-orange focus:outline-none focus-visible:none w-full sm:w-[calc(100%-150px)] xl:w-[calc(100%-195px)] h-[49px] border-gradient3 text-gray font-normal xl:text-lg sm:rounded-none sm:rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
 										placeholder='Username or Email'
 										required
 									/>
@@ -294,7 +294,7 @@ const Login = () => {
 							<div className='flex flex-wrap rounded-md input_field'>
 								<label
 									htmlFor='password'
-									className='rounded-l-md sm:w-[100px] xl:w-[195px] mb-1 sm:mb-0 sm:h-[49px] flex items-center justify-center lg:justify-start ps-0 lg:ps-4 text-sm xl:text-lg text-white font-normal leading-5 xl:leading-29 text-center lg:text-start'
+									className='rounded-l-md sm:w-[150px] xl:w-[195px] mb-1 sm:mb-0 sm:h-[49px] flex items-center justify-center lg:justify-start ps-0 lg:ps-4 text-sm xl:text-lg text-white font-normal leading-5 xl:leading-29 text-center lg:text-start'
 								>
 									Password
 								</label>
@@ -305,7 +305,7 @@ const Login = () => {
 									type='password'
 									id='password'
 									autoComplete='off'
-									className='bg-black border rounded-md sm:border-none sm:border-l-2 border-orange focus:outline-none focus-visible:none w-full sm:w-[calc(100%-100px)] xl:w-[calc(100%-195px)] h-[49px] border-gradient3 text-gray font-normal xl:text-lg sm:rounded-none sm:rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									className='bg-black border rounded-md sm:border-none sm:border-l-2 border-orange focus:outline-none focus-visible:none w-full sm:w-[calc(100%-150px)] xl:w-[calc(100%-195px)] h-[49px] border-gradient3 text-gray font-normal xl:text-lg sm:rounded-none sm:rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
 									placeholder='Password'
 									required
 								/>

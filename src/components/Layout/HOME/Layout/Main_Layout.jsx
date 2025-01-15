@@ -59,7 +59,7 @@ const Main_Layout = ({ socket }) => {
 							}`}
 							style={{ width: '100%' }}
 						>
-							<div className='sticky top-0 h-full z-[9]'>
+							<div className='sticky top-0 h-full z-[9] outlet'>
 								<Outlet />
 							</div>
 						</div>
@@ -74,7 +74,7 @@ const Main_Layout = ({ socket }) => {
 				</div>
 			</div>
 			<div>
-				<div className='audit-dating__block relative my-16'>
+				<div className='audit-dating__block my-16'>
 					<div className='flex flex-col md:flex-row justify-center items-center text-center gap-6 py-71px'>
 						<h2 className='text-white text-2xl sm:text-3xl xl:text-40px'>
 							You Only Live Once - Be a Swinxter

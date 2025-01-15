@@ -7,66 +7,74 @@ svg {
 }
 
 .footer {
-  color: white;
+	color: white;
 	background: rgb(32, 32, 32);
 	background: linear-gradient(
 		180deg,
 		rgba(32, 32, 32, 1) 30%,
 		rgba(0, 0, 0, 1) 100%
 	);
-  padding: 0 100px;
+	padding: 0 100px;
 }
 
 .blurred-edge {
-  filter: blur(0);
-  mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0));
+	filter: blur(0);
+	mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0));
 }
 
 .top-bg {
-  background-color: #f79220;
+	background-color: #f79220;
 }
 
 .main-block {
-  flex-direction: column;
+	flex-direction: column;
 }
 
 .blured-bottom {
-  filter: blur(0);
-  mask-image: linear-gradient(to bottom, rgba(32, 32, 32, 1) 70%, rgba(32, 32, 32, 0) 100%);
+	filter: blur(0);
+	mask-image: linear-gradient(
+		to bottom,
+		rgba(32, 32, 32, 1) 70%,
+		rgba(32, 32, 32, 0) 100%
+	);
 }
 
 .blured-top {
-  filter: blur(0);
-  mask-image: linear-gradient(to top, rgba(32, 32, 32, 1) 70%, rgba(32, 32, 32, 0) 100%);
+	filter: blur(0);
+	mask-image: linear-gradient(
+		to top,
+		rgba(32, 32, 32, 1) 70%,
+		rgba(32, 32, 32, 0) 100%
+	);
 }
 
 .dark-popup {
-  background-color: #1f1f1f !important; /* Dark background for popup */
-  color: #fff !important; /* White text for items */
+	background-color: #1f1f1f !important; /* Dark background for popup */
+	color: #fff !important; /* White text for items */
 }
 
 .rs-picker-default .rs-picker-toggle {
-  background-color: #1f1f1f !important; /* Dark background for input */
-  color: #fff !important; /* White text */
-  border: 1px solid #333 !important; /* Border to match dark theme */
+	background-color: #1f1f1f !important; /* Dark background for input */
+	color: #fff !important; /* White text */
+	border: 1px solid #333 !important; /* Border to match dark theme */
 }
 
 .rs-picker-toggle-placeholder {
-  color: #999 !important; /* Light gray color for placeholder */
+	color: #999 !important; /* Light gray color for placeholder */
 }
 
 .rs-picker-menu {
-  background-color: #1f1f1f !important; /* Dark background inside the menu */
-  color: #fff !important; /* White text for the menu */
+	background-color: #1f1f1f !important; /* Dark background inside the menu */
+	color: #fff !important; /* White text for the menu */
 }
 
 .rs-picker-menu-item {
-  background-color: #1f1f1f !important; /* Dark item background */
-  color: #fff !important; /* White text */
+	background-color: #1f1f1f !important; /* Dark item background */
+	color: #fff !important; /* White text */
 }
 
 .rs-picker-menu-item:hover {
-  background-color: #333 !important; /* Darker hover effect */
+	background-color: #333 !important; /* Darker hover effect */
 }
 
 .main-image {
@@ -85,4 +93,99 @@ svg {
 
 .media-image:hover {
 	transform: scale(1.75, 1.75);
+}
+
+.sidebar-profile-image {
+	width: 230px;
+	height: 230px;
+	display: block;
+}
+
+.logo-styles {
+	display: none;
+}
+
+.all-users-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+	gap: 20px;
+}
+
+.sidebar-users {
+	width: 75%;
+}
+
+.search-block {
+	width: 100%;
+	gap: 20px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.search-block-input {
+	width: 100%;
+}
+
+.search-block-button {
+	display: none;
+}
+
+.sidebar-filters {
+	min-width: 200px;
+	width: 20%;
+	height: calc(100vh - 30px);
+	position: sticky;
+	top: 15px;
+}
+
+.sidebar-filters-open {
+	position: absolute;
+	z-index: 100;
+	top: 100px;
+	/* width: 80%; */
+	background-color: #1f1f1f;
+	padding: 20px 30px;
+	left: 0;
+	right: 0;
+	margin: 0 20px;
+	border-radius: 12px;
+}
+
+@media (max-width: 490px) {
+	.footer {
+		padding: 0;
+	}
+}
+
+@media (max-width: 985px) {
+	.sidebar-filters {
+		display: none;
+	}
+
+	.sidebar-users {
+		width: 100%;
+	}
+
+	.search-block-input {
+		width: 80%;
+	}
+
+	.search-block-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 15%;
+		background-color: #2a2d37;
+		border-radius: 12px;
+	}
+}
+
+@media (max-width: 1279px) {
+	.outlet {
+		position: initial;
+	}
+}
+
+.react-datepicker__input-container {
+	position: inherit !important;
 }

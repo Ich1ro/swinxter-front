@@ -43,7 +43,7 @@ const VisitedUser = () => {
                 View More
               </Link> */}
 					</div>
-					<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-6'>
+					<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6'>
 						{/* {event.slice(0, 6).map((el, i) => (
                 <div className="h-full bg-light-grey rounded-2xl">
                 <EventCard key={i} event={el} />

@@ -14,7 +14,7 @@ const DbHeader = ({ socket }) => {
 	const dropdownRef = useRef(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
-	const [sidebar, setSidebar] = useState(false);
+	const [sidebar, setSidebar] = useState(true);
 	const location = useLocation();
 	const { pathname } = location;
 	const { user } = useSelector(state => state.auth);
@@ -112,9 +112,12 @@ const DbHeader = ({ socket }) => {
 
 	return (
 		<header className='py-8 bg-black-20 sticky top-0 xl:static xl:bg-transparent xl:py-0 mb-4'>
-			<div className='flex justify-between xl:justify-center items-center xl:items-start px-5' style={{
-							alignItems: 'center',
-						}}>
+			<div
+				className='flex justify-between xl:justify-center items-center xl:items-start px-5'
+				style={{
+					alignItems: 'center',
+				}}
+			>
 				<div className='w-1/5 pr-5 flex justify-end'>
 					<Link
 						to={user ? '/home' : '/'}
@@ -124,7 +127,7 @@ const DbHeader = ({ socket }) => {
 							src='/landingPage/images/SwinxterLogo-bg.svg'
 							alt='Logo'
 							className='cursor-pointer block'
-							style={{maxWidth: '70px'}}
+							style={{ maxWidth: '70px' }}
 							height={'auto'}
 						/>
 					</Link>
@@ -154,16 +157,18 @@ const DbHeader = ({ socket }) => {
 						</span>
 						<Link
 							to={user ? '/home' : '/'}
-							className='absolute top-[60px] left-5 w-full max-w-[100px] block xl:hidden'
+							className={menuOpen ? 'logo-styles' : 
+								'absolute top-[60px] left-5 w-full max-w-[100px] block xl:hidden'
+							}
 						>
 							<img
 								src='/landingPage/images/SwinxterLogo-bg.svg'
 								alt='Logo'
-								className='cursor-pointer max-w-100px block'
+								className={menuOpen ? '' :'cursor-pointer max-w-100px block'}
 							/>
 						</Link>
-						<div className='xl:w-4/5'>
-							{/* <form onSubmit={handleSubmit}>
+						{/* <div className='xl:w-4/5'>
+							<form onSubmit={handleSubmit}>
 								<div className='relative text-white '>
 									<span className='absolute top-1/2 left-5 transform -translate-y-1/2 text-2xl flex items-center'>
 										<IoSearchOutline />
@@ -175,7 +180,7 @@ const DbHeader = ({ socket }) => {
 										value={searchquery}
 									/>
 								</div>
-							</form> */}
+							</form>
 							<div className='db_header_nav w-full px-[50px]'>
 								<ul className='xl:flex items-center justify-between grid gap-y-2'>
 									<li
@@ -187,15 +192,15 @@ const DbHeader = ({ socket }) => {
 									>
 										<Link to='/home'>Home</Link>
 									</li>
-									{/* <li
-                    className={`${
-                      pathname === "/live-chat"
-                        ? "text-orange"
-                        : "text-white hover:text-orange"
-                    }`}
-                  >
-                    <Link to="/live-chat">Live Chat</Link>
-                  </li> */}
+									<li
+										className={`${
+											pathname === '/live-chat'
+												? 'text-orange'
+												: 'text-white hover:text-orange'
+										}`}
+									>
+										<Link to='/live-chat'>Live Chat</Link>
+									</li>
 									<li
 										className={`${
 											pathname === '/travel-page'
@@ -207,9 +212,9 @@ const DbHeader = ({ socket }) => {
 									</li>
 								</ul>
 							</div>
-						</div>
+						</div> */}
 						<div
-							className='xl:w-1/5 flex justify-end items-center xl:pl-5 flex-wrap order-first xl:order-2 xl:mt-0 xl:mb-0 mb-5'
+							className='flex justify-end items-center xl:pl-5 flex-wrap order-first xl:order-2 xl:mt-0 xl:mb-0 mb-5 w-full'
 							style={{ position: 'relative' }}
 						>
 							{/* <div className="cursor-pointer w-10 flex justify-center">

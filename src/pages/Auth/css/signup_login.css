@@ -35,4 +35,22 @@
     .navbar ul {
         @apply m-0 w-[95%] bg-white min-h-screen max-w-sm pt-7
     }
+    .sign-up__body {
+        display: flex;
+        flex-direction: column;
+    }
+    .sign-up__image-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    /* .input-title {
+        width: 250px !important;
+    } */
+    
+}
+@media ( max-width: 490px ){
+    
 }

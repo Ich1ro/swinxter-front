@@ -128,7 +128,6 @@ const UserCard = ({ userInfo }) => {
 	return (
 		<div
 			className='user_card'
-			style={{ marginRight: '20px' }}
 			onClick={() => {
 				navigate(`/user-detail?id=${userInfo._id}`);
 			}}

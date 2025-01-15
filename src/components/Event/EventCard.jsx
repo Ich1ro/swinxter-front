@@ -96,17 +96,17 @@ const EventCard = ({ event, loc }) => {
 							by {event?.userId?.username}
 						</span>
 					</p>
-					<div className='date_picker relative '>
+					<div className='date_picker '>
 						<img
 							src='images/calendar-icon.png'
 							alt='calendar-icon'
-							className='absolute top-1/2 left-0 transform -translate-y-1/2'
+							style={{marginRight: '10px'}}
 						/>
-
+						
 						<DatePicker
 							dateFormat='yyyy/MM/dd'
 							selected={new Date(event?.Startdate)}
-							className='font-body_font'
+							className='font-body_font date-picker'
 							disabled
 						/>
 					</div>

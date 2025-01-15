@@ -111,7 +111,7 @@ const ClubCard = ({ clubs }) => {
 									)}
 								</p>
 							</div>
-							<div className='my-2 w-full  bg-light-grey rounded-lg'>
+							<div className='my-2 w-full bg-light-grey rounded-lg'>
 								<p className='text-base font-body_font'>
 									{clubs?.introduction?.length <= 50 ? (
 										<span>{clubs?.introduction}</span>

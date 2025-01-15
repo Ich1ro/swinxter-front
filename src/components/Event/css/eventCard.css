@@ -1,7 +1,7 @@
 
 .date_picker input {
     background:none;
-    text-align: right;
+    /* text-align: right; */
     font-size: 14px;
     font-weight: 300;
     max-width: 100px;

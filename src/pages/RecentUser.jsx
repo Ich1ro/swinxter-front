@@ -32,7 +32,7 @@ const RecentUser = () => {
             New Members
           </h3>
         </div>
-        <div style={{display: "flex", flexWrap: "wrap"}}>
+        <div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6'>
            {
             users.map((user,i) => (
                 <UserCard key={i} userInfo={user}/>

@@ -13,7 +13,7 @@ const NearUsers = () => {
 		let userArr = [];
 		const { data } = await api.get(`/near-users/${user.geometry.coordinates[0]}/${user.geometry.coordinates[1]}`);
 		console.log(data);
-		data.map(d => {
+		data?.map(d => {
 			if (d._id !== userInfo._id && !userInfo.blockedby.includes(d._id)) {
 				userArr.push(d);
 			}
@@ -41,8 +41,8 @@ const NearUsers = () => {
 								Near Members
 							</h3>
 						</div>
-						<div style={{ display: 'flex', flexWrap: 'wrap' }}>
-							{users.map((user, i) => (
+						<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6'>
+							{users.length > 0 && users.map((user, i) => (
 								<UserCard key={i} userInfo={user} />
 							))}
 						</div>

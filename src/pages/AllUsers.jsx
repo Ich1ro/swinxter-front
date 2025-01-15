@@ -31,6 +31,7 @@ const AllUsers = () => {
 	const [ageTo, setAgeTo] = useState(null);
 	const [selectedTreePicker, setSelectedTreePicker] = useState([]);
 	const [radius, setRadius] = useState(null);
+	const [filtersOpen, setFiltersOpen] = useState(false);
 
 	const checkTreePickerRef = useRef(null);
 	const sidebarRef = useRef(null);
@@ -133,6 +134,10 @@ const AllUsers = () => {
 		});
 		setUsers(userArr);
 	};
+
+	const handleFilters = () => {
+		setFiltersOpen(!filtersOpen)
+	}
 
 	const data = [
 		{
@@ -1009,13 +1014,7 @@ const AllUsers = () => {
 			}}
 		>
 			<div
-				className='text-white bg-light-grey px-5 py-5 rounded-2xl'
-				style={{
-					width: '20%',
-					height: 'calc(100vh - 30px)',
-					position: 'sticky',
-					top: '15px',
-				}}
+				className={filtersOpen ? 'sidebar-filters-open' : 'text-white bg-light-grey px-5 py-5 rounded-2xl sidebar-filters'}
 			>
 				<p
 					style={{ fontWeight: '500', fontSize: '18px', marginBottom: '20px' }}
@@ -1304,7 +1303,7 @@ const AllUsers = () => {
 					/>
 				</div>
 				{radius && (
-					<div style={{display: 'flex', justifyContent: 'space-between'}}>
+					<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 						<button
 							onClick={handleSearchNear}
 							style={{
@@ -1361,20 +1360,21 @@ const AllUsers = () => {
 					popupClassName='dark-popup'
 				/> */}
 			</div>
-			<div className='mb-20' style={{ width: '75%' }}>
+			<div className='mb-20 sidebar-users'>
 				<div className='mb-5 sm:mb-8'>
-					<div className='relative text-white'>
+					<div className='relative text-white search-block'>
 						<span className='absolute top-1/2 left-5 transform -translate-y-1/2 text-2xl flex items-center'>
 							<IoSearchOutline />
 						</span>
 						<input
 							type='search'
-							className='outline-none border-none w-full px-5 pl-16 h-14 bg-light-grey rounded-xl'
+							className='outline-none border-none w-full px-5 pl-16 h-14 bg-light-grey rounded-xl search-block-input'
 							onChange={handleSearch}
 						/>
+						<button className='search-block-button' onClick={handleFilters}>Filters</button>
 					</div>
 				</div>
-				<div style={{ display: 'flex', flexWrap: 'wrap' }}>
+				<div className='all-users-grid'>
 					{filteredUsers.map((user, i) => (
 						<UserCard key={i} userInfo={user} />
 					))}

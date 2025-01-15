@@ -328,7 +328,7 @@ const Sidebar = ({ unread, closeMenu }) => {
 			<div>
 				<Link
 					to={'/user-detail'}
-					style={{ width: '230px', height: '230px', display: 'block' }}
+					className='sidebar-profile-image'
 				>
 					{userInfo?.profile_type === 'couple' ? (
 						<img
