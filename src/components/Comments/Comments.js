@@ -45,7 +45,7 @@ const Comments = ({productId, userInfo, product, setCommentRender,setEditComment
 
   return (
     <div className="my-5 w-full p-5 bg-light-grey rounded-lg">
-          <p className="text-lg text-orange font-semibold mb-3">Comments</p>
+          <p className="text-lg text-orange font-semibold mb-3">Reviews</p>
           {/* <div className="rating_container">
               {
                 [...Array(5)].map((star,index) => {
