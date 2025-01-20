@@ -43,7 +43,7 @@ const MenuItem = ({
 	}, [currentPath, path]);
 
 	useEffect(() => {
-		if (openMenuItem !== title && openMenuItem !== 'Media') {
+		if (openMenuItem !== title && openMenuItem !== 'Media' && openMenuItem !== 'My likes') {
 			setShowSubmenu(false);
 		}
 	}, [openMenuItem]);
@@ -70,7 +70,7 @@ const MenuItem = ({
 	return (
 		<li
 			className={
-				title === 'My Photos' || title === 'My Videos'
+				title === 'My Photos' || title === 'My Videos' || title === 'Sent ' || title === 'Received '
 					? 'menu-item-media'
 					: `menu-item`
 			}
@@ -157,6 +157,21 @@ const Sidebar = ({ unread, closeMenu }) => {
 							{ title: 'My Friends', submenus: [], path: '/my_friends' },
 							{ title: 'Sent', submenus: [], path: '/sent_request' },
 							{ title: 'Received', submenus: [], path: '/recieved_request' },
+							{
+								title: 'My likes',
+								submenus: [
+									{
+										title: 'Sent ',
+										submenus: [],
+										path: '/my-sent-likes',
+									},
+									{
+										title: 'Received ',
+										submenus: [],
+										path: '/my-recieved-likes',
+									},
+								],
+							},
 						],
 					},
 			  ]
@@ -326,10 +341,7 @@ const Sidebar = ({ unread, closeMenu }) => {
 			}}
 		>
 			<div>
-				<Link
-					to={'/user-detail'}
-					className='sidebar-profile-image'
-				>
+				<Link to={'/user-detail'} className='sidebar-profile-image'>
 					{userInfo?.profile_type === 'couple' ? (
 						<img
 							src={

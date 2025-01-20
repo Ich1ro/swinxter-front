@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from "react-redux";
 import api from '../utils/api'
 import UserCard from '../components/Cards/UserCard';
+import { calculateDistance } from '../utils/utils'
 
 
 const RecentUser = () => {
@@ -17,7 +18,29 @@ const RecentUser = () => {
                 userArr.push(d);
             }
         })
-        setUsers(userArr);
+        const sortedUsers = data.users
+              .filter(
+                d => d._id !== userInfo._id && !userInfo.blockedby.includes(d._id)
+              )
+              .map(user => {
+                if (user.geometry?.coordinates && userInfo.geometry?.coordinates) {
+                  const distance = calculateDistance(
+                    userInfo.geometry.coordinates[0],
+                    user.geometry.coordinates[0],
+                    userInfo.geometry.coordinates[1],
+                    user.geometry.coordinates[1]
+                  );
+                  return { ...user, distance };
+                }
+                return { ...user, distance: null };
+              })
+              .sort((a, b) => {
+                if (a.distance === null) return 1;
+                if (b.distance === null) return -1;
+                return a.distance - b.distance;
+              });
+            console.log(sortedUsers);
+        setUsers(sortedUsers);
     }
 
     useEffect(() => {

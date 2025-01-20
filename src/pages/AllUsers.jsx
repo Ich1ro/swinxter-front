@@ -6,6 +6,7 @@ import { IoSearchOutline } from 'react-icons/io5';
 import { CheckTreePicker } from 'rsuite';
 import './styles/rsuite.css';
 import 'rsuite/CheckTreePicker/styles/index.css';
+import { calculateDistance } from '../utils/utils';
 
 const AllUsers = () => {
 	const [users, setUsers] = useState([]);
@@ -96,7 +97,31 @@ const AllUsers = () => {
 				userArr.push(d);
 			}
 		});
-		setUsers(userArr);
+
+		const sortedUsers = data
+			.filter(
+				d => d._id !== userInfo._id && !userInfo.blockedby.includes(d._id)
+			)
+			.map(user => {
+				if (user.geometry?.coordinates && userInfo.geometry?.coordinates) {
+					const distance = calculateDistance(
+						userInfo.geometry.coordinates[0],
+						user.geometry.coordinates[0],
+						userInfo.geometry.coordinates[1],
+						user.geometry.coordinates[1]
+					);
+					return { ...user, distance };
+				}
+				return { ...user, distance: null };
+			})
+			.sort((a, b) => {
+				if (a.distance === null) return 1;
+				if (b.distance === null) return -1;
+				return a.distance - b.distance;
+			});
+		console.log(sortedUsers);
+
+		setUsers(sortedUsers);
 	};
 
 	function calculateAge(DOB) {
@@ -136,8 +161,8 @@ const AllUsers = () => {
 	};
 
 	const handleFilters = () => {
-		setFiltersOpen(!filtersOpen)
-	}
+		setFiltersOpen(!filtersOpen);
+	};
 
 	const data = [
 		{
@@ -1014,7 +1039,11 @@ const AllUsers = () => {
 			}}
 		>
 			<div
-				className={filtersOpen ? 'sidebar-filters-open' : 'text-white bg-light-grey px-5 py-5 rounded-2xl sidebar-filters'}
+				className={
+					filtersOpen
+						? 'sidebar-filters-open'
+						: 'text-white bg-light-grey px-5 py-5 rounded-2xl sidebar-filters'
+				}
 			>
 				<p
 					style={{ fontWeight: '500', fontSize: '18px', marginBottom: '20px' }}
@@ -1371,7 +1400,9 @@ const AllUsers = () => {
 							className='outline-none border-none w-full px-5 pl-16 h-14 bg-light-grey rounded-xl search-block-input'
 							onChange={handleSearch}
 						/>
-						<button className='search-block-button' onClick={handleFilters}>Filters</button>
+						<button className='search-block-button' onClick={handleFilters}>
+							Filters
+						</button>
 					</div>
 				</div>
 				<div className='all-users-grid'>

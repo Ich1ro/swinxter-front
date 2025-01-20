@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import api from '../utils/api';
 import UserCard from '../components/Cards/UserCard';
 import { Link } from 'react-router-dom';
+import { calculateDistance } from '../utils/utils'
 
 const NearUsers = () => {
 	const [users, setUsers] = useState([]);
@@ -11,14 +12,37 @@ const NearUsers = () => {
 
 	const getRecentUsers = async () => {
 		let userArr = [];
-		const { data } = await api.get(`/near-users/${user.geometry.coordinates[0]}/${user.geometry.coordinates[1]}`);
+		const { data } = await api.get(`/near-users/${user.geometry.coordinates[0]}/${user.geometry.coordinates[1]}/35000000`);
 		console.log(data);
 		data?.map(d => {
 			if (d._id !== userInfo._id && !userInfo.blockedby.includes(d._id)) {
 				userArr.push(d);
 			}
 		});
-		setUsers(userArr);
+
+		const sortedUsers = data
+					.filter(
+						d => d._id !== userInfo._id && !userInfo.blockedby.includes(d._id)
+					)
+					.map(user => {
+						if (user.geometry?.coordinates && userInfo.geometry?.coordinates) {
+							const distance = calculateDistance(
+								userInfo.geometry.coordinates[0],
+								user.geometry.coordinates[0],
+								userInfo.geometry.coordinates[1],
+								user.geometry.coordinates[1]
+							);
+							return { ...user, distance };
+						}
+						return { ...user, distance: null };
+					})
+					.sort((a, b) => {
+						if (a.distance === null) return 1;
+						if (b.distance === null) return -1;
+						return a.distance - b.distance;
+					});
+				console.log(sortedUsers);
+		setUsers(sortedUsers);
 	};
 
 	useEffect(() => {

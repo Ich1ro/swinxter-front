@@ -67,6 +67,8 @@ import SuccessPaymentPage from './pages/SuccessPaymentPage'
 import AdvancedSearch from './pages/AdvancedSearch'
 import MyMediaUniversal from './pages/MyMediaUniversal'
 import RegisterBusiness from './pages/RegisterBusiness'
+import MySentLikes from './pages/MySentLikes'
+import MyRecievedLikes from './pages/MyRecievedLikes'
 
 function App() {
 const {isAuthenticated} = useSelector((state)=>state.auth);
@@ -166,6 +168,8 @@ useEffect(() => {
         <Route path="/onlineusers" element={<ProtectedRoute><OnlineUers/></ProtectedRoute>} />
         <Route path="/my_friends" element={<ProtectedRoute><ChatContextProvider><MyFriends/></ChatContextProvider></ProtectedRoute>} />
         <Route path="/sent_request" element={<ProtectedRoute><SentRequest/></ProtectedRoute>} />
+        <Route path="/my-sent-likes" element={<ProtectedRoute><MySentLikes/></ProtectedRoute>} />
+        <Route path="/my-recieved-likes" element={<ProtectedRoute><MyRecievedLikes/></ProtectedRoute>} />
         <Route path="/recieved_request" element={<ProtectedRoute><RecievedRequests/></ProtectedRoute>} />
         <Route path="/membership" element={<ProtectedRoute><Membership/></ProtectedRoute>} />
         <Route path="/messaging" element={<ProtectedRoute><Messaging /></ProtectedRoute>} />

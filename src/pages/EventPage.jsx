@@ -128,6 +128,8 @@ const EventPage = () => {
 				});
 				// Update the filtered events
 				filtered = filteredByDistance;
+				console.log(filteredByDistance);
+				
 			}
 			setEvent(filtered);
 		}

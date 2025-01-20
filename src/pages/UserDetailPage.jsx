@@ -153,14 +153,25 @@ const UserDetailPage = ({ socket }) => {
 	};
 
 	const handleCancelRequest = async () => {
-		try {
-			setLoading(1);
-			await api.put(`/cancel_request/${user?._id}/${userInfo?._id}`);
-			setLoading(0);
-			setSent(0);
-		} catch (e) {
-			console.log(e);
-		}
+		const promise = new Promise(async (resolve, reject) => {
+			try {
+				setLoading(1);
+	
+				await api.put(`/cancel_request/${user?._id}/${userInfo?._id}`);
+				setLoading(0);
+				setSent(0);
+				resolve();
+			} catch (error) {
+				setLoading(0);
+				reject(error);
+			}
+		});
+	
+		toast.promise(promise, {
+			loading: 'Canceling friend request...',
+			success: 'Friend request canceled successfully!',
+			error: 'Error when canceling the request!',
+		});
 	};
 
 	const blockUser = async () => {
@@ -308,7 +319,7 @@ const UserDetailPage = ({ socket }) => {
 													}}
 													onClick={handleCancelRequest}
 												>
-													{loading ? <Loading /> : 'Cancel Request'}
+													{'Cancel Request'}
 												</button>
 											) : (
 												<button

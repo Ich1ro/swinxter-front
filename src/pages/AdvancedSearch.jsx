@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import UserCard from '../components/Cards/UserCard';
 // import api from '../utils/api'
 import { useSelector } from 'react-redux';
+import { calculateDistance } from '../utils/utils';
 
 const AdvancedSearch = () => {
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -150,7 +151,29 @@ const AdvancedSearch = () => {
 					userArr.push(d);
 				}
 			});
-			setData(userArr);
+
+			const sortedUsers = response.data
+				.filter(d => d._id !== user._id && !user.blockedby.includes(d._id))
+				.map(userObj => {
+					if (userObj.geometry?.coordinates && user.geometry?.coordinates) {
+						const distance = calculateDistance(
+							user.geometry.coordinates[0],
+							userObj.geometry.coordinates[0],
+							user.geometry.coordinates[1],
+							userObj.geometry.coordinates[1]
+						);
+						return { ...userObj, distance };
+					}
+					return { ...userObj, distance: null };
+				})
+				.sort((a, b) => {
+					if (a.distance === null) return 1;
+					if (b.distance === null) return -1;
+					return a.distance - b.distance;
+				});
+			console.log(sortedUsers);
+
+			setData(sortedUsers);
 			console.log('result:', response.data);
 		} catch (error) {
 			console.error('Error:', error);
@@ -582,6 +605,7 @@ const AdvancedSearch = () => {
 					type='submit'
 					style={{
 						marginTop: '20px',
+						marginBottom: '20px',
 						backgroundColor: 'rgb(42 45 55 / var(--tw-bg-opacity))',
 						padding: '10px',
 						borderRadius: '10px',
@@ -592,12 +616,13 @@ const AdvancedSearch = () => {
 			</form>
 			{data && (
 				<div
-					style={{
-						display: 'flex',
-						flexWrap: 'wrap',
-						marginTop: '20px',
-						justifyContent: 'center',
-					}}
+				className='all-users-grid'
+					// style={{
+					// 	display: 'flex',
+					// 	flexWrap: 'wrap',
+					// 	marginTop: '20px',
+					// 	justifyContent: 'center',
+					// }}
 				>
 					{data.map((user, i) => (
 						<UserCard key={i} userInfo={user} />
