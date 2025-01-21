@@ -25,10 +25,7 @@ const ClubPage = () => {
 
 	const handlereset = () => {
 		setFilter({
-			public: false,
-			private: false,
-			location: '',
-			distance: '',
+			businessTypes: [],
 		});
 		setFilterDropdown(false);
 		setClubs(club);
@@ -203,11 +200,11 @@ const ClubPage = () => {
 								))}
 							</div>
 							{clubs.length === 0 ? (
-								clubs.length === 0 && filter.businessTypes.length === 0 ? (
+								club.length === 0 ? (
 									<p>No businesses available.</p>
 								) : (
 									<p>
-										No businesses available.
+										No businesses match your selection. Please update the filter criteria.
 									</p>
 								)
 							) : (

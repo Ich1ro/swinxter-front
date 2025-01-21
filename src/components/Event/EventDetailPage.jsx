@@ -248,7 +248,7 @@ const EventDetailPage = () => {
 						<div className='flex flex-wrap gap-4 justify-end'>
 							<span
 								className='primary_btn cursor-pointer !text-sm !py-2'
-								onClick={() => navigate('/event-participants')}
+								onClick={() => navigate(`/event-participants/${eventid}`)}
 							>
 								Guest list
 							</span>

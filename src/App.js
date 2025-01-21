@@ -161,7 +161,7 @@ useEffect(() => {
         <Route path='/event-detail/:id' element={<ProtectedRoute><ChatContextProvider><EventDetailPage/></ChatContextProvider></ProtectedRoute>} />
         <Route path="/event-detail-media" element={<ProtectedRoute><EventDetailMedia /></ProtectedRoute>} />
         <Route path="/my-event" element={<ProtectedRoute><Myevents/></ProtectedRoute>} />
-        <Route path="/event-participants" element={<ProtectedRoute><EventParticipants /></ProtectedRoute>} />
+        <Route path="/event-participants/:id" element={<ProtectedRoute><EventParticipants /></ProtectedRoute>} />
         <Route path="/visited-users" element={<ProtectedRoute>< VisitedUsers/></ProtectedRoute>} />
         <Route path="/recentuser" element={<ProtectedRoute>< RecentUser/></ProtectedRoute>} />
         <Route path="/nearusers" element={<ProtectedRoute>< NearUsers/></ProtectedRoute>} />

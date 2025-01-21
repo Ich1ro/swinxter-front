@@ -6,14 +6,15 @@ import { toast } from 'react-hot-toast';
 import { loadUser } from '../../../redux/actions/auth';
 import api from '../../../utils/api';
 import getCoordinatesFromAWS from '../../../utils/client-location';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 const EditUserDetailsPage = () => {
 	const [image, setImage] = useState();
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	const [countries, setCountries] = useState([]);
 	const [newData] = useState([]);
 	const [ctmSelect, setCtmSelect] = useState(false);
+	const [ctmsSelect, setCtmsSelect] = useState(false);
 	const [userDetails, setUserDetails] = useState({
 		email: '',
 		username: '',
@@ -43,6 +44,13 @@ const EditUserDetailsPage = () => {
 		city: '',
 		state: '',
 		country: '',
+		interests: {
+			male_male: [],
+			female_female: [],
+			male_female: [],
+			male: [],
+			female: [],
+		},
 	});
 	const [privatePassword, setPrivatePassword] = useState('');
 	const [usertoken, setUsertoken] = useState('');
@@ -152,6 +160,18 @@ const EditUserDetailsPage = () => {
 	];
 	const Birthday = userInfo.DOB?.replace(/\//g, '-');
 
+	const handleInterests = key => {
+		setUserDetails(prevDetails => {
+			const updatedInterests = { ...prevDetails.interests };
+			if (updatedInterests[key]?.length > 0) {
+				updatedInterests[key] = [];
+			} else {
+				updatedInterests[key] = ['Yes'];
+			}
+			return { ...prevDetails, interests: updatedInterests };
+		});
+	};
+
 	useEffect(() => {
 		if (userInfo.image) {
 			setImage(userInfo?.image);
@@ -191,6 +211,7 @@ const EditUserDetailsPage = () => {
 				city: userInfo?.location?.city || '',
 				state: userInfo?.location?.state || '',
 				country: userInfo?.location?.country || '',
+				interests: userInfo?.interests || {},
 			});
 		}
 	}, []);
@@ -232,29 +253,26 @@ const EditUserDetailsPage = () => {
 					'Content-Type': 'multipart/form-data',
 				},
 			};
-	
+
 			const { data } = await api.put(
 				`/upload_image/${userInfo?._id}`,
 				formData,
 				config
 			);
-	
+
 			if (data) {
 				setUserInfo(data);
 				dispatch(loadUser());
 			}
 			return data;
 		})();
-	
-		toast.promise(
-			uploadPromise,
-			{
-				loading: 'Uploading image...',
-				success: 'Image uploaded successfully!',
-				error: 'Failed to upload image.',
-			}
-		);
-	
+
+		toast.promise(uploadPromise, {
+			loading: 'Uploading image...',
+			success: 'Image uploaded successfully!',
+			error: 'Failed to upload image.',
+		});
+
 		try {
 			await uploadPromise;
 		} catch (error) {
@@ -267,12 +285,12 @@ const EditUserDetailsPage = () => {
 		console.log(privatePassword);
 
 		const locationChanged =
-        userDetails?.city !== user?.location?.city ||
-        userDetails?.state !== user?.location?.state ||
-        userDetails?.country !== user?.location?.country ||
-        !user?.location?.city ||
-        !user?.location?.state ||
-        !user?.location?.country;
+			userDetails?.city !== user?.location?.city ||
+			userDetails?.state !== user?.location?.state ||
+			userDetails?.country !== user?.location?.country ||
+			!user?.location?.city ||
+			!user?.location?.state ||
+			!user?.location?.country;
 
 		const dataForUpdate = {
 			...userDetails,
@@ -281,25 +299,28 @@ const EditUserDetailsPage = () => {
 		if (privatePassword !== '') {
 			dataForUpdate.privatePassword = privatePassword;
 		}
-		
+
 		if (locationChanged) {
 			dataForUpdate.location = {
 				city: userDetails?.city || '',
 				state: userDetails?.state || '',
 				country: userDetails?.country || '',
 			};
-	
+
 			delete dataForUpdate.city;
 			delete dataForUpdate.state;
 			delete dataForUpdate.country;
-	
-			const coords = await getCoordinatesFromAWS(userDetails.state, userDetails.city);
+
+			const coords = await getCoordinatesFromAWS(
+				userDetails.state,
+				userDetails.city
+			);
 			dataForUpdate.geometry = {
 				type: 'Point',
 				coordinates: coords,
 			};
 		}
-	
+
 		const updatePromise = api.put(
 			`/update-user`,
 			{ userId: Id, ...dataForUpdate },
@@ -309,19 +330,16 @@ const EditUserDetailsPage = () => {
 				},
 			}
 		);
-	
-		toast.promise(
-			updatePromise,
-			{
-				loading: 'Saving profile changes...',
-				success: 'Profile edited successfully!',
-				error: 'Failed to edit profile.',
-			}
-		);
-	
+
+		toast.promise(updatePromise, {
+			loading: 'Saving profile changes...',
+			success: 'Profile edited successfully!',
+			error: 'Failed to edit profile.',
+		});
+
 		try {
 			const { data } = await updatePromise;
-	
+
 			if (data) {
 				setUserInfo(data);
 				setPrivatePassword('');
@@ -331,7 +349,7 @@ const EditUserDetailsPage = () => {
 			}
 		} catch (error) {
 			console.error(error);
-		}	
+		}
 		// navigate("/user-detail");
 	};
 
@@ -484,7 +502,7 @@ const EditUserDetailsPage = () => {
 										style={{ width: '50%' }}
 									>
 										<label
-											htmlFor='Country'
+											htmlFor='Password'
 											className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
 										>
 											Password
@@ -507,6 +525,79 @@ const EditUserDetailsPage = () => {
 					<p className='text-2xl font-medium flex justify-between mb-4 md:mb-6'>
 						Details
 					</p>
+					<div className='w-full flex justify-center'>
+						<div
+							className='flex flex-wrap justify-center rounded-md input_field mb-4 md:mb-6'
+							style={{ width: '50%' }}
+						>
+							<label
+								htmlFor='Interests'
+								className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+							>
+								Interests
+							</label>
+							<div
+								className='select_label bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+								name='interest'
+								style={{ height: '49px' }}
+								value={userDetails?.body_hair}
+								onChange={handleChange}
+								onClick={() => setCtmsSelect(!ctmsSelect)}
+							>
+								{Object.keys(userDetails?.interests || {}).filter(
+									key => userDetails?.interests[key]?.length > 0
+								).length === 0 ? (
+									<>Please select</>
+								) : (
+									<p>
+									
+										{Object.keys(userDetails?.interests || {})
+											.filter(key => userDetails?.interests[key]?.length > 0)
+											.map(
+												key =>
+													key
+														.split('_')
+														.map(
+															word => word.charAt(0).toUpperCase() + word.slice(1)
+														)
+														.join(' ')
+											)
+											.join(', ')
+											}
+									</p>
+								)}
+								<span className='select_label_icon' style={{ top: 'auto' }}>
+									<BiChevronDown />
+								</span>
+							</div>
+							<div className={`select_ctmBox ${ctmsSelect ? 'active' : ''}`}>
+								<div className='select_label' name='body_hair'>
+									<span></span>
+								</div>
+								<div className={`select_ctmBox ${ctmsSelect ? 'active' : ''}`}>
+									<div className='select_options_black select_options'>
+										<div className='optionBox'>Please select</div>
+										{Object.keys(userDetails?.interests || {}).map((key, i) => (
+											<div className='optionBox' key={i}>
+												<span>{key}</span>
+												<div className='input_option'>
+													<input
+														id={key}
+														type='checkbox'
+														name={key}
+														value={key}
+														onChange={() => handleInterests(key)}
+														checked={userDetails?.interests[key]?.length > 0}
+													/>
+													<label htmlFor={key}></label>
+												</div>
+											</div>
+										))}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div className='grid md:grid-cols-2 gap-x-10 justify-stretch items-start md:justify-center gap-y-4 sm:gap-y-6'>
 						<div className='grid gap-y-4 md:gap-y-6'>
 							<div>

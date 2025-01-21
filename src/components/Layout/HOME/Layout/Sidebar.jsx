@@ -176,15 +176,15 @@ const Sidebar = ({ unread, closeMenu }) => {
 					},
 			  ]
 			: []),
-		...(user?.role !== 'business'
-			? [
-					{
-						title: 'Live Chat',
-						submenus: [],
-						path: '/live-chat',
-					},
-			  ]
-			: []),
+		// ...(user?.role !== 'business'
+		// 	? [
+		// 			{
+		// 				title: 'Live Chat',
+		// 				submenus: [],
+		// 				path: '/live-chat',
+		// 			},
+		// 	  ]
+		// 	: []),
 		...(user?.role !== 'business'
 			? [
 					{

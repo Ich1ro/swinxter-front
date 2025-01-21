@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import MyMediaAddNew from './MyMediaAddNew';
 import { useNavigate, useParams } from 'react-router-dom';
 import EditMediaPopup from '../components/Profile/EditMediaPopup/EditMediaPopup';
-import { loadUser } from '../redux/actions/auth'
+import { loadUser } from '../redux/actions/auth';
 
 const MyMediaUniversal = () => {
 	const { user } = useSelector(state => state.auth);
@@ -15,7 +15,7 @@ const MyMediaUniversal = () => {
 	const [isHide, setIsHide] = useState(true);
 	const [selectedMedia, setSelectedMedia] = useState(null);
 	const navigate = useNavigate();
-	const dispatch = useDispatch()
+	const dispatch = useDispatch();
 
 	const { type } = useParams();
 
@@ -23,9 +23,14 @@ const MyMediaUniversal = () => {
 		const updatedList = filteredMedia.map(media =>
 			media._id === updatedMedia._id ? updatedMedia : media
 		);
-		await api.post(`/update_media/${user._id}/${type === 'photos' ? 'media' : 'videos'}`, {
-			media: [...updatedList]
-		}).then(() => dispatch(loadUser()))
+		await api
+			.post(
+				`/update_media/${user._id}/${type === 'photos' ? 'media' : 'videos'}`,
+				{
+					media: [...updatedList],
+				}
+			)
+			.then(() => dispatch(loadUser()));
 		// setFilteredMedia(updatedList);
 		// setUserInfo({
 		// 	...userInfo,
@@ -35,13 +40,17 @@ const MyMediaUniversal = () => {
 
 	const onDelete = async item => {
 		if (type === 'photos') {
-			await api.post(`/delete_media/${user._id}`, {
-				mediaId: item._id,
-			}).then(() => dispatch(loadUser()));
+			await api
+				.post(`/delete_media/${user._id}`, {
+					mediaId: item._id,
+				})
+				.then(() => dispatch(loadUser()));
 		} else {
-			await api.post(`/delete_video/${user._id}`, {
-				videoId: item._id,
-			}).then(() => dispatch(loadUser()));
+			await api
+				.post(`/delete_video/${user._id}`, {
+					videoId: item._id,
+				})
+				.then(() => dispatch(loadUser()));
 		}
 	};
 
@@ -94,13 +103,20 @@ const MyMediaUniversal = () => {
 							<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
 								{type === 'photos' ? 'My Photos' : 'My Videos'}
 							</h3>
-							<button
-								style={{ width: '150px' }}
-								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
-								onClick={() => setAddNew(true)}
-							>
-								Add New
-							</button>
+							<div style={{gap: '20px', display: 'flex'}}>
+								<button
+									style={{ width: '150px' }}
+									className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
+									onClick={() => navigate(-1)}
+								>{`<- BACK`}</button>
+								<button
+									style={{ width: '150px' }}
+									className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 !text-[12px]'
+									onClick={() => setAddNew(true)}
+								>
+									Add New
+								</button>
+							</div>
 						</div>
 						<div className='flex justify-center flex-wrap gap-5 items-center mb-5 sm:mb-8 w-full'>
 							<div

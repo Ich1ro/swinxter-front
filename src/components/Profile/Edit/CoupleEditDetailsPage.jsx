@@ -7,20 +7,24 @@ import { toast } from 'react-hot-toast';
 import { loadUser } from '../../../redux/actions/auth';
 import api from '../../../utils/api';
 import getCoordinatesFromAWS from '../../../utils/client-location';
+import { useNavigate } from 'react-router-dom';
 
 const CoupleEditDetailPage = () => {
 	const [image, setImage] = useState();
 	const [isEditing, setIsEditing] = useState(null);
+	const [privatePassword, setPrivatePassword] = useState('');
 	const ref = useRef(null);
 	const dispatch = useDispatch();
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
+	const navigate = useNavigate();
 	useEffect(() => {
 		setUserInfo(user);
 	}, []);
 	console.log(userInfo);
 	const [ctmSelect, setCtmSelect] = useState(false);
 	const [ctmSelect2, setCtmSelect2] = useState(false);
+	const [ctmsSelect, setCtmsSelect] = useState(false);
 	const [location, setLocation] = useState({
 		city: '',
 		state: '',
@@ -53,6 +57,13 @@ const CoupleEditDetailPage = () => {
 		image: '',
 		person1_Name: '',
 		slogan: '',
+		interests: {
+			male_male: [],
+			female_female: [],
+			male_female: [],
+			male: [],
+			female: [],
+		},
 	});
 
 	const [person2, setPerson2] = useState({
@@ -236,6 +247,7 @@ const CoupleEditDetailPage = () => {
 				introduction: userInfo?.introduction || '',
 				slogan: userInfo?.slogan || '',
 				person1_Name: userInfo?.couple?.person1?.person1_Name || '',
+				interests: userInfo?.interests || {},
 			});
 
 			setPerson2({
@@ -270,6 +282,18 @@ const CoupleEditDetailPage = () => {
 			});
 		}
 	}, []);
+
+	const handleInterests = key => {
+		setUserDetails(prevDetails => {
+			const updatedInterests = { ...prevDetails.interests };
+			if (updatedInterests[key]?.length > 0) {
+				updatedInterests[key] = [];
+			} else {
+				updatedInterests[key] = ['Yes'];
+			}
+			return { ...prevDetails, interests: updatedInterests };
+		});
+	};
 
 	const handleChange2 = e => {
 		const { name, value } = e.target;
@@ -369,6 +393,7 @@ const CoupleEditDetailPage = () => {
 	// }
 	const handleSave = async e => {
 		e.preventDefault();
+
 		const couple = {
 			person1: {
 				DOB: userDetails.DOB,
@@ -446,6 +471,18 @@ const CoupleEditDetailPage = () => {
 						coordinates: coords,
 					};
 
+					if (privatePassword !== '') {
+						return api.put(`/update-user`, {
+							couple: couple,
+							userId: userInfo._id,
+							privatePassword: privatePassword,
+							introduction: userDetails?.introduction,
+							slogan: userDetails.slogan,
+							location: locationData,
+							geometry: geometry,
+							interests: userDetails.interests,
+						});
+					}
 					return api.put(`/update-user`, {
 						couple: couple,
 						userId: userInfo._id,
@@ -453,13 +490,25 @@ const CoupleEditDetailPage = () => {
 						slogan: userDetails.slogan,
 						location: locationData,
 						geometry: geometry,
+						interests: userDetails.interests,
 					});
 				} else {
+					if (privatePassword !== '') {
+						return api.put(`/update-user`, {
+							couple: couple,
+							userId: userInfo._id,
+							privatePassword: privatePassword,
+							introduction: userDetails?.introduction,
+							slogan: userDetails.slogan,
+							interests: userDetails.interests,
+						});
+					}
 					return api.put(`/update-user`, {
 						couple: couple,
 						userId: userInfo._id,
 						introduction: userDetails?.introduction,
 						slogan: userDetails.slogan,
+						interests: userDetails.interests,
 					});
 				}
 			})();
@@ -473,6 +522,10 @@ const CoupleEditDetailPage = () => {
 			const { data } = await updatePromise;
 			if (data) {
 				dispatch(loadUser());
+				setPrivatePassword('');
+				dispatch(loadUser()).then(() => {
+					navigate('/home');
+				});
 			}
 		} catch (error) {
 			console.error(error);
@@ -611,6 +664,107 @@ const CoupleEditDetailPage = () => {
 									name='country'
 									value={location?.country}
 								></input>
+							</div>
+						</div>
+					</div>
+					{userInfo.privatePassword && userInfo.privatePassword !== '' && (
+						<div className='mt-6 grid gap-y-6' id='passwordChange'>
+							<p className='text-2xl font-medium flex justify-between mb-4 md:mb-6'>
+								Change Media Private Password
+							</p>
+							<div className='gap-x-10 justify-stretch items-start md:justify-center gap-y-4 sm:gap-y-6'>
+								<div className='w-full flex justify-center'>
+									<div
+										className='flex flex-wrap justify-center rounded-md input_field mb-4 md:mb-6'
+										style={{ width: '50%' }}
+									>
+										<label
+											htmlFor='Password'
+											className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+										>
+											Password
+										</label>
+										<input
+											className='bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+											id='privatePassword'
+											type='password'
+											placeholder='Media Private Password'
+											onChange={e => setPrivatePassword(e.target.value)}
+											name='privatePassword'
+											value={privatePassword}
+										></input>
+									</div>
+								</div>
+							</div>
+						</div>
+					)}
+					<div className='w-full flex justify-center'>
+						<div
+							className='flex flex-wrap justify-center rounded-md input_field mb-4 md:mb-6'
+							style={{ width: '50%' }}
+						>
+							<label
+								htmlFor='Interests'
+								className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+							>
+								Interests
+							</label>
+							<div
+								className='select_label bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+								name='interest'
+								style={{ height: '49px' }}
+								value={userDetails?.body_hair}
+								onChange={handleChange}
+								onClick={() => setCtmsSelect(!ctmsSelect)}
+							>
+								{Object.keys(userDetails?.interests || {}).filter(
+									key => userDetails?.interests[key]?.length > 0
+								).length === 0 ? (
+									<>Please select</>
+								) : (
+									<p>
+										{Object.keys(userDetails?.interests || {})
+											.filter(key => userDetails?.interests[key]?.length > 0)
+											.map(key =>
+												key
+													.split('_')
+													.map(
+														word => word.charAt(0).toUpperCase() + word.slice(1)
+													)
+													.join(' ')
+											)
+											.join(', ')}
+									</p>
+								)}
+								<span className='select_label_icon' style={{ top: 'auto' }}>
+									<BiChevronDown />
+								</span>
+							</div>
+							<div className={`select_ctmBox ${ctmsSelect ? 'active' : ''}`}>
+								<div className='select_label' name='body_hair'>
+									<span></span>
+								</div>
+								<div className={`select_ctmBox ${ctmsSelect ? 'active' : ''}`}>
+									<div className='select_options_black select_options'>
+										<div className='optionBox'>Please select</div>
+										{Object.keys(userDetails?.interests || {}).map((key, i) => (
+											<div className='optionBox' key={i}>
+												<span>{key}</span>
+												<div className='input_option'>
+													<input
+														id={key}
+														type='checkbox'
+														name={key}
+														value={key}
+														onChange={() => handleInterests(key)}
+														checked={userDetails?.interests[key]?.length > 0}
+													/>
+													<label htmlFor={key}></label>
+												</div>
+											</div>
+										))}
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

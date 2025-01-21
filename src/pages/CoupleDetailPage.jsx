@@ -245,7 +245,7 @@ const CoupleDetailPage = ({
 												marginBottom: '1px',
 											}}
 										/>{' '}
-										Superlike
+										Like
 									</button>
 									{/* </div>  */}
 								</div>
@@ -343,12 +343,7 @@ const CoupleDetailPage = ({
 										<span>Male</span>
 										<div>
 											<span className='block text-right'>
-												{userInfo?.interests?.male?.map((el, i) => (
-													<span key={i}>
-														{i !== 0 && <span>, </span>}
-														{el}
-													</span>
-												))}
+												{userInfo?.interests?.male?.length > 0 ? 'Yes' : 'No'}
 											</span>
 										</div>
 									</div>
@@ -356,12 +351,9 @@ const CoupleDetailPage = ({
 										<span>Male Female</span>
 										<div>
 											<span className='block text-right'>
-												{userInfo?.interests?.male_female?.map((el, i) => (
-													<span key={i}>
-														{i !== 0 && <span>, </span>}
-														{el}
-													</span>
-												))}
+												{userInfo?.interests?.male_female?.length > 0
+													? 'Yes'
+													: 'No'}
 											</span>
 										</div>
 									</div>
@@ -369,13 +361,7 @@ const CoupleDetailPage = ({
 										<span>Female </span>
 										<div>
 											<span className='block text-right'>
-												{userInfo?.interests?.female?.map((el, i) => (
-													<span key={i}>
-														{' '}
-														{i !== 0 && <span>, </span>}
-														{el}
-													</span>
-												))}
+												{userInfo?.interests?.female?.length > 0 ? 'Yes' : 'No'}
 											</span>
 										</div>
 									</div>
@@ -383,27 +369,19 @@ const CoupleDetailPage = ({
 										<span>Female Female </span>
 										<div>
 											<span className='block text-right'>
-												{userInfo?.interests?.female_female?.map((el, i) => (
-													<span key={i}>
-														{' '}
-														{i !== 0 && <span>, </span>}
-														{el}
-													</span>
-												))}
+												{userInfo?.interests?.female_female?.length > 0
+													? 'Yes'
+													: 'No'}
 											</span>
 										</div>
 									</div>
-									<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 '>
+									<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px] '>
 										<span>Male Male</span>
 										<div>
 											<span className='block text-right'>
-												{userInfo?.interests?.male_male?.map((el, i) => (
-													<span key={i}>
-														{' '}
-														{i !== 0 && <span>, </span>}
-														{el}
-													</span>
-												))}
+												{userInfo?.interests?.male_male?.length > 0
+													? 'Yes'
+													: 'No'}
 											</span>
 										</div>
 									</div>
@@ -635,6 +613,26 @@ const CoupleDetailPage = ({
 												{userInfo?.couple?.person2?.piercings}
 											</span>
 										</div>
+										{userInfo?.couple?.person1?.gender === 'male' ||
+											(userInfo?.couple?.person2?.gender === 'male' && (
+												<div className='text-sm sm:text-lg grid grid-cols-3 gap-3 border-b border-[#666] py-[5px] '>
+													<span className='block font-body_font'>
+														Circuncised:
+													</span>
+													<span
+														className={`block text-center font-body_font`}
+														style={RenderedStyle}
+													>
+														{userInfo?.couple?.person1?.circumcised}
+													</span>
+													<span
+														className={`block text-right font-body_font`}
+														style={RenderStyle2}
+													>
+														{userInfo?.couple?.person2?.circumcised}
+													</span>
+												</div>
+											))}
 
 										<div className='text-sm sm:text-lg grid grid-cols-3 gap-3 border-b border-[#666] py-[5px] '>
 											<span className='block font-body_font'>Tattoos:</span>

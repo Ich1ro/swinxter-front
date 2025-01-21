@@ -156,7 +156,7 @@ const UserDetailPage = ({ socket }) => {
 		const promise = new Promise(async (resolve, reject) => {
 			try {
 				setLoading(1);
-	
+
 				await api.put(`/cancel_request/${user?._id}/${userInfo?._id}`);
 				setLoading(0);
 				setSent(0);
@@ -166,7 +166,7 @@ const UserDetailPage = ({ socket }) => {
 				reject(error);
 			}
 		});
-	
+
 		toast.promise(promise, {
 			loading: 'Canceling friend request...',
 			success: 'Friend request canceled successfully!',
@@ -193,7 +193,7 @@ const UserDetailPage = ({ socket }) => {
 		let currentDate = Date.now();
 
 		if (user.superlike.sent.some(obj => obj.userId === userInfo._id)) {
-			toast.error("You've already superliked this user");
+			toast.error("You've already liked this user");
 			return;
 		}
 
@@ -208,7 +208,7 @@ const UserDetailPage = ({ socket }) => {
 			recieverId: userInfo._id,
 			senderName: user.username,
 			recieverName: userInfo.username,
-			message: `${user.username} sent you a superlike`,
+			message: `${user.username} sent you a like`,
 			type: 'superlike',
 		};
 
@@ -223,9 +223,9 @@ const UserDetailPage = ({ socket }) => {
 				await dispatch(loadUser());
 			})(),
 			{
-				loading: 'Sending superlike...',
-				success: `${userInfo.username} has been superliked successfully.`,
-				error: 'Failed to send superlike, please try again.',
+				loading: 'Sending like...',
+				success: `${userInfo.username} has been liked successfully.`,
+				error: 'Failed to send like, please try again.',
 			}
 		);
 	};
@@ -516,14 +516,9 @@ const UserDetailPage = ({ socket }) => {
 												<span>Male</span>
 												<div>
 													<span className='block text-right'>
-														{userInfo?.interests?.male?.map((el, i) => (
-															<>
-																<span key={i}>
-																	{i !== 0 && <span>, </span>}
-																	{el}
-																</span>
-															</>
-														))}
+														{userInfo?.interests?.male?.length > 0
+															? 'Yes'
+															: 'No'}
 													</span>
 												</div>
 											</div>
@@ -531,14 +526,9 @@ const UserDetailPage = ({ socket }) => {
 												<span>Male Female</span>
 												<div>
 													<span className='block text-right'>
-														{userInfo?.interests?.male_female?.map((el, i) => (
-															<>
-																<span key={i}>
-																	{i !== 0 && <span>, </span>}
-																	{el}
-																</span>
-															</>
-														))}
+														{userInfo?.interests?.male_female?.length > 0
+															? 'Yes'
+															: 'No'}
 													</span>
 												</div>
 											</div>
@@ -546,13 +536,9 @@ const UserDetailPage = ({ socket }) => {
 												<span>Female </span>
 												<div>
 													<span className='block text-right'>
-														{userInfo?.interests?.female?.map((el, i) => (
-															<span key={i}>
-																{' '}
-																{i !== 0 && <span>, </span>}
-																{el}
-															</span>
-														))}
+														{userInfo?.interests?.female?.length > 0
+															? 'Yes'
+															: 'No'}
 													</span>
 												</div>
 											</div>
@@ -560,29 +546,19 @@ const UserDetailPage = ({ socket }) => {
 												<span>Female Female </span>
 												<div>
 													<span className='block text-right'>
-														{userInfo?.interests?.female_female?.map(
-															(el, i) => (
-																<span key={i}>
-																	{' '}
-																	{i !== 0 && <span>, </span>}
-																	{el}
-																</span>
-															)
-														)}
+														{userInfo?.interests?.female_female?.length > 0
+															? 'Yes'
+															: 'No'}
 													</span>
 												</div>
 											</div>
-											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 '>
+											<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 py-[5px] '>
 												<span>Male Male</span>
 												<div>
 													<span className='block text-right'>
-														{userInfo?.interests?.male_male?.map((el, i) => (
-															<span key={i}>
-																{' '}
-																{i !== 0 && <span>, </span>}
-																{el}
-															</span>
-														))}
+														{userInfo?.interests?.male_male?.length > 0
+															? 'Yes'
+															: 'No'}
 													</span>
 												</div>
 											</div>
@@ -721,6 +697,7 @@ const UserDetailPage = ({ socket }) => {
 														))}
 													</span>
 												</div>
+
 												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
 													<span className='block font-body_font'>
 														Piercings:
@@ -732,6 +709,19 @@ const UserDetailPage = ({ socket }) => {
 														{userInfo?.piercings}
 													</span>
 												</div>
+												{userInfo.gender === 'male' && (
+													<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
+														<span className='block font-body_font'>
+															Circuncised:
+														</span>
+														<span
+															className={`block text-right font-body_font`}
+															style={RenderedStyle}
+														>
+															{userInfo?.circumcised}
+														</span>
+													</div>
+												)}
 												<div className='text-sm sm:text-lg grid grid-cols-2 gap-3 border-b border-[#666] py-[5px] '>
 													<span className='block font-body_font'>Looks:</span>
 													<span
