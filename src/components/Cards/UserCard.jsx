@@ -1,6 +1,8 @@
 import React from 'react';
 import './css/userCard.css';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast'
 
 const calculateAge = dob => {
 	const today = new Date();
@@ -124,12 +126,40 @@ const UserAge = ({ userInfo }) => {
 };
 
 const UserCard = ({ userInfo }) => {
+	const { user } = useSelector(state => state.auth);
 	const navigate = useNavigate();
 	return (
 		<div
 			className='user_card'
 			onClick={() => {
-				navigate(`/user-detail?id=${userInfo._id}`);
+				if (user.payment.membership) {
+					navigate(`/user-detail?id=${userInfo._id}`);
+				} else {
+					toast((t) => (
+						<span>
+							You want to get a membership plan?
+							<div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
+								<button
+									onClick={() => {
+										toast.dismiss(t.id);
+										navigate('/membership');
+									}}
+									style={{ backgroundColor: '#b64a4a', color: 'white', padding: '5px 10px', border: 'none', borderRadius: '5px' }}
+								>
+									Yes
+								</button>
+								<button
+									onClick={() => toast.dismiss(t.id)}
+									style={{ backgroundColor: '#4caf50', color: 'white', padding: '5px 10px', border: 'none', borderRadius: '5px' }}
+								>
+									No
+								</button>
+							</div>
+						</span>
+					), {
+						duration: 5000,
+					});
+				}
 			}}
 		>
 			<div className='user_photo'>
@@ -167,45 +197,31 @@ const UserCard = ({ userInfo }) => {
 							userInfo?.couple?.person1?.gender === 'male' &&
 							userInfo?.couple?.person2?.gender === 'male'
 						) {
-							return (
-								<img src='/images/men_men.png' alt='Male/Male Couple' />
-							);
+							return <img src='/images/men_men.png' alt='Male/Male Couple' />;
 						} else if (
 							userInfo?.couple?.person1?.gender === 'female' &&
 							userInfo?.couple?.person2?.gender === 'female'
 						) {
 							return (
-								<img
-									src='/images/girl_girl.png'
-									alt='Female/Female Couple'
-								/>
+								<img src='/images/girl_girl.png' alt='Female/Female Couple' />
 							);
 						} else if (
 							userInfo?.couple?.person1?.gender === 'male' &&
 							userInfo?.couple?.person2?.gender === 'female'
 						) {
 							return (
-								<img
-									src='/images/men_girl.png'
-									alt='Female/Female Couple'
-								/>
+								<img src='/images/men_girl.png' alt='Female/Female Couple' />
 							);
 						} else if (
 							userInfo?.couple?.person1?.gender === 'female' &&
 							userInfo?.couple?.person2?.gender === 'male'
 						) {
 							return (
-								<img
-									src='/images/girl_men.png'
-									alt='Female/Female Couple'
-								/>
+								<img src='/images/girl_men.png' alt='Female/Female Couple' />
 							);
 						} else {
 							return (
-								<img
-									src='/images/girl_men.png'
-									alt='Female/Female Couple'
-								/>
+								<img src='/images/girl_men.png' alt='Female/Female Couple' />
 							);
 						}
 					})()
@@ -221,8 +237,8 @@ const UserCard = ({ userInfo }) => {
 						alt=''
 					/>
 				)}
-				{userInfo.distance ? (<p>{userInfo.distance} miles</p>) : (<p></p>)}
-				
+				{userInfo.distance ? <p>{userInfo.distance} miles</p> : <p></p>}
+
 				{/* <p style={{ fontSize: '14px' }}>
 					In publishing and graphic design, Lorem ipsum is a placeholder text
 					commonly used to demonstrate the visual form of a document or a
