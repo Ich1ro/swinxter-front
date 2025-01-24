@@ -317,7 +317,7 @@ export default function MyTravel() {
 								</div>
 								<div className='flex text-[#FF0000] text-[12px] flex-wrap gap-1 leading'>
 									<img src='images/loc-icon.png' alt='Location-icon' />
-									{travel.locationto.display_name.length <= 20 ? (
+									{travel?.locationto?.display_name?.length <= 20 ? (
 										<span className='font-body_font'>
 											{travel.locationto.display_name}
 										</span>

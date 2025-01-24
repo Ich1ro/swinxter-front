@@ -10,6 +10,7 @@ const CreateTravelPage = () => {
 	const DEBOUNCE_DELAY = 300;
 	const [areaname, setAreaName] = useState([]);
 	const [selectlocation, setSelectedLocation] = useState([]);
+	const [resorts, setResorts] = useState([]);
 	const [selectedOptions, setSelectedOptions] = useState();
 	const [showResults, setShowResults] = useState(false);
 	const options = ['M', 'F', 'MF', 'MM', 'FF', 'T'];
@@ -140,6 +141,21 @@ const CreateTravelPage = () => {
 		{ value: 'Countryside Inn', label: 'Countryside Inn' },
 		{ value: 'Blossom Bed', label: 'Blossom Bed' },
 	];
+
+	const getResorts = async () => {
+		const resorst = await api.get(`/get_resorts`);
+		setResorts(resorst.data);
+	};
+
+	useEffect(() => {
+		getResorts();
+	}, []);
+
+	useEffect(() => {
+		console.log(resorts);
+		
+	}, [resorts]);
+
 	return (
 		<div className='bg-white rounded-40px'>
 			<div className='text-center p-5 py-10 text-black px-10 relative'>
@@ -226,9 +242,13 @@ const CreateTravelPage = () => {
 									name='resort'
 								>
 									<option value={''}>Please select</option>
-									{options2.map(el => (
-										<option value={el.value}>{el.label}</option>
-									))}
+									{resorts.length > 0
+										? resorts.map(el => (
+												<option key={el._id} value={el.name}>
+													{el.name}
+												</option>
+										  ))
+										: ''}
 								</select>
 							</div>
 
