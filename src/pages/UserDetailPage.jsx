@@ -403,7 +403,7 @@ const UserDetailPage = ({ socket }) => {
 														marginBottom: '1px',
 													}}
 												/>{' '}
-												Superlike
+												Like
 											</button>
 										</div>
 									) : null}

@@ -27,7 +27,7 @@ const MyMediaUniversal = () => {
 			.post(
 				`/update_media/${user._id}/${type === 'photos' ? 'media' : 'videos'}`,
 				{
-					media: [...updatedList],
+					media: {...updatedList[0]},
 				}
 			)
 			.then(() => dispatch(loadUser()));

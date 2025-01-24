@@ -45,13 +45,20 @@
     top: -8px;
     right: 24%;
 }
-.dropdownList button {
+.dropdownList .notification_button {
     padding: 10px 15px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    width: 100%;
+    width: 90%;
+    /* border-bottom: 1px solid #333; */
+}
+.dropdownList ul {
+    display: flex;
     border-bottom: 1px solid #333;
+}
+.dropdownList .close_button {
+    padding: 10px;
 }
 .dropdownList button svg {
     max-width: 16px;

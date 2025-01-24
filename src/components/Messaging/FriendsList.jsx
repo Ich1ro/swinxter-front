@@ -14,10 +14,12 @@ const FriendsList = ({back}) => {
     const {startDMChatRoom} = useCustomChatContext();
 
     const getFriends = async () => {
-        userInfo.friends.map(async ele => {
-          const { data } = await api.get(`/user_details/${ele}`);
-          setFriends([...friends,data])
-        })
+        // userInfo.friends.map(async ele => {
+          const { data } = await api.post(`/get-friends`, {
+            friendIds: userInfo.friends
+          });
+          setFriends(data)
+        // })
     }
 
     useEffect(() => {

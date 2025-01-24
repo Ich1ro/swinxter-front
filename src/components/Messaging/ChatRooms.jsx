@@ -15,6 +15,11 @@ const ChatRooms = () => {
   const {user} = useSelector
   ((state)=>state.auth);
 
+  useEffect(() => {
+    console.log(friends);
+    
+  }, [friends])
+
   return (
     <div className='chatroom'>
       <div className='chatroom_header'>
