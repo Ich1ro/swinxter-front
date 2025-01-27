@@ -91,7 +91,7 @@ const Main_Home = () => {
 							{event.length === 0 ? (
 								<p>No event available right now !</p>
 							) : (
-								event.slice(0, 6).map((el, i) => (
+								event.slice(0, 4).map((el, i) => (
 									<div className='h-full bg-light-grey rounded-2xl'>
 										<EventCard key={i} event={el} />
 									</div>
@@ -105,7 +105,7 @@ const Main_Home = () => {
 						<div className='mb-20'>
 							<div className='flex justify-between flex-wrap gap-5 items-center mb-5 sm:mb-8'>
 								<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
-									Clubs
+									Busenesses
 								</h3>
 								<Link
 									to='/club-page'
@@ -115,7 +115,7 @@ const Main_Home = () => {
 								</Link>
 							</div>
 							<div className='grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-6'>
-								{clubs.slice(0, 6).map((el, i) => (
+								{clubs.slice(0, 4).map((el, i) => (
 									<ClubCard key={i} clubs={el} />
 								))}
 							</div>

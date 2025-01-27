@@ -888,6 +888,7 @@ const CoupleEditDetailPage = () => {
 									<label
 										htmlFor='body_hair'
 										className='flex justify-between items-center w-full bg-black-20 items-stretch'
+										style={{marginBottom: '0', paddingTop: '0'}}
 									>
 										<span className='gradient gradient rounded-l-md w-full md:w-[120px] xl:w-[195px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'>
 											Body Hair
@@ -900,18 +901,33 @@ const CoupleEditDetailPage = () => {
 											onChange={handleChange}
 											onClick={() => setCtmSelect(!ctmSelect)}
 										>
-											{!Array.isArray(userDetails?.body_hair) ||
+											{/* {!Array.isArray(userDetails?.body_hair) ||
 											userDetails?.body_hair.length === 0
 												? 'Please select'
 												: userDetails?.body_hair?.map((el, i) => (
 														<span>
-															{el}{' '}
+															{el}
 															{i !== 0 &&
 																i !== userDetails?.body_hair?.length - 1 && (
-																	<span>, </span>
+																	<span>{', '}</span>
 																)}
 														</span>
-												  ))}
+												  ))} */}
+
+											{Array.isArray(userDetails?.body_hair) &&
+											userDetails?.body_hair.length > 0 ? (
+												userDetails?.body_hair?.map((el, i) => (
+													<span>
+														{el}
+														{i !== userDetails.body_hair.length - 1 && (
+															<span>, </span>
+														)}
+													</span>
+												))
+											) : (
+												<>Please select</>
+											)}
+
 											<span className='select_label_icon'>
 												<BiChevronDown />
 											</span>
@@ -1463,6 +1479,7 @@ const CoupleEditDetailPage = () => {
 									<label
 										htmlFor='body_hair2'
 										className='flex justify-between items-center w-full bg-black-20'
+										style={{marginBottom: '0', paddingTop: '0'}}
 									>
 										<span className='gradient gradient rounded-l-md w-full md:w-[120px] xl:w-[195px] md:min-h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'>
 											Body Hair
@@ -1475,22 +1492,20 @@ const CoupleEditDetailPage = () => {
 											onChange={handleChange2}
 											onClick={() => setCtmSelect2(!ctmSelect2)}
 										>
-											{Array.isArray(person2?.body_hair) ||
-											person2?.body_hair.length === 1 ? (
-												<>Please select</>
+											{Array.isArray(person2?.body_hair) &&
+											person2.body_hair.length > 0 ? (
+												person2.body_hair.map((el, i) => (
+													<span key={i}>
+														{el}
+														{i !== person2.body_hair.length - 1 && (
+															<span>, </span>
+														)}
+													</span>
+												))
 											) : (
-												userDetails?.couple?.person2?.body_hair?.map(
-													(el, i) => (
-														<span>
-															{el}
-															{i !== 0 &&
-																i !== person2?.body_hair.length - 1 && (
-																	<span>, </span>
-																)}
-														</span>
-													)
-												)
+												<>Please select</>
 											)}
+
 											<span className='select_label_icon'>
 												<BiChevronDown />
 											</span>

@@ -77,7 +77,7 @@ const FriendCard = ({ data, request }) => {
 						View Profile
 					</button>
 					{(location?.pathname !== '/my-recieved-likes' &&
-					location?.pathname !== '/my-sent-likes') ?
+					location?.pathname !== '/my-sent-likes' && location?.pathname !== '/sent_request') ?
 					request ? (
 						<button
 							className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
