@@ -22,15 +22,15 @@ const EventCard = ({ event, loc }) => {
 	}, []);
 
 	const calculatePreciseDistance = (fLong, sLong, fLat, sLat) => {
-      var pdis = getPreciseDistance(
-        { latitude: Number(fLat), longitude: Number(fLong) },
-        { latitude: Number(sLat), longitude: Number(sLong) }
-      );
-      const factor = 0.621371;
-      const result = ((pdis / 1000) * factor).toFixed(0);
-      
-      return `${isNaN(result) ? '' : result + 'miles'}`;
-    };
+		var pdis = getPreciseDistance(
+			{ latitude: Number(fLat), longitude: Number(fLong) },
+			{ latitude: Number(sLat), longitude: Number(sLong) }
+		);
+		const factor = 0.621371;
+		const result = ((pdis / 1000) * factor).toFixed(0);
+
+		return `${isNaN(result) ? '' : result + ' miles'}`;
+	};
 
 	const handleEvent = id => {
 		navigate(`/event-detail/${id}`);
@@ -100,9 +100,9 @@ const EventCard = ({ event, loc }) => {
 						<img
 							src='images/calendar-icon.png'
 							alt='calendar-icon'
-							style={{marginRight: '10px'}}
+							style={{ marginRight: '10px' }}
 						/>
-						
+
 						<DatePicker
 							dateFormat='yyyy/MM/dd'
 							selected={new Date(event?.Startdate)}
@@ -149,14 +149,18 @@ const EventCard = ({ event, loc }) => {
 								/>
 							</g>
 						</svg>
-						{event?.location?.display_name?.length > 10
-							? event?.location?.display_name?.slice(0, 10) + '..'
-							: event?.location?.display_name}
+						{`${event?.location?.address} ${event?.location?.street}, ${event?.location?.municipality}, ${event?.location?.country}`
+							.length > 15
+							? `${event?.location?.address} ${event?.location?.street}, ${event?.location?.municipality}, ${event?.location?.country}`.slice(
+									0,
+									15
+							  ) + '..'
+							: `${event?.location?.address} ${event?.location?.street}, ${event?.location?.municipality}, ${event?.location?.country}`}
 					</p>
 					{calculatePreciseDistance(
-						event?.location?.lon,
+						event?.geometry?.coordinates[0],
 						user?.geometry?.coordinates[0],
-						event?.location?.lat,
+						event?.geometry?.coordinates[1],
 						user?.geometry?.coordinates[1]
 					)}
 				</div>

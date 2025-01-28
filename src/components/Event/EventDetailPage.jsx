@@ -57,6 +57,8 @@ const EventDetailPage = () => {
 		try {
 			setLoading(true);
 			const { data } = await api.get(`/get_event/${eventid}`);
+			console.log(data);
+			
 			setEventInfo(data);
 			setLoading(false);
 			getPendingReq(data);
@@ -234,7 +236,7 @@ const EventDetailPage = () => {
 				<>
 					<span
 						className='primary_btn cursor-pointer !text-sm !py-2 !px-3 !leading-none !py-3'
-						onClick={() => navigate(-1)}
+						onClick={() => navigate('/event-page')}
 					>
 						<span className='text-sm inline-flex items-center mr-2'>
 							<FaArrowLeft />
@@ -379,7 +381,7 @@ const EventDetailPage = () => {
 											<SlLocationPin />
 										</span>
 
-										{eventInfo?.location?.display_name}
+										{`${eventInfo?.location?.address} ${eventInfo?.location?.street}, ${eventInfo?.location?.municipality}, ${eventInfo?.location?.country}`}
 									</div>
 
 									<div className='my-4'>
@@ -391,9 +393,9 @@ const EventDetailPage = () => {
 											// savedCred.long,
 											// eventInfo?.location?.lat,
 											// savedCred.lat
-											eventInfo?.location?.lon,
+											eventInfo?.geometry?.coordinates[0],
 											user?.geometry?.coordinates[0],
-											eventInfo?.location?.lat,
+											eventInfo?.geometry?.coordinates[1],
 											user?.geometry?.coordinates[1]
 										)}
 									</div>
