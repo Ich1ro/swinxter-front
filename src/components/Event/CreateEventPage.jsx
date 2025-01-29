@@ -414,6 +414,7 @@ const CreateEventPage = () => {
 									<input
 										type='file'
 										className='hidden'
+										accept='.jpg, .jpeg, .png'
 										onChange={e => handleCoverImage(e)}
 									/>
 								</label>
@@ -447,6 +448,7 @@ const CreateEventPage = () => {
 										type='file'
 										multiple
 										className='hidden'
+										accept='.jpg, .jpeg, .png'
 										onChange={e => handleImageChange(e)}
 									/>
 								</label>
@@ -487,6 +489,7 @@ const CreateEventPage = () => {
 										type='file'
 										id='videoUpload'
 										multiple
+										accept='video/*'
 										className='hidden'
 										onChange={e => handleVideoChange(e)}
 									/>

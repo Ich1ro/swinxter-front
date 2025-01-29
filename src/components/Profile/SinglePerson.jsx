@@ -468,6 +468,7 @@ const SinglePerson = () => {
 											<input
 												id='add_photos'
 												type='file'
+												accept='.jpg, .jpeg, .png'
 												className='hidden'
 												name='image'
 												onChange={handleimage}

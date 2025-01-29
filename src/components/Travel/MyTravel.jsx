@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import api from '../../utils/api';
 import { FaArrowLeft } from 'react-icons/fa6';
+import { calculateAge } from '../../utils/CalculateAge'
 export default function MyTravel() {
 	const [age, setAge] = useState('');
 	const [age2, setage2] = useState('');
@@ -42,33 +43,32 @@ export default function MyTravel() {
 
 	// _____________CALCULATE AGE______________________
 
-	const calculateAge = dateOfBirth => {
-		const dob = new Date(dateOfBirth);
-		const today = new Date();
-		const age = today.getFullYear() - dob.getFullYear();
+	// const calculateAge = dateOfBirth => {
+	// 	const dob = new Date(dateOfBirth);
+	// 	const today = new Date();
+	// 	const age = today.getFullYear() - dob.getFullYear();
 
-		if (
-			today.getMonth() < dob.getMonth() ||
-			(today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())
-		) {
-			age--;
-		}
+	// 	if (
+	// 		today.getMonth() < dob.getMonth() ||
+	// 		(today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())
+	// 	) {
+	// 		age--;
+	// 	}
 
-		return age;
-	};
+	// 	return age;
+	// };
 
 	// Use the calculateAge function to get the age for single users or couple members
 
 	useEffect(() => {
-		{
-			travel.map(travel => {
-				if (travel?.userId?.profile_type === 'single') {
-					setAge(calculateAge(travel.userId.DOB));
-				} else {
-					setAge(calculateAge(travel?.userId?.couple?.person1.DOB));
-					setage2(calculateAge(travel.userId.couple.person2.DOB));
-				}
-			});
+		if (travel.length > 0) {
+			const firstTravel = travel[0];
+			if (firstTravel?.userId?.profile_type === 'single') {
+				setAge(calculateAge(firstTravel.userId.DOB));
+			} else {
+				setAge(calculateAge(firstTravel?.userId?.couple?.person1.DOB));
+				setage2(calculateAge(firstTravel?.userId?.couple?.person2.DOB));
+			}
 		}
 	}, [travel]);
 

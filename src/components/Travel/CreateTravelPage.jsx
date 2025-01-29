@@ -89,7 +89,6 @@ const CreateTravelPage = () => {
 		formdata.append('userId', userInfo._id);
 
 		if (
-			!travel.Location ||
 			!travel.description ||
 			!travel.end_date ||
 			!travel.start_date ||
@@ -196,7 +195,7 @@ const CreateTravelPage = () => {
                   required
                 />
               </div> */}
-							<div className='flex flex-wrap rounded-md input_field_2'>
+							{/* <div className='flex flex-wrap rounded-md input_field_2'>
 								<label
 									htmlFor='Location'
 									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
@@ -227,7 +226,7 @@ const CreateTravelPage = () => {
 										))}
 									</ul>
 								)}
-							</div>
+							</div> */}
 							<div className='flex flex-wrap rounded-md input_field_2'>
 								<label
 									htmlFor='start_date'

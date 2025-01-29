@@ -580,6 +580,7 @@ const CoupleEditDetailPage = () => {
 							<input
 								type='file'
 								multiple
+								accept='.jpg, .jpeg, .png'
 								className='hidden'
 								onChange={handleImageChange}
 							/>

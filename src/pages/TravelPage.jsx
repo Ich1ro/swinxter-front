@@ -118,13 +118,17 @@ const TravelPage = () => {
 
   const getResorts = async () => {
 		const resorst = await api.get(`/get_resorts`);
-		setResorts(resorst)
+		setResorts(resorst.data)
 	}
 
 	useEffect(() => {
 		getResorts()
 	}, [])
 
+	useEffect(() => {
+		console.log(resorts);
+		
+	}, [resorts])
 
 	return (
 		<div className='bg-black py-8 px-6 rounded-2xl'>
