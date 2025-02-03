@@ -468,6 +468,7 @@ const CreateClubPage = () => {
 									<input
 										type='file'
 										className='hidden'
+										accept='.jpg, .jpeg, .png'
 										onChange={e => handleCoverImage(e)}
 									/>
 								</label>

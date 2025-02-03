@@ -375,6 +375,7 @@ const handleImageChange = (e) => {
                     type="file"
                     className="hidden"
                     multiple
+                    accept='.jpg, .jpeg, .png'
                     onChange={(e)=>handleCoverChange(e)}
                   />
                 </label>
@@ -401,6 +402,7 @@ const handleImageChange = (e) => {
                     type="file"
                     className="hidden"
                     multiple
+                    accept='.jpg, .jpeg, .png'
                     onChange={(e) => handleImageChange(e)}
                   />
                 </label>
@@ -437,6 +439,7 @@ const handleImageChange = (e) => {
                     type="file"
                     className="hidden"
                     multiple
+                    accept='video/*'
                     onChange={(e)=>handleVideoChange(e)}
                   />
                 </label>

@@ -349,6 +349,7 @@ const file = Array.from(e.target.files);
                   id="single_image"
                     type="file"
                     className="hidden"
+                    accept='.jpg, .jpeg, .png'
                     onChange={(e) => handleCoverImage(e)}
                   />
                 </label>
@@ -374,6 +375,7 @@ const file = Array.from(e.target.files);
                     type="file"
                     multiple
                     className="hidden"
+                    accept='.jpg, .jpeg, .png'
                     onChange={(e) => handleImageChange(e)}
                   />
                 </label>
@@ -407,6 +409,7 @@ const file = Array.from(e.target.files);
                     type="file"
                     multiple
                     className="hidden"
+                    accept='video/*'
                     onChange={(e) => handleVideoChange(e)}
                   />
                 </label>
