@@ -14,6 +14,7 @@ const UserDetailPage = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const [sent, setSent] = useState(0);
+	const [friends, setFriends] = useState([]);
 
 	const getUser = async () => {
 		const id = location.search.split('=')[1];
@@ -27,6 +28,13 @@ const UserDetailPage = () => {
 	};
 	console.log(1);
 
+	const getFriends = async () => {
+		const { data } = await api.post(`/get-friends`, {
+			friendIds: userInfo.friends,
+		});
+		setFriends(data);
+	};
+
 	useEffect(() => {
 		if (location.search.length > 0) {
 			getUser();
@@ -36,6 +44,12 @@ const UserDetailPage = () => {
 	}, []);
 
 	console.log(userInfo);
+
+	useEffect(() => {
+		if (user) {
+			getFriends();
+		}
+	}, [user]);
 
 	useEffect(() => {
 		if (userInfo?.profile_type === 'single') {
@@ -557,6 +571,56 @@ const UserDetailPage = () => {
 							</div>
 						)}
 					</div>
+					{/* <>
+						<div className='mb-20'>
+							<div className='flex justify-between flex-wrap gap-5 items-center mb-5 sm:mb-8'>
+								<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
+									Events
+								</h3>
+								{event.length === 0 ? null : (
+									<Link
+										to='/event-page'
+										className='primary_btn !text-sm sm:!text-xl'
+									>
+										View More
+									</Link>
+								)}
+							</div>
+							<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-6'>
+								{event.length === 0 ? (
+									<p>No event available right now !</p>
+								) : (
+									event.slice(0, 4).map((el, i) => (
+										<div className='h-full bg-light-grey rounded-2xl'>
+											<EventCard key={i} event={el} />
+										</div>
+									))
+								)}
+							</div>
+						</div>
+						{clubs.length === 0 ? (
+							''
+						) : (
+							<div className='mb-20'>
+								<div className='flex justify-between flex-wrap gap-5 items-center mb-5 sm:mb-8'>
+									<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
+										Busenesses
+									</h3>
+									<Link
+										to='/club-page'
+										className='primary_btn !text-sm sm:!text-xl'
+									>
+										View More
+									</Link>
+								</div>
+								<div className='grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-6'>
+									{clubs.slice(0, 4).map((el, i) => (
+										<ClubCard key={i} clubs={el} />
+									))}
+								</div>
+							</div>
+						)}
+					</> */}
 					<div className='audit-dating__block relative py-4 md:py-16 md:pt-0 container mx-auto mt-14'>
 						<div className='flex flex-col md:flex-row justify-center items-center text-center gap-6 py-71px'>
 							<h2 className='text-white text-base sm:text-2xl md:text-3xl xl:text-40px'>

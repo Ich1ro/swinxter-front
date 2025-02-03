@@ -9,6 +9,7 @@ import { loadUser } from '../redux/actions/auth';
 import { calculateAge } from '../utils/CalculateAge';
 import api from '../utils/api';
 import CoupleDetailPage from './CoupleDetailPage';
+import FriendCard from '../components/Cards/FriendCard';
 
 const UserDetailPage = ({ socket }) => {
 	const [age, setAge] = useState('');
@@ -25,6 +26,7 @@ const UserDetailPage = ({ socket }) => {
 	const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
 	const [isProfile, setIsProfile] = useState(true);
 	const dispatch = useDispatch();
+	const [friends, setFriends] = useState([]);
 
 	const getUser = async () => {
 		const currentUser = await api.get(`/user_details/${user._id}`);
@@ -42,7 +44,16 @@ const UserDetailPage = ({ socket }) => {
 			await api.post(`/add_visitor/${id}`, { visitorId: currentUser.data._id });
 		}
 	};
+
+	const getFriends = async () => {
+		const { data } = await api.post(`/get-friends`, {
+			friendIds: userInfo.friends,
+		});
+		setFriends(data);
+	};
+
 	console.log(currentUser);
+
 	useEffect(() => {
 		if (location.search.length > 0) {
 			getUser();
@@ -50,6 +61,12 @@ const UserDetailPage = ({ socket }) => {
 			setUserInfo(user);
 		}
 	}, []);
+
+	useEffect(() => {
+		if (userInfo) {
+			getFriends();
+		}
+	}, [userInfo]);
 
 	console.log(userInfo);
 
@@ -1105,13 +1122,41 @@ const UserDetailPage = ({ socket }) => {
 									</div>
 								)}
 							</div>
+							{location.search.length === 0 && (
+								<>
+									<div className='my-20'>
+										<div className='flex justify-between flex-wrap gap-5 items-center mb-12'>
+											<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
+												Friends
+											</h3>
+											{friends.length === 0 ? null : (
+												<Link
+													to='/my_friends'
+													className='primary_btn !text-sm sm:!text-xl'
+												>
+													View More
+												</Link>
+											)}
+										</div>
+										<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-6'>
+											{friends.length > 0 ? (
+												friends?.slice(0, 4)?.map((friend, i) => {
+													return <FriendCard data={friend} key={i} />;
+												})
+											) : (
+												<p>No friends yet !</p>
+											)}
+										</div>
+									</div>
+								</>
+							)}
 						</div>
 					</div>
 					<div className='audit-dating__block relative py-4 md:py-16 md:pt-0 container mx-auto mt-14'>
 						<div className='flex flex-col md:flex-row justify-center items-center text-center gap-6 py-71px'>
-							<h2 className='text-white text-base sm:text-2xl md:text-3xl xl:text-40px'>
+							{/* <h2 className='text-white text-base sm:text-2xl md:text-3xl xl:text-40px'>
 								#1 Adult Dating Site
-							</h2>
+							</h2> */}
 						</div>
 					</div>
 				</div>

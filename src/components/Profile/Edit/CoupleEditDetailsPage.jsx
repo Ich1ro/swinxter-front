@@ -748,7 +748,7 @@ const CoupleEditDetailPage = () => {
 								<div className={`select_ctmBox ${ctmsSelect ? 'active' : ''}`}>
 									<div className='select_options_black select_options'>
 										<div className='optionBox'>Please select</div>
-										{Object.keys(userDetails?.interests || {}).map((key, i) => (
+										{['male_female', 'female', 'male', 'female_female', 'male_male', 'transgender'].map((key, i) => (
 											<div className='optionBox' key={i}>
 												<span>{key}</span>
 												<div className='input_option'>

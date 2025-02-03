@@ -347,7 +347,7 @@ const Sidebar = ({ unread, closeMenu }) => {
 							src={
 								userInfo?.image ? userInfo?.image : 'images/couple-avatar.jpg'
 							}
-							className='hidden aspect-square object-cover xl:block main-image'
+							className='hidden aspect-square object-cover xl:block'
 						/>
 					) : (
 						<img
@@ -360,7 +360,7 @@ const Sidebar = ({ unread, closeMenu }) => {
 									? '/images/girl-avatar.jpg'
 									: '/images/trans avatar.png'
 							}
-							className='hidden aspect-square object-cover xl:block main-image'
+							className='hidden aspect-square object-cover xl:block'
 						/>
 					)}
 				</Link>
