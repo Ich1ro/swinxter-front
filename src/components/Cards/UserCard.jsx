@@ -137,7 +137,7 @@ const UserCard = ({ userInfo }) => {
 				} else {
 					toast((t) => (
 						<span>
-							You want to get a membership plan?
+							You want to get a membership plan!
 							<div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
 								<button
 									onClick={() => {

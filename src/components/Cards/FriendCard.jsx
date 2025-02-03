@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import './css/friendsCard.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import api from '../../utils/api';
 import { useCustomChatContext } from '../../Context/ChatContext';
+import { loadUser } from '../../redux/actions/auth';
 
-const FriendCard = ({ data, request }) => {
+const FriendCard = ({ data, request, getFriends }) => {
 	const [users, setUsers] = useState([]);
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
 	const navigate = useNavigate();
 	const params = useParams();
 	const location = useLocation();
+	const dispatch = useDispatch();
 
 	const { startDMChatRoom } = useCustomChatContext();
 
@@ -24,6 +26,19 @@ const FriendCard = ({ data, request }) => {
 		try {
 			await api.put(`/accept_req/${userInfo._id}/${data?._id}`);
 			window.location.reload();
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const unlike = async () => {
+		try {
+			await api
+				.post(`/remove-superlike`, {
+					userId: userInfo._id,
+					superlikeId: data._id,
+				})
+				window.location.reload();
 		} catch (e) {
 			console.log(e);
 		}
@@ -76,25 +91,35 @@ const FriendCard = ({ data, request }) => {
 					>
 						View Profile
 					</button>
-					{(location?.pathname !== '/my-recieved-likes' &&
-					location?.pathname !== '/my-sent-likes' && location?.pathname !== '/sent_request') ?
-					request ? (
+					{location?.pathname !== '/my-recieved-likes' &&
+					location?.pathname !== '/my-sent-likes' &&
+					location?.pathname !== '/sent_request' ? (
+						request ? (
+							<button
+								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
+								onClick={acceptReq}
+							>
+								Accept
+							</button>
+						) : (
+							<button
+								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
+								onClick={message}
+							>
+								Message
+							</button>
+						)
+					) : (
+						<></>
+					)}
+					{location?.pathname === '/my-sent-likes' && (
 						<button
 							className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
-							onClick={acceptReq}
+							onClick={unlike}
 						>
-							Accept
+							Unlike
 						</button>
-					) : (
-						<button
-							className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
-							onClick={message}
-						>
-							Message
-						</button>
-					) : (
-            <></>
-          )}
+					)}
 				</div>
 			</div>
 		</div>

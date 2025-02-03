@@ -192,23 +192,23 @@ const UserDetailPage = ({ socket }) => {
 		console.log('clicked');
 		let currentDate = Date.now();
 
-		if (user.superlike.sent.some(obj => obj.userId === userInfo._id)) {
+		if (user?.superlike?.sent?.some(obj => obj?.userId === userInfo?._id)) {
 			toast.error("You've already liked this user");
 			return;
 		}
 
 		const superlikeData = {
-			userId: user._id,
-			superlikeId: userInfo._id,
+			userId: user?._id,
+			superlikeId: userInfo?._id,
 			cooldown: Date.now(),
 		};
 
 		const notificationData = {
-			senderId: user._id,
-			recieverId: userInfo._id,
-			senderName: user.username,
-			recieverName: userInfo.username,
-			message: `${user.username} sent you a like`,
+			senderId: user?._id,
+			recieverId: userInfo?._id,
+			senderName: user?.username,
+			recieverName: userInfo?.username,
+			message: `${user?.username} sent you a like`,
 			type: 'superlike',
 		};
 
@@ -224,7 +224,7 @@ const UserDetailPage = ({ socket }) => {
 			})(),
 			{
 				loading: 'Sending like...',
-				success: `${userInfo.username} has been liked successfully.`,
+				success: `${userInfo?.username} has been liked successfully.`,
 				error: 'Failed to send like, please try again.',
 			}
 		);

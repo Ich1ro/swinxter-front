@@ -36,6 +36,8 @@ const MySentLikes = () => {
 		// });
 	};
 
+	
+
 	useEffect(() => {
 		getFriends();
 	}, []);
@@ -58,7 +60,7 @@ const MySentLikes = () => {
 						>
 							{friends.length > 0 ? (
 								friends?.map((friend, i) => {
-									return <FriendCard data={friend} key={i} request={false} />;
+									return <FriendCard data={friend} key={i} request={false} getFriends={getFriends} />;
 								})
 							) : (
 								<p>No likes sent yet !</p>

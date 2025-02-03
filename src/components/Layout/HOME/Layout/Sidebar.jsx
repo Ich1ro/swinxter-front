@@ -264,9 +264,8 @@ const Sidebar = ({ unread, closeMenu }) => {
 			submenus: [],
 			path: '/travel-page',
 		},
-		{ title: 'Membership', submenus: [], path: '/membership' },
 		{
-			title: 'Setting',
+			title: 'Settings',
 			submenus: [
 				...(user?.role !== 'business'
 					? [
@@ -310,6 +309,7 @@ const Sidebar = ({ unread, closeMenu }) => {
 					: []),
 			],
 		},
+		{ title: 'Membership', submenus: [], path: '/membership' },
 	];
 
 	useEffect(() => {
