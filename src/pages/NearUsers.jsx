@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import api from '../utils/api';
 import UserCard from '../components/Cards/UserCard';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { calculateDistance } from '../utils/utils';
 
 const NearUsers = () => {
 	const [users, setUsers] = useState([]);
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
+	const location = useLocation();
+
+	console.log(location);
 
 	const getRecentUsers = async () => {
 		let userArr = [];
@@ -57,6 +60,10 @@ const NearUsers = () => {
 
 	console.log(user);
 
+	if (location.pathname === '/home' && users.length === 0) {
+		return null;
+	}
+
 	return (
 		<>
 			<div className='home_page bg-black py-8 px-6 rounded-2xl'>
@@ -66,11 +73,26 @@ const NearUsers = () => {
 							<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
 								Near Members
 							</h3>
+							{location.pathname === '/home' && (
+								<Link
+									to='/nearusers'
+									className='primary_btn !text-sm sm:!text-xl'
+								>
+									View More
+								</Link>
+							)}
 						</div>
-						<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6'>
-							{users.length > 0 &&
-								users.map((user, i) => <UserCard key={i} userInfo={user} />)}
-						</div>
+						{location.pathname === '/home' ? (
+							<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4 gap-6'>
+								{users.length > 0 &&
+									users.slice(0, 4).map((user, i) => <UserCard key={i} userInfo={user} />)}
+							</div>
+						) : (
+							<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6'>
+								{users.length > 0 &&
+									users.map((user, i) => <UserCard key={i} userInfo={user} />)}
+							</div>
+						)}
 					</div>
 				) : (
 					<div

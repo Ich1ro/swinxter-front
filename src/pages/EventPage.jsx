@@ -106,8 +106,12 @@ const EventPage = () => {
 			}
 			if (filter.date) {
 				filtered = filtered.filter(event => {
-					const formattedDate = `${event.Startdate.split('T')[0]}`;
-					return formattedDate === filter.date;
+					const eventDate = new Date(event.Startdate.split('T')[0]);
+					const filterDate = new Date(filter.date); 
+					const oneMonthLater = new Date(filterDate);
+					oneMonthLater.setMonth(filterDate.getMonth() + 1);
+			
+					return eventDate >= filterDate && eventDate <= oneMonthLater;
 				});
 			}
 			if (filter.distance) {

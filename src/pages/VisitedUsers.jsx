@@ -4,13 +4,14 @@ import { useSelector } from 'react-redux';
 import api from '../utils/api';
 import { useEffect } from 'react';
 import UserCard from '../components/Cards/UserCard';
-import { Link } from 'react-router-dom';
-import { calculateDistance } from '../utils/utils'
+import { Link, useLocation } from 'react-router-dom';
+import { calculateDistance } from '../utils/utils';
 
 const VisitedUser = () => {
 	const [users, setUsers] = useState(null);
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user || null);
+	const location = useLocation();
 
 	const getVisitedUsers = async () => {
 		console.log(userInfo?.viewedMe);
@@ -22,27 +23,27 @@ const VisitedUser = () => {
 			);
 
 			const sortedUsers = data
-						.filter(
-							d => d._id !== userInfo._id && !userInfo.blockedby.includes(d._id)
-						)
-						.map(user => {
-							if (user.geometry?.coordinates && userInfo.geometry?.coordinates) {
-								const distance = calculateDistance(
-									userInfo.geometry.coordinates[0],
-									user.geometry.coordinates[0],
-									userInfo.geometry.coordinates[1],
-									user.geometry.coordinates[1]
-								);
-								return { ...user, distance };
-							}
-							return { ...user, distance: null };
-						})
-						.sort((a, b) => {
-							if (a.distance === null) return 1;
-							if (b.distance === null) return -1;
-							return a.distance - b.distance;
-						});
-					console.log(sortedUsers);
+				.filter(
+					d => d._id !== userInfo._id && !userInfo.blockedby.includes(d._id)
+				)
+				.map(user => {
+					if (user.geometry?.coordinates && userInfo.geometry?.coordinates) {
+						const distance = calculateDistance(
+							userInfo.geometry.coordinates[0],
+							user.geometry.coordinates[0],
+							userInfo.geometry.coordinates[1],
+							user.geometry.coordinates[1]
+						);
+						return { ...user, distance };
+					}
+					return { ...user, distance: null };
+				})
+				.sort((a, b) => {
+					if (a.distance === null) return 1;
+					if (b.distance === null) return -1;
+					return a.distance - b.distance;
+				});
+			console.log(sortedUsers);
 
 			setUsers(sortedUsers);
 		}
@@ -56,6 +57,10 @@ const VisitedUser = () => {
 
 	console.log(users);
 
+	if (location.pathname === '/home' && users.length === 0) {
+		return null;
+	}
+
 	return (
 		<div className='home_page bg-black py-8 px-6 rounded-2xl'>
 			{user?.payment?.membership ? (
@@ -64,26 +69,43 @@ const VisitedUser = () => {
 						<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
 							Who viewed me
 						</h3>
+						{location.pathname === '/home' && (
+							<Link
+								to='/visited-users'
+								className='primary_btn !text-sm sm:!text-xl'
+							>
+								View More
+							</Link>
+						)}
 						{/* <Link to="/event-page" className="primary_btn !text-sm sm:!text-xl">
                 View More
               </Link> */}
 					</div>
-					<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6'>
-						{/* {event.slice(0, 6).map((el, i) => (
-                <div className="h-full bg-light-grey rounded-2xl">
-                <EventCard key={i} event={el} />
-                </div>
-              ))} */}
-						{users && Array.isArray(users) ? (
-							users?.map((user, i) => (
-								<div className='h-full bg-light-grey rounded-2xl'>
-									<UserCard key={i} userInfo={user} />
-								</div>
-							))
-						) : (
-							<>No one visitors</>
-						)}
-					</div>
+					{location.pathname === '/home' ? (
+						<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4 gap-6'>
+							{users && Array.isArray(users) ? (
+								users?.slice(0, 4)?.map((user, i) => (
+									<div className='h-full bg-light-grey rounded-2xl'>
+										<UserCard key={i} userInfo={user} />
+									</div>
+								))
+							) : (
+								<>No one visitors</>
+							)}
+						</div>
+					) : (
+						<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-6'>
+							{users && Array.isArray(users) ? (
+								users?.map((user, i) => (
+									<div className='h-full bg-light-grey rounded-2xl'>
+										<UserCard key={i} userInfo={user} />
+									</div>
+								))
+							) : (
+								<>No one visitors</>
+							)}
+						</div>
+					)}
 				</div>
 			) : (
 				<div

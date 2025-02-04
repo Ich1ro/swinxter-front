@@ -159,10 +159,10 @@ const CreateTravelPage = () => {
 		<div className='bg-white rounded-40px'>
 			<div className='text-center p-5 py-10 text-black px-10 relative'>
 				<BackBtn />
-				<h3 className='text-2xl sm:text-4xl mb-2'>
+				<h3 className='text-2xl sm:text-4xl'>
 					Create Your Situationship Plan
 				</h3>
-				<p className='text-lg'>Let’s Create a Notorious Travel</p>
+				{/* <p className='text-lg'>Let’s Create a Notorious Travel</p> */}
 			</div>
 			<div className='flex flex-wrap bg-black rounded-40px '>
 				<div className='w-full md:w-3/5 xl:w-full 2xl:w-3/5 '>

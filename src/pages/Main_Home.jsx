@@ -6,6 +6,9 @@ import EventCard from '../components/Event/EventCard';
 import TravelCard from '../components/Travel/TravelCard';
 import api from '../utils/api';
 import { useSelector } from 'react-redux';
+import NearUsers from './NearUsers'
+import VisitedUser from './VisitedUsers'
+import RecentUser from './RecentUser'
 const Main_Home = () => {
 	const [event, setEvent] = useState([]);
 	const [clubs, setClubs] = useState([]);
@@ -121,6 +124,9 @@ const Main_Home = () => {
 							</div>
 						</div>
 					)}
+					<VisitedUser />
+					<RecentUser/>
+					<NearUsers />
 				</>
 			) : (
 				<div
