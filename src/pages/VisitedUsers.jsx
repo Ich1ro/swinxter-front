@@ -57,7 +57,7 @@ const VisitedUser = () => {
 
 	console.log(users);
 
-	if (location.pathname === '/home' && users.length === 0) {
+	if (location?.pathname === '/home' && users?.length === 0) {
 		return null;
 	}
 
