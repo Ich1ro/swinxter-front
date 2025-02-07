@@ -1110,9 +1110,9 @@ const CoupleDetailPage = ({
 			</div>
 			<div className='audit-dating__block relative py-4 md:py-16 md:pt-0 container mx-auto mt-14'>
 				<div className='flex flex-col md:flex-row justify-center items-center text-center gap-6 py-71px'>
-					<h2 className='text-white text-base sm:text-2xl md:text-3xl xl:text-40px'>
+					{/* <h2 className='text-white text-base sm:text-2xl md:text-3xl xl:text-40px'>
 						#1 Adult Dating Site
-					</h2>
+					</h2> */}
 				</div>
 			</div>
 		</div>

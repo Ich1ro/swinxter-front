@@ -43,7 +43,11 @@ const MenuItem = ({
 	}, [currentPath, path]);
 
 	useEffect(() => {
-		if (openMenuItem !== title && openMenuItem !== 'Media' && openMenuItem !== 'My likes') {
+		if (
+			openMenuItem !== title &&
+			openMenuItem !== 'Media' &&
+			openMenuItem !== 'My likes'
+		) {
 			setShowSubmenu(false);
 		}
 	}, [openMenuItem]);
@@ -70,7 +74,10 @@ const MenuItem = ({
 	return (
 		<li
 			className={
-				title === 'My Photos' || title === 'My Videos' || title === 'Sent ' || title === 'Received '
+				title === 'My Photos' ||
+				title === 'My Videos' ||
+				title === 'Sent ' ||
+				title === 'Received '
 					? 'menu-item-media'
 					: `menu-item`
 			}
@@ -305,11 +312,13 @@ const Sidebar = ({ unread, closeMenu }) => {
 				//   submenus: [{ title: "Top up points", submenus: [] }],
 				// },
 				...(user?.role !== 'business'
-					? [{ title: 'Blocked', submenus: [], path: '/blocked_users' }]
+					? [
+							{ title: 'Membership', submenus: [], path: '/membership' },
+							{ title: 'Blocked', submenus: [], path: '/blocked_users' },
+					  ]
 					: []),
 			],
 		},
-		{ title: 'Membership', submenus: [], path: '/membership' },
 	];
 
 	useEffect(() => {

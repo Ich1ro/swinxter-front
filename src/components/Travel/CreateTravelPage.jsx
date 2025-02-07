@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import api from '../../utils/api';
 import { BackBtn } from '../M_used/BackBtn';
+import getFullCoordinatesFromAWS from '../../utils/get-full-location';
 const CreateTravelPage = () => {
 	const DEBOUNCE_DELAY = 300;
 	const [areaname, setAreaName] = useState([]);
@@ -15,7 +16,10 @@ const CreateTravelPage = () => {
 	const [showResults, setShowResults] = useState(false);
 	const options = ['M', 'F', 'MF', 'MM', 'FF', 'T'];
 	const [travel, setTravel] = useState({
-		Location: '',
+		country: '',
+		state: '',
+		city: '',
+		address: '',
 		start_date: '',
 		resort: '',
 		end_date: '',
@@ -77,16 +81,64 @@ const CreateTravelPage = () => {
 
 	const handleTravelSubmit = async e => {
 		e.preventDefault();
+
+		let address;
+		let location;
+		let geometry = {};
+
+		const isResortFilled = travel.resort.trim() !== '';
+		const isAddressFilled =
+			travel.address.trim() !== '' &&
+			travel.city.trim() !== '' &&
+			travel.state.trim() !== '' &&
+			travel.country.trim() !== '';
+
+		if (
+			!isResortFilled && !isAddressFilled
+		) {
+			toast.error('Please fill all location fields or choose resort.');
+			return null;
+		}
+
+		if (
+			travel.address !== '' &&
+			travel.city !== '' &&
+			travel.state !== '' &&
+			travel.country !== ''
+		) {
+			address = `${travel.address}, ${travel.city}, ${travel.state}, ${travel.country}`;
+
+			location = await getFullCoordinatesFromAWS(address);
+
+			geometry = {
+				type: 'Point',
+				coordinates: location.coordinates,
+			};
+		}
+
+		// const location = await getFullCoordinatesFromAWS(address);
+
+		// const geometry = {
+		// 	type: 'Point',
+		// 	coordinates: location.coordinates,
+		// };
+		console.log(address);
+		console.log(location);
+
 		const formdata = new FormData();
 		formdata.append('image', userInfo.image);
 		formdata.append('name', userInfo.username);
-		formdata.append('locationto', JSON.stringify(travel?.Location));
+		// formdata.append('locationto', JSON.stringify(travel?.Location));
 		formdata.append('startDate', travel.start_date);
 		formdata.append('resort', travel.resort);
 		formdata.append('endDate', travel.end_date);
 		formdata.append('interested', JSON.stringify(selectedOptions));
 		formdata.append('description', travel.description);
 		formdata.append('userId', userInfo._id);
+		if (location) {
+			formdata.append('location', JSON.stringify(location.location));
+			formdata.append('geometry', JSON.stringify(geometry));
+		}
 
 		if (
 			!travel.description ||
@@ -116,7 +168,10 @@ const CreateTravelPage = () => {
 
 			if (data) {
 				setTravel({
-					Location: '',
+					country: '',
+					state: '',
+					city: '',
+					address: '',
 					start_date: '',
 					resort: '',
 					end_date: '',
@@ -152,16 +207,13 @@ const CreateTravelPage = () => {
 
 	useEffect(() => {
 		console.log(resorts);
-		
 	}, [resorts]);
 
 	return (
 		<div className='bg-white rounded-40px'>
 			<div className='text-center p-5 py-10 text-black px-10 relative'>
 				<BackBtn />
-				<h3 className='text-2xl sm:text-4xl'>
-					Create Your Situationship Plan
-				</h3>
+				<h3 className='text-2xl sm:text-4xl'>Create Your Situationship Plan</h3>
 				{/* <p className='text-lg'>Let’s Create a Notorious Travel</p> */}
 			</div>
 			<div className='flex flex-wrap bg-black rounded-40px '>
@@ -175,6 +227,82 @@ const CreateTravelPage = () => {
 							className='flex flex-col justify-center gap-y-4 sm:gap-y-6'
 							autoComplete='off'
 						>
+							<div className='flex flex-wrap rounded-md input_field_2'>
+								<label
+									htmlFor='Country'
+									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
+                                            lg:text-start'
+								>
+									Country
+								</label>
+								<input
+									type='text'
+									id='Country'
+									name='country'
+									onChange={e => handleChange(e)}
+									value={travel.country}
+									autocomplete='off'
+									className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									required
+								/>
+							</div>
+							<div className='flex flex-wrap rounded-md input_field_2'>
+								<label
+									htmlFor='State'
+									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
+                                            lg:text-start'
+								>
+									State
+								</label>
+								<input
+									type='text'
+									id='State'
+									name='state'
+									onChange={e => handleChange(e)}
+									value={travel.state}
+									autocomplete='off'
+									className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									required
+								/>
+							</div>
+							<div className='flex flex-wrap rounded-md input_field_2'>
+								<label
+									htmlFor='City'
+									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
+                                            lg:text-start'
+								>
+									City
+								</label>
+								<input
+									type='text'
+									id='City'
+									name='city'
+									onChange={e => handleChange(e)}
+									value={travel.city}
+									autocomplete='off'
+									className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									required
+								/>
+							</div>
+							<div className='flex flex-wrap rounded-md input_field_2'>
+								<label
+									htmlFor='Address'
+									className='rounded-l-md w-full md:w-[120px] xl:w-[195px] sm:h-[49px] flex items-center justify-start sm:px-2 lg:px-4 text-sm mb-1 sm:mb-0 md:text-text-xs xl:text-lg text-white  font-normal leading-5 xl:leading-29 text-center 
+                                            lg:text-start'
+								>
+									Address
+								</label>
+								<input
+									type='text'
+									id='Address'
+									name='address'
+									onChange={e => handleChange(e)}
+									value={travel.address}
+									autocomplete='off'
+									className='bg-black border md:rounded-l-none rounded-md md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] h-[49px] text-gray font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+									required
+								/>
+							</div>
 							{/* <div className="flex flex-wrap rounded-md input_field_2">
                 <label
                   htmlFor="loc_to"

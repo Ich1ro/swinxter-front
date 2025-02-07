@@ -2,7 +2,7 @@ import React from 'react';
 import './css/userCard.css';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import toast from 'react-hot-toast'
+import toast from 'react-hot-toast';
 
 const calculateAge = dob => {
 	const today = new Date();
@@ -135,30 +135,47 @@ const UserCard = ({ userInfo }) => {
 				if (user.payment.membership) {
 					navigate(`/user-detail?id=${userInfo._id}`);
 				} else {
-					toast((t) => (
-						<span>
-							You want to get a membership plan!
-							<div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
-								<button
-									onClick={() => {
-										toast.dismiss(t.id);
-										navigate('/membership');
-									}}
-									style={{ backgroundColor: '#b64a4a', color: 'white', padding: '5px 10px', border: 'none', borderRadius: '5px' }}
+					toast(
+						t => (
+							<span>
+								You want to get a membership plan!
+								<div
+									style={{ marginTop: '10px', display: 'flex', gap: '10px' }}
 								>
-									Yes
-								</button>
-								<button
-									onClick={() => toast.dismiss(t.id)}
-									style={{ backgroundColor: '#4caf50', color: 'white', padding: '5px 10px', border: 'none', borderRadius: '5px' }}
-								>
-									No
-								</button>
-							</div>
-						</span>
-					), {
-						duration: 5000,
-					});
+									<button
+										onClick={() => {
+											toast.dismiss(t.id);
+											navigate('/membership');
+										}}
+										style={{
+											backgroundColor: '#b64a4a',
+											color: 'white',
+											padding: '5px 10px',
+											border: 'none',
+											borderRadius: '5px',
+										}}
+									>
+										Yes
+									</button>
+									<button
+										onClick={() => toast.dismiss(t.id)}
+										style={{
+											backgroundColor: '#4caf50',
+											color: 'white',
+											padding: '5px 10px',
+											border: 'none',
+											borderRadius: '5px',
+										}}
+									>
+										No
+									</button>
+								</div>
+							</span>
+						),
+						{
+							duration: 5000,
+						}
+					);
 				}
 			}}
 		>
@@ -191,7 +208,7 @@ const UserCard = ({ userInfo }) => {
 			<div className='user_details'>
 				<p>{userInfo.username}</p>
 				<UserAge userInfo={userInfo} />
-				{userInfo?.profile_type === 'couple' ? (
+				{/* {userInfo?.profile_type === 'couple' ? (
 					(() => {
 						if (
 							userInfo?.couple?.person1?.gender === 'male' &&
@@ -236,7 +253,47 @@ const UserCard = ({ userInfo }) => {
 						}
 						alt=''
 					/>
-				)}
+				)} */}
+				<div style={{ display: 'flex', gap: '2px' }}>
+					{userInfo?.interests?.male?.length > 0 ? (
+						<img src='images/Male.png' alt='male-user' className='h-[25px]' />
+					) : (
+						''
+					)}
+					{userInfo?.interests?.female?.length > 0 ? (
+						<img src='images/Female.png' alt='woman' className='h-[25px]' />
+					) : (
+						''
+					)}
+					{userInfo?.interests?.male_female?.length > 0 ? (
+						<img
+							src='images/malefemale.png'
+							alt='couple'
+							className='h-[22px]'
+						/>
+					) : (
+						''
+					)}
+					{userInfo?.interests?.male_male?.length > 0 ? (
+						<img src='images/malemale.png' alt='couple' className='h-[22px]' />
+					) : (
+						''
+					)}
+					{userInfo?.interests?.female_female?.length > 0 ? (
+						<img
+							src='images/femaleFemale.png'
+							alt='couple'
+							className='h-[22px]'
+						/>
+					) : (
+						''
+					)}
+					{userInfo?.interests?.transgender?.length > 0 ? (
+						<img src='images/Trans.png' alt='couple' className='h-[22px]' />
+					) : (
+						''
+					)}
+				</div>
 				{userInfo.distance ? <p>{userInfo.distance} miles</p> : <p></p>}
 
 				{/* <p style={{ fontSize: '14px' }}>
