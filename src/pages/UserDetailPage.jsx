@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { AiFillLike } from 'react-icons/ai';
+import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCustomChatContext } from '../Context/ChatContext';
@@ -247,6 +247,28 @@ const UserDetailPage = ({ socket }) => {
 		);
 	};
 
+	const unlike = async () => {
+		try {
+			toast.promise(
+				(async () => {
+					await api.post(`/remove-superlike`, {
+						userId: user?._id,
+						superlikeId: userInfo?._id,
+					});
+					await dispatch(loadUser());
+				})(),
+				{
+					loading: 'Unliking...',
+					success: `${userInfo?.username} has been unliked successfully.`,
+					error: 'Failed to unlike, please try again.',
+				}
+			);
+			// window.location.reload();
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
 	const RenderedStyle = {
 		color: `${
 			userInfo?.gender === 'male'
@@ -410,17 +432,42 @@ const UserDetailPage = ({ socket }) => {
 													alignItems: 'center',
 												}}
 												onClick={() => {
-													superlike();
+													if (
+														user?.superlike?.sent?.some(
+															obj => obj?.userId === userInfo?._id
+														)
+													) {
+														unlike();
+													} else {
+														superlike();
+													}
 												}}
 											>
-												<AiFillLike
-													style={{
-														fontSize: '16px',
-														marginRight: '5px',
-														marginBottom: '1px',
-													}}
-												/>{' '}
-												Like
+												{user?.superlike?.sent?.some(
+													obj => obj?.userId === userInfo?._id
+												) ? (
+													<>
+														<AiFillDislike
+															style={{
+																fontSize: '16px',
+																marginRight: '5px',
+																marginBottom: '1px',
+															}}
+														/>{' '}
+														UnLike
+													</>
+												) : (
+													<>
+														<AiFillLike
+															style={{
+																fontSize: '16px',
+																marginRight: '5px',
+																marginBottom: '1px',
+															}}
+														/>{' '}
+														Like
+													</>
+												)}
 											</button>
 										</div>
 									) : null}
@@ -1168,6 +1215,7 @@ const UserDetailPage = ({ socket }) => {
 					superlike={() => {
 						superlike();
 					}}
+					unlike={unlike}
 					currentUser={currentUser}
 					handleRemove={handleRemove}
 					handleSendRequest={handleSendRequest}

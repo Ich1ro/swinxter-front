@@ -12,6 +12,7 @@ const TravelPage = () => {
 	const [travel, setTravel] = useState([]);
 	const [travels, setNew] = useState([]);
 	const [resorts, setResorts] = useState([]);
+	const [banners, setBanners] = useState([]);
 	const navigate = useNavigate();
 	const [recordsPerPage] = useState(6);
 	const [currentPage, setCurrentPage] = useState(1);
@@ -92,8 +93,14 @@ const TravelPage = () => {
 		const newPost = data.reverse();
 		setTravel(newPost);
 		setNew(newPost);
+		const getBanners = async () => {
+			const {data} = await api.get(`/get_banner_by_page/travel`);
+			setBanners(data)
+		}
+		getBanners()
 		setLoading(false);
 	};
+
 
 	useEffect(() => {
 		setLoading(true);
@@ -116,19 +123,18 @@ const TravelPage = () => {
 		{ value: 'Blossom Bed', label: 'Blossom Bed' },
 	];
 
-  const getResorts = async () => {
+	const getResorts = async () => {
 		const resorst = await api.get(`/get_resorts`);
-		setResorts(resorst.data)
-	}
+		setResorts(resorst.data);
+	};
 
 	useEffect(() => {
-		getResorts()
-	}, [])
+		getResorts();
+	}, []);
 
 	useEffect(() => {
 		console.log(resorts);
-		
-	}, [resorts])
+	}, [resorts]);
 
 	return (
 		<div className='bg-black py-8 px-6 rounded-2xl'>
@@ -218,9 +224,10 @@ const TravelPage = () => {
 														onChange={handleChange}
 													>
 														<option value=''>Please Select</option>
-														{resorts.length > 0 && resorts.map(el => (
-															<option value={el.name}>{el.name}</option>
-														))}
+														{resorts.length > 0 &&
+															resorts.map(el => (
+																<option value={el.name}>{el.name}</option>
+															))}
 													</select>
 												</div>
 												{/* <div className="distance_filter">
@@ -270,7 +277,21 @@ const TravelPage = () => {
 							</div>
 							<div className='grid sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-5'>
 								{currentPost.map((el, i) => (
-									<TravelCard2 key={i} travel={el} />
+									<>
+										<div className='h-full bg-light-grey rounded-2xl' key={i}>
+											<TravelCard2 key={i} travel={el} />
+										</div>
+										{i !== 5 && (i + 1) % 3 === 0 && (
+											<div className='event_promo_ban'>
+												{/* Banner image */}
+												<img
+													className='w-full'
+													src={banners.length > 0 ? banners[0].imgUrl : `images/banner.jpg`}
+													alt='Banner'
+												/>
+											</div>
+										)}
+									</>
 								))}
 							</div>
 							<Pagination

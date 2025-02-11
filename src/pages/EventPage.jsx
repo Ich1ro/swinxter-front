@@ -13,6 +13,7 @@ const EventPage = () => {
 	const [event, setEvent] = useState([]);
 	const [events, setNew] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [banners, setBanners] = useState([]);
 	const [filterDropdown, setFilterDropdown] = useState(false);
 	const [recordsPerPage] = useState(8);
 	const [loading, setLoading] = useState(false);
@@ -31,6 +32,11 @@ const EventPage = () => {
 	const getEvent = async () => {
 		setLoading(true);
 		const { data } = await api.get(`/events?q=${searchquery}`);
+		const getBanners = async () => {
+			const { data } = await api.get(`/get_banner_by_page/event`);
+			setBanners(data);
+		};
+		getBanners();
 		setLoading(false);
 		const allEvents = data.data;
 		const verifiedEvents = allEvents.filter(event => {
@@ -107,10 +113,10 @@ const EventPage = () => {
 			if (filter.date) {
 				filtered = filtered.filter(event => {
 					const eventDate = new Date(event.Startdate.split('T')[0]);
-					const filterDate = new Date(filter.date); 
+					const filterDate = new Date(filter.date);
 					const oneMonthLater = new Date(filterDate);
 					oneMonthLater.setMonth(filterDate.getMonth() + 1);
-			
+
 					return eventDate >= filterDate && eventDate <= oneMonthLater;
 				});
 			}
@@ -133,7 +139,6 @@ const EventPage = () => {
 				// Update the filtered events
 				filtered = filteredByDistance;
 				console.log(filteredByDistance);
-				
 			}
 			setEvent(filtered);
 		}
@@ -325,7 +330,11 @@ const EventPage = () => {
 													{/* Banner image */}
 													<img
 														className='w-full'
-														src='images/banner.jpg'
+														src={
+															banners.length > 0
+																? banners[0].imgUrl
+																: `images/banner.jpg`
+														}
 														alt='Banner'
 													/>
 												</div>

@@ -6,13 +6,14 @@ import Loading from '../components/M_used/Loading';
 import { useCustomChatContext } from '../Context/ChatContext';
 import { StreamChat } from 'stream-chat';
 import api from '../utils/api';
-import { AiFillLike } from 'react-icons/ai';
+import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 import '../components/Users/user.css';
 
 const CoupleDetailPage = ({
 	userInfo,
 	currentUser,
 	superlike,
+	unlike,
 	handleRemove,
 	handleSendRequest,
 	handleCancelRequest,
@@ -235,17 +236,42 @@ const CoupleDetailPage = ({
 											alignItems: 'center',
 										}}
 										onClick={() => {
-											superlike();
+											if (
+												user?.superlike?.sent?.some(
+													obj => obj?.userId === userInfo?._id
+												)
+											) {
+												unlike();
+											} else {
+												superlike();
+											}
 										}}
 									>
-										<AiFillLike
-											style={{
-												fontSize: '16px',
-												marginRight: '5px',
-												marginBottom: '1px',
-											}}
-										/>{' '}
-										Like
+										{user?.superlike?.sent?.some(
+											obj => obj?.userId === userInfo?._id
+										) ? (
+											<>
+												<AiFillDislike
+													style={{
+														fontSize: '16px',
+														marginRight: '5px',
+														marginBottom: '1px',
+													}}
+												/>{' '}
+												UnLike
+											</>
+										) : (
+											<>
+												<AiFillLike
+													style={{
+														fontSize: '16px',
+														marginRight: '5px',
+														marginBottom: '1px',
+													}}
+												/>{' '}
+												Like
+											</>
+										)}
 									</button>
 									{/* </div>  */}
 								</div>

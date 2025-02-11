@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 const ClubPage = () => {
 	const [clubs, setClubs] = useState([]);
 	const [club, setNew] = useState([]);
+	const [banners, setBanners] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [filterDropdown, setFilterDropdown] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -34,11 +35,17 @@ const ClubPage = () => {
 	const getClubs = async () => {
 		setLoading(true);
 		const { data } = await api.get(`/search_club?q=${searchquery}`);
+		const getBanners = async () => {
+			const {data} = await api.get(`/get_banner_by_page/${'business'}`);
+			setBanners(data)
+		};
+		getBanners()
 		setLoading(false);
 		const allclubs = data;
 		const verifiedClubs = allclubs.filter(el => el.isverify === true);
 		const newestPostFirst = verifiedClubs.reverse();
 		setClubs(newestPostFirst);
+
 		setNew(newestPostFirst);
 	};
 
@@ -194,9 +201,23 @@ const ClubPage = () => {
 									</div>
 								</div>
 							</div>
-							<div className='grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
+							<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-5'>
 								{currentPost.map((el, i) => (
-									<ClubCard key={i} clubs={el} />
+									<>
+										<div className='h-full bg-light-grey rounded-2xl' key={i}>
+											<ClubCard key={i} clubs={el} />
+										</div>
+										{i !== 7 && (i + 1) % 4 === 0 && (
+											<div className='event_promo_ban'>
+												{/* Banner image */}
+												<img
+													className='w-full'
+													src={banners.length > 0 ? banners[0].imgUrl : `images/banner.jpg`}
+													alt='Banner'
+												/>
+											</div>
+										)}
+									</>
 								))}
 							</div>
 							{clubs.length === 0 ? (
@@ -204,7 +225,8 @@ const ClubPage = () => {
 									<p>No businesses available.</p>
 								) : (
 									<p>
-										No businesses match your selection. Please update the filter criteria.
+										No businesses match your selection. Please update the filter
+										criteria.
 									</p>
 								)
 							) : (

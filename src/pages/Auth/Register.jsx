@@ -156,7 +156,7 @@ const Signup = () => {
 						<h2 className='text-white text-2xl sm:text-3xl xl:text-5xl text-center xl:text-start font-bold mb-6'>
 							Find Your Date
 						</h2>
-
+						
 						<form className='flex flex-col justify-center' autoComplete='off'>
 							<div className='signup_radio mb-5 flex flex-wrap gap-y-5 justify-between'>
 								<p
