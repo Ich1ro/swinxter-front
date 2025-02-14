@@ -170,7 +170,7 @@ useEffect(() => {
         <Route path="/sent_request" element={<ProtectedRoute><SentRequest/></ProtectedRoute>} />
         <Route path="/my-sent-likes" element={<ProtectedRoute><MySentLikes/></ProtectedRoute>} />
         <Route path="/my-recieved-likes" element={<ProtectedRoute><MyRecievedLikes/></ProtectedRoute>} />
-        <Route path="/recieved_request" element={<ProtectedRoute><RecievedRequests/></ProtectedRoute>} />
+        <Route path="/recieved_request" element={<ProtectedRoute><RecievedRequests socket={socket}/></ProtectedRoute>} />
         <Route path="/membership" element={<ProtectedRoute><Membership/></ProtectedRoute>} />
         <Route path="/messaging" element={<ProtectedRoute><Messaging /></ProtectedRoute>} />
 

@@ -4,7 +4,7 @@ import api from '../utils/api';
 import FriendCard from '../components/Cards/FriendCard';
 import { Link } from 'react-router-dom';
 
-const RecievedRequests = () => {
+const RecievedRequests = ({socket}) => {
 	const [users, setUsers] = useState([]);
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
@@ -41,7 +41,7 @@ const RecievedRequests = () => {
 						>
 							{friends?.length > 0 ? (
 								friends?.map((friend, i) => {
-									return <FriendCard data={friend} key={i} request={true} />;
+									return <FriendCard data={friend} key={i} request={true} socket={socket} />;
 								})
 							) : (
 								<p>No friends requests yet !</p>

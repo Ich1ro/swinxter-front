@@ -6,7 +6,7 @@ import api from '../../utils/api';
 import { useCustomChatContext } from '../../Context/ChatContext';
 import { loadUser } from '../../redux/actions/auth';
 
-const FriendCard = ({ data, request, getFriends }) => {
+const FriendCard = ({ data, request, getFriends, socket }) => {
 	const [users, setUsers] = useState([]);
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
@@ -25,6 +25,33 @@ const FriendCard = ({ data, request, getFriends }) => {
 	const acceptReq = async () => {
 		try {
 			await api.put(`/accept_req/${userInfo._id}/${data?._id}`);
+			window.location.reload();
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const decline_req = async () => {
+		try {
+			await api.put(`/decline_req/${userInfo._id}/${data?._id}`);
+			socket?.emit('sendNotification', {
+				senderName: user.username,
+				senderId: user._id,
+				recieverId: data._id,
+				recieverName: data.username,
+				message: `${user.username} decline your friend request`,
+				type: 'friendRequest',
+			});
+
+			await api.post('/notifications', {
+				senderId: user._id,
+				recieverId: data._id,
+				senderName: user.username,
+				recieverName: data.username,
+				type: 'friendRequest',
+				message: `${user.username} decline your friend request`,
+			});
+
 			window.location.reload();
 		} catch (e) {
 			console.log(e);
@@ -117,7 +144,7 @@ const FriendCard = ({ data, request, getFriends }) => {
 						request && (
 							<button
 								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
-								onClick={acceptReq}
+								onClick={decline_req}
 							>
 								Decline
 							</button>
