@@ -8,11 +8,15 @@ import { StreamChat } from 'stream-chat';
 import api from '../utils/api';
 import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 import '../components/Users/user.css';
+import FriendCard from '../components/Cards/FriendCard';
+import TravelCard2 from '../components/Travel/TravelCard2';
 
 const CoupleDetailPage = ({
 	userInfo,
 	currentUser,
 	superlike,
+	friends,
+	situationships,
 	unlike,
 	handleRemove,
 	handleSendRequest,
@@ -1132,6 +1136,67 @@ const CoupleDetailPage = ({
 							</div>
 						)}
 					</div>
+					{friends.length > 0 && (
+						<>
+							<div className='my-20'>
+								<div className='flex justify-between flex-wrap gap-5 items-center mb-12'>
+									<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
+										Friends
+									</h3>
+									{location.search.length !== 0 ? null : friends.length ===
+									  0 ? null : (
+										<Link
+											to='/my_friends'
+											className='primary_btn !text-sm sm:!text-xl'
+										>
+											View More
+										</Link>
+									)}
+								</div>
+								<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-6'>
+									{friends.length > 0 ? (
+										friends?.slice(0, 4)?.map((friend, i) => {
+											return <FriendCard data={friend} key={i} />;
+										})
+									) : (
+										<p>No friends yet !</p>
+									)}
+								</div>
+							</div>
+						</>
+					)}
+					{situationships.length > 0 && (
+						<>
+							<div className='my-20'>
+								<div className='flex justify-between flex-wrap gap-5 items-center mb-12'>
+									<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
+										Situationships
+									</h3>
+									{situationships.length === 0 ? null : (
+										<Link
+											to='/travel-page'
+											className='primary_btn !text-sm sm:!text-xl'
+										>
+											View More
+										</Link>
+									)}
+								</div>
+								<div className='grid sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-5'>
+									{situationships.length > 0 &&
+										situationships?.slice(0, 4)?.map((el, i) => (
+											<>
+												<div
+													className='h-full bg-light-grey rounded-2xl'
+													key={i}
+												>
+													<TravelCard2 key={i} travel={el} />
+												</div>
+											</>
+										))}
+								</div>
+							</div>
+						</>
+					)}
 				</div>
 			</div>
 			<div className='audit-dating__block relative py-4 md:py-16 md:pt-0 container mx-auto mt-14'>

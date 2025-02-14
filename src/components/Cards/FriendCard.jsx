@@ -33,12 +33,11 @@ const FriendCard = ({ data, request, getFriends }) => {
 
 	const unlike = async () => {
 		try {
-			await api
-				.post(`/remove-superlike`, {
-					userId: userInfo._id,
-					superlikeId: data._id,
-				})
-				window.location.reload();
+			await api.post(`/remove-superlike`, {
+				userId: userInfo._id,
+				superlikeId: data._id,
+			});
+			window.location.reload();
 		} catch (e) {
 			console.log(e);
 		}
@@ -89,7 +88,7 @@ const FriendCard = ({ data, request, getFriends }) => {
 						className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
 						onClick={handleViewProfile}
 					>
-						View Profile
+						Profile
 					</button>
 					{location?.pathname !== '/my-recieved-likes' &&
 					location?.pathname !== '/my-sent-likes' &&
@@ -107,6 +106,20 @@ const FriendCard = ({ data, request, getFriends }) => {
 								onClick={message}
 							>
 								Message
+							</button>
+						)
+					) : (
+						<></>
+					)}
+					{location?.pathname !== '/my-recieved-likes' &&
+					location?.pathname !== '/my-sent-likes' &&
+					location?.pathname !== '/sent_request' ? (
+						request && (
+							<button
+								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
+								onClick={acceptReq}
+							>
+								Decline
 							</button>
 						)
 					) : (

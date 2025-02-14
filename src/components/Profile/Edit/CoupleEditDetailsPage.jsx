@@ -741,7 +741,7 @@ const CoupleEditDetailPage = () => {
 									<BiChevronDown />
 								</span>
 							</div>
-							<div className={`select_ctmBox ${ctmsSelect ? 'active' : ''}`}>
+							<div className={`select_ctmBox ${ctmsSelect ? 'active' : ''}`} style={{zIndex: '1'}}>
 								<div className='select_label' name='body_hair'>
 									<span></span>
 								</div>
@@ -757,6 +757,7 @@ const CoupleEditDetailPage = () => {
 														type='checkbox'
 														name={key}
 														value={key}
+														style={{background: 'white'}}
 														onChange={() => handleInterests(key)}
 														checked={userDetails?.interests[key]?.length > 0}
 													/>

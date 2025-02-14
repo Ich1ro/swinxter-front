@@ -10,6 +10,7 @@ import { calculateAge } from '../utils/CalculateAge';
 import api from '../utils/api';
 import CoupleDetailPage from './CoupleDetailPage';
 import FriendCard from '../components/Cards/FriendCard';
+import TravelCard2 from '../components/Travel/TravelCard2';
 
 const UserDetailPage = ({ socket }) => {
 	const [age, setAge] = useState('');
@@ -27,6 +28,7 @@ const UserDetailPage = ({ socket }) => {
 	const [isProfile, setIsProfile] = useState(true);
 	const dispatch = useDispatch();
 	const [friends, setFriends] = useState([]);
+	const [situationships, setSituationships] = useState([]);
 
 	const getUser = async () => {
 		const currentUser = await api.get(`/user_details/${user._id}`);
@@ -52,6 +54,13 @@ const UserDetailPage = ({ socket }) => {
 		setFriends(data);
 	};
 
+	const getSituationships = async () => {
+		const { data } = await api.get(
+			`/situationships_by_user_id/${userInfo?._id}`
+		);
+		setSituationships(data);
+	};
+
 	console.log(currentUser);
 
 	useEffect(() => {
@@ -65,6 +74,7 @@ const UserDetailPage = ({ socket }) => {
 	useEffect(() => {
 		if (userInfo) {
 			getFriends();
+			getSituationships();
 		}
 	}, [userInfo]);
 
@@ -1169,14 +1179,15 @@ const UserDetailPage = ({ socket }) => {
 									</div>
 								)}
 							</div>
-							{location.search.length === 0 && (
+							{friends.length > 0 && (
 								<>
 									<div className='my-20'>
 										<div className='flex justify-between flex-wrap gap-5 items-center mb-12'>
 											<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
 												Friends
 											</h3>
-											{friends.length === 0 ? null : (
+											{location.search.length !== 0 ? null : friends.length ===
+											  0 ? null : (
 												<Link
 													to='/my_friends'
 													className='primary_btn !text-sm sm:!text-xl'
@@ -1193,6 +1204,38 @@ const UserDetailPage = ({ socket }) => {
 											) : (
 												<p>No friends yet !</p>
 											)}
+										</div>
+									</div>
+								</>
+							)}
+							{situationships.length > 0 && (
+								<>
+									<div className='my-20'>
+										<div className='flex justify-between flex-wrap gap-5 items-center mb-12'>
+											<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
+												Situationships
+											</h3>
+											{situationships.length === 0 ? null : (
+												<Link
+													to='/travel-page'
+													className='primary_btn !text-sm sm:!text-xl'
+												>
+													View More
+												</Link>
+											)}
+										</div>
+										<div className='grid sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-5'>
+											{situationships.length > 0 &&
+												situationships?.slice(0, 4)?.map((el, i) => (
+													<>
+														<div
+															className='h-full bg-light-grey rounded-2xl'
+															key={i}
+														>
+															<TravelCard2 key={i} travel={el} />
+														</div>
+													</>
+												))}
 										</div>
 									</div>
 								</>
@@ -1215,6 +1258,8 @@ const UserDetailPage = ({ socket }) => {
 					superlike={() => {
 						superlike();
 					}}
+					friends={friends}
+					situationships={situationships}
 					unlike={unlike}
 					currentUser={currentUser}
 					handleRemove={handleRemove}
