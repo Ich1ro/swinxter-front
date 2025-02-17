@@ -203,17 +203,23 @@ const UserDetailPage = ({ socket }) => {
 
 	const blockUser = async () => {
 		try {
-			setLoading(1);
-			await api.post('/blockuser', {
-				userId: user._id,
-				blockId: userInfo._id,
-			});
-			setLoading(0);
+		  setLoading(1);
+		  const response = await api.post('/blockuser', {
+			userId: user._id,
+			blockId: userInfo._id,
+		  });
+		  setLoading(0);
+		  
+		  if (response.status === 200 && response.data.blocked_users.includes(userInfo._id)) {
 			setBlocked(1);
+		  } else {
+			setBlocked(0);
+		  }
 		} catch (e) {
-			console.log(e);
+		  console.log(e);
+		  setLoading(0);
 		}
-	};
+	  };
 
 	const superlike = async () => {
 		console.log('clicked');
