@@ -240,7 +240,7 @@ const TravelDetails = () => {
 				<>
 					<span
 						className='primary_btn cursor-pointer !text-sm !py-2 !px-3 !leading-none !py-3'
-						onClick={() => navigate('/travel-page')}
+						onClick={() => navigate(-1)}
 					>
 						<span className='text-sm inline-flex items-center mr-2'>
 							<FaArrowLeft />
