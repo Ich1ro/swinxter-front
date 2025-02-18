@@ -29,6 +29,7 @@ const UserDetailPage = ({ socket }) => {
 	const dispatch = useDispatch();
 	const [friends, setFriends] = useState([]);
 	const [situationships, setSituationships] = useState([]);
+	const [isFriendsOpen, setIsFriendsOpen] = useState(false);
 
 	const getUser = async () => {
 		const currentUser = await api.get(`/user_details/${user._id}`);
@@ -203,23 +204,26 @@ const UserDetailPage = ({ socket }) => {
 
 	const blockUser = async () => {
 		try {
-		  setLoading(1);
-		  const response = await api.post('/blockuser', {
-			userId: user._id,
-			blockId: userInfo._id,
-		  });
-		  setLoading(0);
-		  
-		  if (response.status === 200 && response.data.blocked_users.includes(userInfo._id)) {
-			setBlocked(1);
-		  } else {
-			setBlocked(0);
-		  }
+			setLoading(1);
+			const response = await api.post('/blockuser', {
+				userId: user._id,
+				blockId: userInfo._id,
+			});
+			setLoading(0);
+
+			if (
+				response.status === 200 &&
+				response.data.blocked_users.includes(userInfo._id)
+			) {
+				setBlocked(1);
+			} else {
+				setBlocked(0);
+			}
 		} catch (e) {
-		  console.log(e);
-		  setLoading(0);
+			console.log(e);
+			setLoading(0);
 		}
-	  };
+	};
 
 	const superlike = async () => {
 		console.log('clicked');
@@ -1192,8 +1196,14 @@ const UserDetailPage = ({ socket }) => {
 											<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
 												Friends
 											</h3>
-											{location.search.length !== 0 ? null : friends.length ===
-											  0 ? null : (
+											{location.search.length !== 0 ? (
+												<button
+													onClick={() => setIsFriendsOpen(!isFriendsOpen)}
+													className='primary_btn !text-sm sm:!text-xl'
+												>
+													View More
+												</button>
+											) : friends.length === 0 ? null : (
 												<Link
 													to='/my_friends'
 													className='primary_btn !text-sm sm:!text-xl'
@@ -1204,9 +1214,35 @@ const UserDetailPage = ({ socket }) => {
 										</div>
 										<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-6'>
 											{friends.length > 0 ? (
-												friends?.slice(0, 4)?.map((friend, i) => {
-													return <FriendCard data={friend} key={i} />;
-												})
+												!isFriendsOpen ? (
+													friends?.slice(0, 4)?.map((friend, i) => {
+														return (
+															<div
+																style={{
+																	display: 'flex',
+																	alignItems: 'center',
+																	justifyContent: 'center',
+																}}
+															>
+																<FriendCard data={friend} key={i} />
+															</div>
+														);
+													})
+												) : (
+													friends?.map((friend, i) => {
+														return (
+															<div
+																style={{
+																	display: 'flex',
+																	alignItems: 'center',
+																	justifyContent: 'center',
+																}}
+															>
+																<FriendCard data={friend} key={i} />
+															</div>
+														);
+													})
+												)
 											) : (
 												<p>No friends yet !</p>
 											)}

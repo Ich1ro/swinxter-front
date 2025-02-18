@@ -164,7 +164,6 @@ const EditEventPage = () => {
 		formData.append('eventName', event.event_name);
 		formData.append('Startdate', event.Startdate);
 		formData.append('EndDate', event.EndDate);
-		formData.append('location', JSON.stringify(event.Location));
 		formData.append('description', event.Description);
 		formData.append('mainImage', coverImage);
 		formData.append('type', event.event_type);
