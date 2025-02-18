@@ -10,7 +10,8 @@ const TravelCard2 = ({ travel }) => {
 	const navigate = useNavigate();
 
 	const handleTravel = id => {
-		navigate(`/user-detail?id=${id}`);
+		// navigate(`/user-detail?id=${id}`);
+		navigate(`/travel-details/${id}`);
 	};
 
 	const formatDate = dateString => {
@@ -33,7 +34,7 @@ const TravelCard2 = ({ travel }) => {
 	return (
 		<div
 			className='w-full cursor-pointer p-3 bg-light-grey rounded-2xl flex flex-wrap sm:grid grid-cols-2'
-			onClick={() => handleTravel(travel?.userId?._id)}
+			onClick={() => handleTravel(travel?._id)}
 		>
 			<div className='w-2/5 sm:w-full'>
 				<img

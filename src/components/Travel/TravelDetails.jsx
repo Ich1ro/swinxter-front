@@ -17,23 +17,21 @@ import { MidLoading } from '../M_used/Loading';
 import { FaArrowLeft } from 'react-icons/fa6';
 import './css/eventDetailPage.css';
 import { IoMdSend } from 'react-icons/io';
-import Comments from './Comments';
+// import Comments from './Comments';
 import { useCustomChatContext } from '../../Context/ChatContext';
 
-const EventDetailPage = () => {
-	const [eventInfo, setEventInfo] = useState({});
-	const [isJoined, setIsJoined] = useState(false);
+const TravelDetails = () => {
+	const [travelInfo, setTravelInfo] = useState({});
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
 	const [loading, setLoading] = useState(false);
 	const { savedCred } = useContext(Context);
-	const [pendingUser, setPendingUser] = useState([]);
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
 	const [toggleRequest, setToggleRequest] = useState(false);
 	const [updateList, setUpdateList] = useState(false);
 	const navigate = useNavigate();
 	const data = useParams();
-	const eventid = data.id;
+	const travelId = data.id;
 	const [comment, setComment] = useState('');
 	const [commentRender, setCommentRender] = useState(true);
 	const { startDMChatRoom } = useCustomChatContext();
@@ -41,6 +39,7 @@ const EventDetailPage = () => {
 	useEffect(() => {
 		setUserInfo(user);
 	}, []);
+
 	const calculatePreciseDistance = (fLong, sLong, fLat, sLat) => {
 		var pdis = getPreciseDistance(
 			{ latitude: Number(fLat), longitude: Number(fLong) },
@@ -56,12 +55,12 @@ const EventDetailPage = () => {
 	const getEvent = async () => {
 		try {
 			setLoading(true);
-			const { data } = await api.get(`/get_event/${eventid}`);
+			const { data } = await api.get(`/travel/${travelId}`);
 			console.log(data);
-			
-			setEventInfo(data);
+
+			setTravelInfo(data);
 			setLoading(false);
-			getPendingReq(data);
+			// getPendingReq(data);
 		} catch (error) {
 			setLoading(false);
 			console.log(error);
@@ -84,7 +83,7 @@ const EventDetailPage = () => {
 				console.log(error);
 			}
 		}
-		setPendingUser(pendingUserData);
+		// setPendingUser(pendingUserData);
 	};
 
 	useEffect(() => {
@@ -94,10 +93,14 @@ const EventDetailPage = () => {
 
 	let formattedTime;
 	let formattedEndTime;
-	const EndDateString = eventInfo.EndDate;
-	const inputDateString = eventInfo.Startdate;
+	const EndDateString = travelInfo.endDate;
+	const inputDateString = travelInfo.startDate;
 	const parsedDate = new Date(inputDateString);
 	const parseEndDate = new Date(EndDateString);
+
+	console.log(inputDateString);
+	console.log(EndDateString);
+
 	const monthNames = [
 		'Jan',
 		'Feb',
@@ -112,16 +115,16 @@ const EventDetailPage = () => {
 		'Nov',
 		'Dec',
 	];
-	const handleCancle = async () => {
-		const requestData = {
-			eventId: eventid,
-			userId: userInfo._id,
-		};
-		await api.post(`/delPart`, requestData).then(res => {
-			setCancleRequest(true);
-			setIsJoined(false);
-		});
-	};
+	// const handleCancle = async () => {
+	// 	const requestData = {
+	// 		eventId: eventid,
+	// 		userId: userInfo._id,
+	// 	};
+	// 	await api.post(`/delPart`, requestData).then(res => {
+	// 		setCancleRequest(true);
+	// 		// setIsJoined(false);
+	// 	});
+	// };
 	const day = parsedDate.getDate();
 	const monthIndex = parsedDate.getMonth();
 	const year = parsedDate.getFullYear();
@@ -150,61 +153,62 @@ const EventDetailPage = () => {
 		});
 	}
 	console.log(endformattedDate);
-	const handleJoin = async () => {
-		try {
-			const { data } = await api.post(`/events/${eventid}/participants`, {});
-			if (data) {
-				if (eventInfo.type === 'Private Place') {
-					toast.success('Request sent');
-				}
-				if (eventInfo.type === 'Public Place') {
-					toast.success('Event Joined');
-				}
-				setIsJoined(true);
-			} else {
-				toast.error('Request Already sent');
-			}
-		} catch (error) {
-			toast.error('Something went wrong');
-			console.log(error);
-		}
-	};
-	const hasUserJoined = eventInfo.participants?.some(
-		participant =>
-			participant.user === userInfo._id && participant?.status === 'Approved'
-	);
+	// const handleJoin = async () => {
+	// 	try {
+	// 		const { data } = await api.post(`/events/${eventid}/participants`, {});
+	// 		if (data) {
+	// 			if (travelInfo.type === 'Private Place') {
+	// 				toast.success('Request sent');
+	// 			}
+	// 			if (travelInfo.type === 'Public Place') {
+	// 				toast.success('Event Joined');
+	// 			}
+	// 			// setIsJoined(true);
+	// 		} else {
+	// 			toast.error('Request Already sent');
+	// 		}
+	// 	} catch (error) {
+	// 		toast.error('Something went wrong');
+	// 		console.log(error);
+	// 	}
+	// };
+	// const hasUserJoined = travelInfo.participants?.some(
+	// 	participant =>
+	// 		participant.user === userInfo._id && participant?.status === 'Approved'
+	// );
 
-	const hasUserPending = eventInfo.participants?.some(
-		participant =>
-			participant.user === userInfo._id && participant?.status === 'Pending'
-	);
-	const handlePendingUser = async (userId, status) => {
-		try {
-			const { data } = await api.post(`/events/${eventid}/${userId}`, {
-				status,
-			});
-			if (data) {
-				if (status === 'Approved') {
-					toast.success('User Added to Event');
-				} else {
-					toast.success('User Removed');
-				}
-				setUpdateList(!updateList);
-			}
-		} catch (error) {
-			console.log(error);
-		}
-	};
+	// const hasUserPending = travelInfo.participants?.some(
+	// 	participant =>
+	// 		participant.user === userInfo._id && participant?.status === 'Pending'
+	// );
 
-	const deleteEvent = e => {
-		axios.delete(`${BASE_URL}/api/delete_event/${e}`).then(res => {
-			console.log(res);
-			if (res.data === 'Event is deleted successfully') {
-				toast.success('Event deleted successfully');
-				navigate('/event-page');
-			}
-		});
-	};
+	// const handlePendingUser = async (userId, status) => {
+	// 	try {
+	// 		const { data } = await api.post(`/events/${eventid}/${userId}`, {
+	// 			status,
+	// 		});
+	// 		if (data) {
+	// 			if (status === 'Approved') {
+	// 				toast.success('User Added to Event');
+	// 			} else {
+	// 				toast.success('User Removed');
+	// 			}
+	// 			setUpdateList(!updateList);
+	// 		}
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 	}
+	// };
+
+	// const deleteEvent = e => {
+	// 	axios.delete(`${BASE_URL}/api/delete_event/${e}`).then(res => {
+	// 		console.log(res);
+	// 		if (res.data === 'Event is deleted successfully') {
+	// 			toast.success('Event deleted successfully');
+	// 			navigate('/event-page');
+	// 		}
+	// 	});
+	// };
 	console.log(loading, 'l');
 
 	const postComment = async e => {
@@ -216,7 +220,7 @@ const EventDetailPage = () => {
 		};
 		const data = {
 			userId: userInfo._id,
-			eventId: eventInfo._id,
+			eventId: travelInfo._id,
 			username: userInfo.username,
 			userPhoto: userInfo.image,
 			comment: comment,
@@ -226,7 +230,7 @@ const EventDetailPage = () => {
 	};
 
 	const message = async () => {
-		startDMChatRoom(eventInfo.userId);
+		startDMChatRoom(travelInfo.userId);
 		navigate('/messaging');
 	};
 
@@ -236,7 +240,7 @@ const EventDetailPage = () => {
 				<>
 					<span
 						className='primary_btn cursor-pointer !text-sm !py-2 !px-3 !leading-none !py-3'
-						onClick={() => navigate('/event-page')}
+						onClick={() => navigate('/travel-page')}
 					>
 						<span className='text-sm inline-flex items-center mr-2'>
 							<FaArrowLeft />
@@ -245,16 +249,18 @@ const EventDetailPage = () => {
 					</span>
 					<div className='flex justify-between items-center max-w-7xl'>
 						<h3 className='clipped_text bg-gradient-to-r from-orange to-red-500 bg-clip-text text-base sm:text-3xl md:text-5xl font-bold mb-5 pt-5'>
-							Event Details
+							Situationship Details
 						</h3>
 						<div className='flex flex-wrap gap-4 justify-end'>
 							<span
 								className='primary_btn cursor-pointer !text-sm !py-2'
-								onClick={() => navigate(`/event-participants/${eventid}`)}
+								onClick={() =>
+									navigate(`/user-detail?id=${travelInfo.userId._id}`)
+								}
 							>
-								Guest list
+								Owner
 							</span>
-							{eventInfo.userId?._id !== userInfo._id ? (
+							{travelInfo.userId?._id !== userInfo._id ? (
 								<span
 									className='primary_btn cursor-pointer !text-sm !py-2'
 									onClick={message}
@@ -267,7 +273,7 @@ const EventDetailPage = () => {
 					<div className='flex flex-wrap items-stretch max-w-7xl'>
 						<div className='w-full md:w-[45%] p-5 bg-light-grey rounded-2xl'>
 							<img
-								src={eventInfo.mainImage}
+								src={travelInfo.image}
 								alt=''
 								className='w-full aspect-4/3 rounded-2xl object-cover border-[3px] border-white'
 							/>
@@ -275,26 +281,26 @@ const EventDetailPage = () => {
 						<div className='w-full md:w-[55%] xl:pl-5 xxl:pl-10 mt-5 md:mt-0'>
 							<div className='text-white h-full bg-light-grey rounded-2xl '>
 								<div className='p-5'>
-									<div className='flex flex-wrap items-center justify-between gap-y-1 gap-x-5 mb-4'>
+									{/* <div className='flex flex-wrap items-center justify-between gap-y-1 gap-x-5 mb-4'>
 										<h3 className='text-2xl xxl:text-4xl font-semibold'>
-											{eventInfo.eventName}
+											{travelInfo.eventName}
 										</h3>
-										{eventInfo.userId?._id === userInfo._id ? (
+										{travelInfo.userId?._id === userInfo._id ? (
 											<div className='flex gap-2'>
 												<Link
 													className='inline-flex items-center text-2xl'
-													to={`/event_edit/${eventInfo._id}`}
+													to={`/event_edit/${travelInfo._id}`}
 												>
 													<MdOutlineModeEditOutline />
 												</Link>
 												<div
 													className='inline-flex items-center text-2xl'
-													onClick={() => deleteEvent(eventInfo._id)}
+													onClick={() => deleteEvent(travelInfo._id)}
 												>
 													<RiDeleteBin6Line />
 												</div>
 											</div>
-										) : eventInfo.type === 'Private Event' ? (
+										) : travelInfo.type === 'Private Event' ? (
 											hasUserPending || isJoined ? (
 												<div className='flex gap-3'>
 													<button
@@ -334,7 +340,7 @@ const EventDetailPage = () => {
 													Send Join Request
 												</button>
 											)
-										) : eventInfo.type === 'Public Event' ? (
+										) : travelInfo.type === 'Public Event' ? (
 											hasUserJoined || isJoined ? (
 												<div className='flex gap-2'>
 													<button
@@ -361,7 +367,7 @@ const EventDetailPage = () => {
 										) : (
 											''
 										)}
-									</div>
+									</div> */}
 									<div className='grid sm:flex flex-wrap items-start gap-1 sm:gap-1 justify-between'>
 										<div className='text-sm'>
 											<span className='inline-block mr-1 font-body_font'>
@@ -380,51 +386,60 @@ const EventDetailPage = () => {
 										<span className='flex items-center text-lg mr-3'>
 											<SlLocationPin />
 										</span>
-
-										{`${eventInfo?.location?.address} ${eventInfo?.location?.street}, ${eventInfo?.location?.municipality}, ${eventInfo?.location?.country}`}
-									</div>
-
-									<div className='my-4'>
-										<p className='text-lg text-orange font-semibold'>
-											Distance
-										</p>
-										{calculatePreciseDistance(
-											// eventInfo?.location?.lon,
-											// savedCred.long,
-											// eventInfo?.location?.lat,
-											// savedCred.lat
-											eventInfo?.geometry?.coordinates[0],
-											user?.geometry?.coordinates[0],
-											eventInfo?.geometry?.coordinates[1],
-											user?.geometry?.coordinates[1]
+										{travelInfo?.location?.address &&
+										travelInfo?.location?.street &&
+										travelInfo?.location?.municipality &&
+										travelInfo?.location?.country ? (
+											<>
+												{`${travelInfo?.location?.address} ${travelInfo?.location?.street}, ${travelInfo?.location?.municipality}, ${travelInfo?.location?.country}`}
+											</>
+										) : (
+											<>{travelInfo?.resort}</>
 										)}
 									</div>
+
+									{travelInfo?.location?.address &&
+									travelInfo?.location?.street &&
+									travelInfo?.location?.municipality &&
+									travelInfo?.location?.country ? (
+										<div className='my-4'>
+											<p className='text-lg text-orange font-semibold'>
+												Distance
+											</p>
+											{calculatePreciseDistance(
+												// travelInfo?.location?.lon,
+												// savedCred.long,
+												// travelInfo?.location?.lat,
+												// savedCred.lat
+												travelInfo?.geometry?.coordinates[0],
+												user?.geometry?.coordinates[0],
+												travelInfo?.geometry?.coordinates[1],
+												user?.geometry?.coordinates[1]
+											)}
+										</div>
+									) : (
+										<></>
+									)}
 
 									<div>
 										<p className='text-lg font-semibold pb-2 border-b border-white'>
 											INFORMATION
 										</p>
 										<p className='text-base my-2'>
-											{/* <span className="font-semibold">{eventInfo.type} BY : </span> */}
-											{eventInfo?.type === 'Public Event' ? (
-												<span className='text-red-500'>{eventInfo?.type} </span>
-											) : (
-												<span className='text-green-500'>
-													{eventInfo?.type}{' '}
-												</span>
-											)}
+											{/* <span className="font-semibold">{travelInfo.type} BY : </span> */}
+
 											<span className='font-body_font'>
-												by : {eventInfo.userId?.username}
+												Created by : {travelInfo.name}
 											</span>
 										</p>
 										<p className='text-base my-2 flex items-center gap-2'>
-											<span className='text-orange'>Contact Info:</span>
-											<span>{eventInfo?.contact}</span>
+											<span className='text-orange'>Description:</span>
+											<span>{travelInfo?.description}</span>
 										</p>
 										<p className='text-base my-2 flex items-center gap-2'>
 											<span className='font-semibold'>WELCOMING </span>
 											<span className='flex items-center gap-1'>
-												{eventInfo?.accepted_type?.map((el, i) => (
+												{travelInfo?.interested?.map((el, i) => (
 													<>
 														{el === 'M' && (
 															<img
@@ -473,19 +488,19 @@ const EventDetailPage = () => {
 											</span>
 										</p>
 
-										<p className='text-base'>
+										{/* <p className='text-base'>
 											<span className='font-semibold'>
 												Total Number of Participants :
 												<span className='font-body_font font-normal'>
-													{eventInfo.participants?.length - pendingUser.length}
+													{travelInfo.participants?.length - pendingUser.length}
 												</span>
 											</span>
-										</p>
+										</p> */}
 									</div>
 								</div>
 							</div>
 						</div>
-						<div className='mt-5'>
+						{/* <div className='mt-5'>
 							<ul className='flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400'>
 								<li className='mr-2'>
 									<span
@@ -496,8 +511,8 @@ const EventDetailPage = () => {
 										onClick={() =>
 											navigate('/event-detail-media', {
 												state: {
-													photos: eventInfo.images,
-													vidoes: eventInfo.videos,
+													photos: travelInfo.images,
+													vidoes: travelInfo.videos,
 												},
 											})
 										}
@@ -505,7 +520,7 @@ const EventDetailPage = () => {
 										Photos & Videos
 									</span>
 								</li>
-								{eventInfo.userId?._id === userInfo._id && (
+								{travelInfo.userId?._id === userInfo._id && (
 									<li className='mr-2'>
 										<span
 											className={`inline-block px-2 py-3 rounded-lg  cursor-pointer hover:bg-gray-100  ${
@@ -526,19 +541,19 @@ const EventDetailPage = () => {
 							<p
 								className='text-base font-body_font'
 								dangerouslySetInnerHTML={{
-									__html: eventInfo?.description?.replace(/\n/g, '<br />'),
+									__html: travelInfo?.description?.replace(/\n/g, '<br />'),
 								}}
 							></p>
-						</div>
+						</div> */}
 						{/* <div className="my-5 w-full p-5 bg-light-grey rounded-lg">
         <p className="text-lg text-orange font-semibold mb-3">Comments</p>
         <input type="text" placeholder="Write a comment" onChange={(e) => {setComment(e.target.value)}} id="comment_box"/>
         <button id="btn_post" onClick={postComment}><IoMdSend /></button>
         {
-          eventInfo?.comments?
-          (eventInfo.comments.map((comment,i) => {
+          travelInfo?.comments?
+          (travelInfo.comments.map((comment,i) => {
             return(
-              <Comments comment={comment} eventId={eventid} userInfo={userInfo} eventInfo={eventInfo}/>
+              <Comments comment={comment} eventId={eventid} userInfo={userInfo} travelInfo={travelInfo}/>
             )
           }))
           :
@@ -547,7 +562,7 @@ const EventDetailPage = () => {
       </div> */}
 						{/* Photos and Videos */}
 
-						{toggleRequest ? (
+						{/* {toggleRequest ? (
 							<div className='w-full grid gap-5 mt-5'>
 								{pendingUser.map((user, i) => (
 									<div
@@ -576,7 +591,7 @@ const EventDetailPage = () => {
 							</div>
 						) : (
 							<div></div>
-						)}
+						)} */}
 
 						{/* {!toggleRequest && (
   
@@ -593,4 +608,4 @@ const EventDetailPage = () => {
 		</div>
 	);
 };
-export default EventDetailPage;
+export default TravelDetails;

@@ -69,6 +69,7 @@ import MyMediaUniversal from './pages/MyMediaUniversal'
 import RegisterBusiness from './pages/RegisterBusiness'
 import MySentLikes from './pages/MySentLikes'
 import MyRecievedLikes from './pages/MyRecievedLikes'
+import TravelDetails from './components/Travel/TravelDetails'
 
 function App() {
 const {isAuthenticated} = useSelector((state)=>state.auth);
@@ -159,6 +160,7 @@ useEffect(() => {
         <Route path="/create_event" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
         <Route path="/event_edit/:id" element={<ProtectedRoute><EditEventPage /></ProtectedRoute>} />
         <Route path='/event-detail/:id' element={<ProtectedRoute><ChatContextProvider><EventDetailPage/></ChatContextProvider></ProtectedRoute>} />
+        <Route path='/travel-details/:id' element={<ProtectedRoute><ChatContextProvider><TravelDetails /></ChatContextProvider></ProtectedRoute>} />
         <Route path="/event-detail-media" element={<ProtectedRoute><EventDetailMedia /></ProtectedRoute>} />
         <Route path="/my-event" element={<ProtectedRoute><Myevents/></ProtectedRoute>} />
         <Route path="/event-participants/:id" element={<ProtectedRoute><EventParticipants /></ProtectedRoute>} />

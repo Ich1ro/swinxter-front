@@ -70,7 +70,11 @@ const UserDetailPage = ({ socket }) => {
 		} else {
 			setUserInfo(user);
 		}
-	}, []);
+	}, [location.search]);
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	  }, [location.search]);
 
 	useEffect(() => {
 		if (userInfo) {
@@ -1311,6 +1315,8 @@ const UserDetailPage = ({ socket }) => {
 					loading={loading}
 					blockUser={blockUser}
 					blocked={blocked}
+					isFriendsOpen={isFriendsOpen}
+					setIsFriendsOpen={setIsFriendsOpen}
 				/>
 			)}
 		</>

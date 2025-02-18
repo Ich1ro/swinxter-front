@@ -25,6 +25,8 @@ const CoupleDetailPage = ({
 	loading,
 	blockUser,
 	blocked,
+	isFriendsOpen,
+	setIsFriendsOpen,
 }) => {
 	const location = useLocation();
 	const [age, setAge] = useState('');
@@ -1143,8 +1145,14 @@ const CoupleDetailPage = ({
 									<h3 className='text-2xl sm:text-5xl leading-none font-bold'>
 										Friends
 									</h3>
-									{location.search.length !== 0 ? null : friends.length ===
-									  0 ? null : (
+									{location.search.length !== 0 ? (
+										<button
+											onClick={() => setIsFriendsOpen(!isFriendsOpen)}
+											className='primary_btn !text-sm sm:!text-xl'
+										>
+											View More
+										</button>
+									) : friends.length === 0 ? null : (
 										<Link
 											to='/my_friends'
 											className='primary_btn !text-sm sm:!text-xl'
@@ -1155,9 +1163,35 @@ const CoupleDetailPage = ({
 								</div>
 								<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-6'>
 									{friends.length > 0 ? (
-										friends?.slice(0, 4)?.map((friend, i) => {
-											return <FriendCard data={friend} key={i} />;
-										})
+										!isFriendsOpen ? (
+											friends?.slice(0, 4)?.map((friend, i) => {
+												return (
+													<div
+														style={{
+															display: 'flex',
+															alignItems: 'center',
+															justifyContent: 'center',
+														}}
+													>
+														<FriendCard data={friend} key={i} />
+													</div>
+												);
+											})
+										) : (
+											friends?.map((friend, i) => {
+												return (
+													<div
+														style={{
+															display: 'flex',
+															alignItems: 'center',
+															justifyContent: 'center',
+														}}
+													>
+														<FriendCard data={friend} key={i} />
+													</div>
+												);
+											})
+										)
 									) : (
 										<p>No friends yet !</p>
 									)}
