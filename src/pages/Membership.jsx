@@ -35,15 +35,45 @@ const Membership = () => {
 					<PlansCard
 						title='3 Days'
 						price={user?.isAccountVerify ? `$2.99` : `$5.99`}
+            priceWithoutVerification={
+							user?.isAccountVerify ? null : `$2.99`
+						}
 					/>
 					<PlansCard
 						title='1 Week'
 						price={user?.isAccountVerify ? `$14.99` : `$29.99`}
+            priceWithoutVerification={
+							user?.isAccountVerify ? null : `$14.99`
+						}
 					/>
-					<PlansCard title='1 Month' price={user?.isAccountVerify ? `$24.99` : `$49.99`} />
-					<PlansCard title='3 Months' price={user?.isAccountVerify ? `$46.99` : `$93.99`} />
-					<PlansCard title='6 Months' price={user?.isAccountVerify ? `$77.99` : `$155.99`} />
-					<PlansCard title='9 Months' price={user?.isAccountVerify ? `$119.99` : `$239.99`} />
+					<PlansCard
+						title='1 Month'
+						price={user?.isAccountVerify ? `$24.99` : `$49.99`}
+						priceWithoutVerification={
+							user?.isAccountVerify ? null : `$24.99`
+						}
+					/>
+					<PlansCard
+						title='3 Months'
+						price={user?.isAccountVerify ? `$46.99` : `$93.99`}
+            priceWithoutVerification={
+							user?.isAccountVerify ? null : `$46.99`
+						}
+					/>
+					<PlansCard
+						title='6 Months'
+						price={user?.isAccountVerify ? `$77.99` : `$155.99`}
+            priceWithoutVerification={
+							user?.isAccountVerify ? null : `$77.99`
+						}
+					/>
+					<PlansCard
+						title='9 Months'
+						price={user?.isAccountVerify ? `$119.99` : `$239.99`}
+            priceWithoutVerification={
+							user?.isAccountVerify ? null : `$119.99`
+						}
+					/>
 				</div>
 			</div>
 		</div>

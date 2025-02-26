@@ -210,7 +210,7 @@ const Login = () => {
 								type: LOGIN_SUCCESS,
 								payload: ans.data,
 							});
-							dispatch(loadUser())
+							dispatch(loadUser());
 							navigate(`${from}`, { replace: true });
 						}
 						// dispatch(loadUser());
@@ -301,13 +301,30 @@ const Login = () => {
 							real person. This is a one-time verification process to enhance
 							security and prevent fraudulent activity.
 						</p>
-						<p>
+						<p>Verification Fee: $9</p>
+						<div className='popup-info'>
+							<div>
+								• After completing verification, you will receive{' '}
+								<b>one extra month</b> of membership for <b>free</b>.
+							</div>
+							<div>
+								• Our membership prices will become lower after you pass
+								verification, making access to premium access even more
+								affordable.
+							</div>
+						</div>
+						<b>
 							We do not store or share your personal data—our goal is simply to
 							ensure a safe and trusted environment for all users.
-						</p>
+						</b>
 						<div className='button-wrapper'>
 							<button
-								onClick={() => navigate(`/verification`, { replace: true, state: userData?.data?._id })}
+								onClick={() =>
+									navigate(`/verification`, {
+										replace: true,
+										state: userData?.data?._id,
+									})
+								}
 								className='ok-button'
 							>
 								OK
