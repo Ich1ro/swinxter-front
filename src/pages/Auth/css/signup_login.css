@@ -83,6 +83,10 @@
     border-radius: 20px;
 }
 
+.popup-content p {
+    margin: 0;
+}
+
 .button-wrapper {
     display: flex;
     gap: 25px;
@@ -94,9 +98,14 @@
 }
 
 .ok-button {
-    background-color: #4caf4f96;
+    background: #4caf4f96 !important;
 }
 
 .cancel-button {
-    background-color: #b64a4a7e;
+    background: #b64a4a7e !important;
+}
+
+.popup-info {
+    display: flex;
+    flex-direction: column;
 }
