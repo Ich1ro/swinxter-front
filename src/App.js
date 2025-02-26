@@ -70,6 +70,7 @@ import RegisterBusiness from './pages/RegisterBusiness'
 import MySentLikes from './pages/MySentLikes'
 import MyRecievedLikes from './pages/MyRecievedLikes'
 import TravelDetails from './components/Travel/TravelDetails'
+import Verification from './pages/Verification'
 
 function App() {
 const {isAuthenticated} = useSelector((state)=>state.auth);
@@ -99,7 +100,7 @@ useEffect(() => {
   }, []);
 
   useEffect(()=>{
-  if(isAuthenticated && !pathname.includes("legal")){
+  if(isAuthenticated && !pathname.includes("legal") && pathname !== '/verification'){
   // console.log("first");
   // console.log(isAuthenticated.data);
   navigate(from, { replace: true })
@@ -135,6 +136,7 @@ useEffect(() => {
         <Route path="forgot" element={<Layout><ForgotPassword /></Layout>} />
         <Route path="/single/:userId/:email" element={<SinglePerson/>} />
         <Route path="/couple/:userId/:email" element={<SignUpCouple/>} />
+        <Route path="/verification" element={<Verification/>} />
         <Route path="/business/:userId/:email" element={<RegisterBusiness/>} />
         <Route path="/verify_email/:userId/:email" element={<Layout><VerifyEmail/></Layout>} />
         <Route path="/verified/:id" element={<Layout><EmailVerified/></Layout>} />
@@ -175,6 +177,7 @@ useEffect(() => {
         <Route path="/recieved_request" element={<ProtectedRoute><RecievedRequests socket={socket}/></ProtectedRoute>} />
         <Route path="/membership" element={<ProtectedRoute><Membership/></ProtectedRoute>} />
         <Route path="/messaging" element={<ProtectedRoute><Messaging /></ProtectedRoute>} />
+        {/* <Route path="/verification" element={<ProtectedRoute><Verification /></ProtectedRoute>} /> */}
 
         {/* CLUBS */}
         <Route path="/club-page" element={<ProtectedRoute><ClubPage /></ProtectedRoute>} />
