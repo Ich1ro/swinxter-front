@@ -104,7 +104,7 @@ const CoupleDetailPage = ({
 					<div className='w-full sm:w-3/5 md:w-4/5 border-b-2 sm:border-b-0 sm:border-r-2 border-orange rounded-2xl'>
 						<div className='h-full p-5 grid content-between rounded-2xl max-w-3xl gap-y-10'>
 							<div>
-								<div className='flex flex-wrap sm:flex-nowrap justify-between sm:gap-5'>
+								<div className='flex flex-wrap sm:flex-nowrap justify-between sm:gap-5 items-center'>
 									<h3 className='flex items-center text-lg sm:text-[22px] font-bold gap-2 font-body_font'>
 										{userInfo?.username}
 										<p className='flex items-center text-sm font-light gap-1'>
@@ -112,6 +112,13 @@ const CoupleDetailPage = ({
 											Online
 										</p>
 									</h3>
+									{!userInfo?.isAccountVerify && (
+										<>
+											<p className='user-not-verify'>
+												This member is not verified!
+											</p>
+										</>
+									)}
 								</div>
 								<div className='text-lg flex items-center gap-2  mt-1 font-body_font'>
 									{/* <span>
