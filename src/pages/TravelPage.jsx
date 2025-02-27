@@ -7,6 +7,7 @@ import Pagination from '../components/Pagination/Pagination';
 import TravelCard2 from '../components/Travel/TravelCard2';
 import api from '../utils/api';
 import { useSelector } from 'react-redux';
+import './styles/situationships.css'
 
 const TravelPage = () => {
 	const [travel, setTravel] = useState([]);
@@ -275,7 +276,7 @@ const TravelPage = () => {
 									</div>
 								</div>
 							</div>
-							<div className='grid sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-5'>
+							<div className='grid xl:grid-cols-3 2xl:grid-cols-3 gap-5 situationship_grid'>
 								{currentPost.map((el, i) => (
 									<>
 										<div className='h-full bg-light-grey rounded-2xl' key={i}>

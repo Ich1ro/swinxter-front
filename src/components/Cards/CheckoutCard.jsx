@@ -181,7 +181,7 @@ const CheckoutCard = ({ title, price, month_freq }) => {
 						name='expmonth'
 						onChange={handleChange}
 					/>
-					<p style={{ transform: 'translateX(50px)' }}>Expiry Year:</p>
+					<p className='expyear_input'>Expiry Year:</p>
 					<input
 						type='text'
 						placeholder='YYYY'

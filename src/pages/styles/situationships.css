@@ -1,0 +1,16 @@
+.situationship_grid {
+
+}
+
+@media ( max-width: 1080px ){
+	.situationship_grid {
+		display: flex !important;
+		flex-direction: column !important;
+		/* flex-wrap: wrap !important; */
+	}
+	.situationship_grid_wrap {
+		display: flex !important;
+		/* flex-direction: column !important; */
+		flex-wrap: wrap !important;
+	}
+  }

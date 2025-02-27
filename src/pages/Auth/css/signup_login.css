@@ -12,7 +12,7 @@
 .forgot-password-text {
     -webkit-text-fill-color: transparent;
 }
-@media ( min-width:640px ){
+@media ( min-width:768px ){
     .input_field{
         padding: 2px !important;
         background: linear-gradient(46deg, #F79220 55.15%, #F94A2B 82%);

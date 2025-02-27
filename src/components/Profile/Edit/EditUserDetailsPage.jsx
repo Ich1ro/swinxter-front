@@ -551,20 +551,17 @@ const EditUserDetailsPage = () => {
 									<>Please select</>
 								) : (
 									<p>
-									
 										{Object.keys(userDetails?.interests || {})
 											.filter(key => userDetails?.interests[key]?.length > 0)
-											.map(
-												key =>
-													key
-														.split('_')
-														.map(
-															word => word.charAt(0).toUpperCase() + word.slice(1)
-														)
-														.join(' ')
+											.map(key =>
+												key
+													.split('_')
+													.map(
+														word => word.charAt(0).toUpperCase() + word.slice(1)
+													)
+													.join(' ')
 											)
-											.join(', ')
-											}
+											.join(', ')}
 									</p>
 								)}
 								<span className='select_label_icon' style={{ top: 'auto' }}>
@@ -578,7 +575,14 @@ const EditUserDetailsPage = () => {
 								<div className={`select_ctmBox ${ctmsSelect ? 'active' : ''}`}>
 									<div className='select_options_black select_options'>
 										<div className='optionBox'>Please select</div>
-										{['male_female', 'female', 'male', 'female_female', 'male_male', 'transgender'].map((key, i) => (
+										{[
+											'male_female',
+											'female',
+											'male',
+											'female_female',
+											'male_male',
+											'transgender',
+										].map((key, i) => (
 											<div className='optionBox' key={i}>
 												<span>{key}</span>
 												<div className='input_option'>
@@ -587,7 +591,7 @@ const EditUserDetailsPage = () => {
 														type='checkbox'
 														name={key}
 														value={key}
-														style={{background: 'white'}}
+														style={{ background: 'white' }}
 														onChange={() => handleInterests(key)}
 														checked={userDetails?.interests[key]?.length > 0}
 													/>
@@ -682,50 +686,48 @@ const EditUserDetailsPage = () => {
 								</select>
 							</div>
 
-							<div className='grid items-center ctm_select_drop rounded-md input_fields relative'>
+							<div className='grid items-center rounded-md input_fields relative'>
 								<div
-									className='p-2 rounded-lg input_field'
-									style={{ height: '53px', overflow: 'hidden' }}
+									className='flex flex-wrap justify-center rounded-md input_field'
 								>
 									<label
 										htmlFor='body_hair'
-										className='flex justify-between items-center w-full bg-black-20 items-stretch'
-										style={{ paddingTop: '0', marginBottom: '0' }}
+										className='rounded-l-md w-full md:w-[120px] xl:w-[195px] md:h-[49px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+										// style={{ paddingTop: '0', marginBottom: '0' }}
 									>
-										<span
+										{/* <span
 											className='gradient gradient rounded-l-md w-full md:w-[120px] xl:w-[195px] flex items-center justify-start md:px-2 lg:px-4 text-sm mb-1 md:mb-0 md:text-text-xs 
-                  xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
-										>
-											Body Hair
-										</span>
-
-										<div
-											className='select_label bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
-											name='body_hair'
-											style={{ height: '49px' }}
-											value={userDetails?.body_hair}
-											onChange={handleChange}
-											onClick={() => setCtmSelect(!ctmSelect)}
-										>
-											{!Array.isArray(userDetails?.body_hair) ||
-											userDetails?.body_hair.length === 1 ? (
-												<>Please select</>
-											) : (
-												userDetails?.body_hair?.map((el, i) => (
-													<span>
-														{el}
-														{i !== 0 &&
-															i !== userDetails?.body_hair?.length - 1 && (
-																<span>,</span>
-															)}
-													</span>
-												))
-											)}
-											<span className='select_label_icon'>
-												<BiChevronDown />
-											</span>
-										</div>
+											xl:text-base text-orange md:text-white  font-normal leading-5 xl:leading-29 text-center lg:text-start'
+											> */}
+										Body Hair
+										{/* </span> */}
 									</label>
+									<div
+										className='select_label bg-black-20 border rounded-md md:rounded-none md:border-none md:border-l-2 md:rounded-r-md border-orange focus:outline-none focus-visible:none w-full md:w-[calc(100%-120px)] xl:w-[calc(100%-195px)] text-white font-normal xl:text-lg rounded-r-md text-sm px-2 xl:px-4 py-2.5 text-start placeholder:text-lg placeholder:text-gray items-center flex justify-between'
+										name='body_hair'
+										style={{ height: '49px' }}
+										value={userDetails?.body_hair}
+										onChange={handleChange}
+										onClick={() => setCtmSelect(!ctmSelect)}
+									>
+										{!Array.isArray(userDetails?.body_hair) ||
+										userDetails?.body_hair.length === 1 ? (
+											<>Please select</>
+										) : (
+											userDetails?.body_hair?.map((el, i) => (
+												<span>
+													{el}
+													{i !== 0 &&
+														i !== userDetails?.body_hair?.length - 1 && (
+															<span>,</span>
+														)}
+												</span>
+											))
+										)}
+										<span className='select_label_icon' style={{ top: 'auto' }}>
+											<BiChevronDown />
+										</span>
+									</div>
 								</div>
 
 								<div className={`select_ctmBox ${ctmSelect ? 'active' : ''}`}>

@@ -1,6 +1,7 @@
 import React from 'react'
 import CheckoutCard from '../components/Cards/CheckoutCard'
 import { useParams } from 'react-router-dom'
+import './styles/checkout.css'
 
 
 const Checkout = () => {
@@ -8,7 +9,7 @@ const Checkout = () => {
     const price = useParams().price;
     const month_freq = useParams().month_freq;
   return (
-    <div style={{width: "100%", height: "110vh", display: "flex", justifyContent: "center", alignItems: "center",backgroundColor: "#111"}}>
+    <div className='checkout'>
         <CheckoutCard title={title} price={price} month_freq={month_freq}/>
     </div>
   )

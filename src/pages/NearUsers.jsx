@@ -83,7 +83,7 @@ const NearUsers = () => {
 							)}
 						</div>
 						{location.pathname === '/home' ? (
-							<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4 gap-6'>
+							<div className='grid lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-4 gap-6 main_users_grid'>
 								{users.length > 0 &&
 									users.slice(0, 4).map((user, i) => <UserCard key={i} userInfo={user} />)}
 							</div>

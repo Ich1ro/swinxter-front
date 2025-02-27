@@ -558,3 +558,22 @@ Chatbot */
   display: flex;
   gap: 7px;
 }
+
+@media ( max-width: 1280px ){
+  .main_mobile_wrapper {
+    overflow: hidden;
+  }
+}
+/* 
+@media ( max-width: 760px ){
+  .main_users_grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+  }
+} */
+
+@media ( max-width: 1280px ){
+  .main_mobile_wrapper {
+    overflow: hidden;
+  }
+}
+

@@ -80,7 +80,7 @@ const FriendCard = ({ data, request, getFriends, socket }) => {
 	}, [location]);
 
 	return (
-		<div className='friends_card'>
+		<div className='card_wrapper'>
 			<div className='friends_card_dp'>
 				{data?.image ? (
 					<img
@@ -96,70 +96,72 @@ const FriendCard = ({ data, request, getFriends, socket }) => {
 					<img src='/images/trans avatar.png' alt='trans' />
 				)}
 			</div>
-			<h1
-				style={{
-					fontSize: '20px',
-					fontWeight: '600',
-					display: 'flex',
-					justifyContent: 'center',
-				}}
-			>
-				{data.username}
-			</h1>
-			<div className='friends_card_actionbox'>
-				<div
-					className='flex justify-stretch gap-2 mt-3 event_card_button_wrap items-center'
-					style={{ width: '200px', margin: '20px auto' }}
+			<div className='friends_card'>
+				<h1
+					style={{
+						fontSize: '20px',
+						fontWeight: '600',
+						display: 'flex',
+						justifyContent: 'center',
+					}}
 				>
-					<button
-						className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
-						onClick={handleViewProfile}
+					{data.username}
+				</h1>
+				<div className='friends_card_actionbox'>
+					<div
+						className='flex justify-stretch gap-2 mt-3 event_card_button_wrap items-center'
+						style={{ width: '200px', margin: '20px auto' }}
 					>
-						Profile
-					</button>
-					{location?.pathname !== '/my-recieved-likes' &&
-					location?.pathname !== '/my-sent-likes' &&
-					location?.pathname !== '/sent_request' ? (
-						request ? (
-							<button
-								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
-								onClick={acceptReq}
-							>
-								Accept
-							</button>
-						) : (
-							<button
-								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
-								onClick={message}
-							>
-								Message
-							</button>
-						)
-					) : (
-						<></>
-					)}
-					{location?.pathname !== '/my-recieved-likes' &&
-					location?.pathname !== '/my-sent-likes' &&
-					location?.pathname !== '/sent_request' ? (
-						request && (
-							<button
-								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
-								onClick={decline_req}
-							>
-								Decline
-							</button>
-						)
-					) : (
-						<></>
-					)}
-					{location?.pathname === '/my-sent-likes' && (
 						<button
 							className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
-							onClick={unlike}
+							onClick={handleViewProfile}
 						>
-							Unlike
+							Profile
 						</button>
-					)}
+						{location?.pathname !== '/my-recieved-likes' &&
+						location?.pathname !== '/my-sent-likes' &&
+						location?.pathname !== '/sent_request' ? (
+							request ? (
+								<button
+									className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
+									onClick={acceptReq}
+								>
+									Accept
+								</button>
+							) : (
+								<button
+									className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
+									onClick={message}
+								>
+									Message
+								</button>
+							)
+						) : (
+							<></>
+						)}
+						{location?.pathname !== '/my-recieved-likes' &&
+						location?.pathname !== '/my-sent-likes' &&
+						location?.pathname !== '/sent_request' ? (
+							request && (
+								<button
+									className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
+									onClick={decline_req}
+								>
+									Decline
+								</button>
+							)
+						) : (
+							<></>
+						)}
+						{location?.pathname === '/my-sent-likes' && (
+							<button
+								className='primary_btn !py-1 !text-sm !leading-[28px] !px-1 w-full !text-[12px]'
+								onClick={unlike}
+							>
+								Unlike
+							</button>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>

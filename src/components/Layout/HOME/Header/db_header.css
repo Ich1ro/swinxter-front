@@ -95,11 +95,21 @@
   
 @media ( max-width: 1279px ){
     .mobile_db_header {
-        transition: 0.3s;
-        @apply fixed top-0 left-0 h-screen bg-black/90 w-full z-[999] transform -translate-x-full;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out;
     }
-    .mobile_db_header_open{
-        @apply translate-x-0
+    
+    .mobile_db_header_open {
+        opacity: 1;
+        pointer-events: auto;
     }
     .mobile_db_header .mobile_db_header_inner {
         @apply max-w-sm w-11/12 bg-black-20 h-full overflow-y-auto p-5

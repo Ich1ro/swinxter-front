@@ -4,7 +4,7 @@ import api from '../utils/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOGOUT } from '../redux/actions/types';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast'
+import toast from 'react-hot-toast';
 
 const AccountPage = () => {
 	const [success, setSuccess] = useState(false);
@@ -48,14 +48,11 @@ const AccountPage = () => {
 							onClick={async () => {
 								toast.dismiss(t.id);
 								try {
-									await toast.promise(
-										api.delete(`delete_user/${user._id}`),
-										{
-											loading: 'User deletion...',
-											success: 'User successfully deleted!',
-											error: (err) => `${err}`,
-										}
-									);
+									await toast.promise(api.delete(`delete_user/${user._id}`), {
+										loading: 'User deletion...',
+										success: 'User successfully deleted!',
+										error: err => `${err}`,
+									});
 									dispatch({ type: LOGOUT });
 									navigate('/login');
 								} catch (error) {
@@ -199,8 +196,9 @@ const AccountPage = () => {
 						<p style={{ marginBottom: '20px' }}>
 							Membership:{' '}
 							<span style={{ color: 'orange', fontWeight: '400' }}>
-                {user.payment?.membership_plan ? `${user.payment?.membership_plan} plan` : 'Limited access'}
-								
+								{user.payment?.membership_plan
+									? `${user.payment?.membership_plan} plan`
+									: 'Limited access'}
 							</span>
 						</p>
 						{user.payment?.membership_expiry && (
@@ -259,7 +257,7 @@ const AccountPage = () => {
 								setNewPass(e.target.value);
 							}}
 							placeholder='New Password'
-							className='w-200 px-5 py-3 border-2 border-gray-300 rounded-md my-5 mx-5 text-black'
+							className='w-200 px-5 py-3 border-2 border-gray-300 rounded-md my-5 md:mx-5 text-black'
 						/>
 						<button className='primary_btn text-lg' onClick={handleSubmit}>
 							{loading ? <Loading /> : 'Change Password'}

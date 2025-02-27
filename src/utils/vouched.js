@@ -167,7 +167,9 @@ const loadVouched = userId => {
 									window.location.replace('/home');
 								});
 							console.log(user);
-						} catch (error) {}
+						} catch (error) {
+							console.log(error)
+						}
 					} else {
 						window.location.replace('/home');
 					}

@@ -52,7 +52,7 @@ const Main_Layout = ({ socket }) => {
 			) : (
 				<>
 					<div className='main_dashboard_wrapper bg-black-20 text-white grid content-between min-h-screen'>
-						<div style={{ display: 'flex', position: 'relative' }}>
+						<div style={{ display: 'flex', position: 'relative' }} className='main_mobile_wrapper'>
 							<div
 								className='sidebar_wrapper w-1/5 hidden xl:block'
 								style={{

@@ -1035,7 +1035,7 @@ const AllUsers = () => {
 			style={{
 				display: 'flex',
 				justifyContent: 'space-between',
-				position: 'relative',
+				// position: 'relative',
 			}}
 		>
 			<div
@@ -1391,8 +1391,8 @@ const AllUsers = () => {
 			</div>
 			<div className='mb-20 sidebar-users'>
 				<div className='mb-5 sm:mb-8'>
-					<div className='relative text-white search-block'>
-						<span className='absolute top-1/2 left-5 transform -translate-y-1/2 text-2xl flex items-center'>
+					<div className='text-white search-block flex items-center'>
+						<span className='text-2xl flex items-center search_icon'>
 							<IoSearchOutline />
 						</span>
 						<input

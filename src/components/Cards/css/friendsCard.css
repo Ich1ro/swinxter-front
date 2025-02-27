@@ -1,24 +1,30 @@
-.friends_card{
+.card_wrapper {
     width: 250px;
-    /* height: 160px; */
-    border-radius: 10px;
-    background-color: #2A2D37;
-    position: inherit;
-    margin-right: 20px;
-    margin-bottom: 60px;
 }
-.friends_card_dp{
-    width: 100%;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: inherit;
-    top: 0%;
-    z-index: 1;
-    transform: translate(0,-50%);
+
+.friends_card {
+	width: 100%;
+	/* height: 160px; */
+	border-radius: 10px;
+	background-color: #2a2d37;
+    padding: 40px 20px 10px 20px;
+	/* position: re; */
+	/* margin-right: 20px; */
+	/* margin-bottom: 60px; */
 }
-.friends_card_dp > img{
-    width: 70px;
-    height: 70px;
+.friends_card_dp {
+	width: 100%;
+	height: 70px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    margin-bottom: -12.5%;
+	/* position: inherit; */
+	/* top: 0%; */
+	/* z-index: 1; */
+	/* transform: translate(0, -50%); */
+}
+.friends_card_dp > img {
+	width: 70px;
+	height: 70px;
 }

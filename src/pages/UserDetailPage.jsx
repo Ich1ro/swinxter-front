@@ -362,15 +362,14 @@ const UserDetailPage = ({ socket }) => {
 									</div>
 									{location.search.length > 0 &&
 									location.search.split('=')[1] !== user?._id ? (
-										<div className='flex' style={{ width: '100%' }}>
+										<div className='flex' style={{ width: '100%', flexWrap: 'wrap', justifyContent: 'center', gap: '10px' }}>
 											{currentUser.friends.includes(userInfo?._id) ? (
 												<button
 													className='primary_btn'
 													style={{
 														fontSize: '12px',
 														padding: '5px 0',
-														width: '180px',
-														marginRight: '10px',
+														width: '160px',
 													}}
 													onClick={handleRemove}
 												>
@@ -383,8 +382,7 @@ const UserDetailPage = ({ socket }) => {
 													style={{
 														fontSize: '12px',
 														padding: '5px 0',
-														width: '180px',
-														marginRight: '10px',
+														width: '160px',
 													}}
 													onClick={handleCancelRequest}
 												>
@@ -396,8 +394,7 @@ const UserDetailPage = ({ socket }) => {
 													style={{
 														fontSize: '12px',
 														padding: '5px 0',
-														width: '180px',
-														marginRight: '10px',
+														width: '160px',
 													}}
 													onClick={handleSendRequest}
 													disabled={loading}
@@ -410,8 +407,7 @@ const UserDetailPage = ({ socket }) => {
 												style={{
 													fontSize: '12px',
 													padding: '5px 0',
-													width: '180px',
-													marginRight: '10px',
+													width: '160px',
 												}}
 												onClick={() => {
 													message();
@@ -426,8 +422,7 @@ const UserDetailPage = ({ socket }) => {
 													style={{
 														fontSize: '12px',
 														padding: '5px 0',
-														width: '180px',
-														marginRight: '10px',
+														width: '160px',
 													}}
 													onClick={() => {
 														blockUser();
@@ -441,8 +436,7 @@ const UserDetailPage = ({ socket }) => {
 													style={{
 														fontSize: '12px',
 														padding: '5px 0',
-														width: '180px',
-														marginRight: '10px',
+														width: '160px',
 													}}
 													onClick={() => {
 														blockUser();
@@ -456,8 +450,7 @@ const UserDetailPage = ({ socket }) => {
 												style={{
 													fontSize: '12px',
 													padding: '5px 0',
-													width: '180px',
-													marginRight: '10px',
+													width: '160px',
 													display: 'flex',
 													alignItems: 'center',
 												}}
@@ -534,7 +527,7 @@ const UserDetailPage = ({ socket }) => {
 						<div className='max-w-5xl mx-auto pt-20'>
 							<div className='px-8'>
 								<button
-									className='inline-block py-3 px-8 text-lg rounded-t-lg text-black min-w-[200px] text-center'
+									className='inline-block py-3 sm:px-4 md:px-8 text-lg rounded-t-lg text-black min-w-[100px] md:min-w-[200px] text-center'
 									style={
 										isProfile
 											? {
@@ -558,7 +551,7 @@ const UserDetailPage = ({ socket }) => {
 									Profile
 								</button>
 								<button
-									className='inline-block py-3 px-8 text-lg rounded-t-lg text-black min-w-[200px] text-center'
+									className='inline-block py-3 sm:px-4 md:px-8 text-lg rounded-t-lg text-black min-w-[100px] md:min-w-[200px] text-center'
 									style={
 										!isProfile
 											? { backgroundColor: '#F79220' }

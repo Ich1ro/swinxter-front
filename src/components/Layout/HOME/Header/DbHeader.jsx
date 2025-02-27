@@ -122,7 +122,7 @@ const DbHeader = ({ socket }) => {
 	};
 
 	return (
-		<header className='py-8 bg-black-20 sticky top-0 xl:static xl:bg-transparent xl:py-0 mb-4'>
+		<header className='py-8 bg-black-20 top-0 xl:static xl:bg-transparent xl:py-0 mb-4'>
 			<div
 				className='flex justify-between xl:justify-center items-center xl:items-start px-5'
 				style={{
@@ -291,7 +291,7 @@ const DbHeader = ({ socket }) => {
 								<div className={`dropdownList ${isOpen ? 'show' : 'hide'}`}>
 									<ul>
 										
-										{notifications.length > 0 &&
+										{notifications.length > 0 ?
 											notifications.map((notification, i) => (
 												<div className='notification_wrapper'>
 													<button
@@ -332,7 +332,9 @@ const DbHeader = ({ socket }) => {
 														x
 													</button>
 												</div>
-											))
+											)) : (<div style={{display: 'flex', width: '100%', justifyContent: 'center'}}>
+												You dont have notifications
+											</div>)
 										}
 									</ul>
 								</div>

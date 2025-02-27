@@ -114,10 +114,15 @@ svg {
 .sidebar-users {
 	width: 75%;
 }
+/* 
+.search_icon {
+	z-index: 0;
+} */
 
 .search-block {
 	width: 100%;
 	gap: 20px;
+	position: static;
 	display: flex;
 	justify-content: space-between;
 }
@@ -134,7 +139,8 @@ svg {
 	min-width: 200px;
 	width: 20%;
 	height: calc(100vh - 30px);
-	position: sticky;
+	/* position: sticky; */
+	/* z-index: 1; */
 	top: 15px;
 	overflow-y: auto;
 }
@@ -176,6 +182,7 @@ svg {
 		align-items: center;
 		justify-content: center;
 		width: 15%;
+		height: 56px;
 		background-color: #2a2d37;
 		border-radius: 12px;
 	}
@@ -183,7 +190,7 @@ svg {
 
 @media (max-width: 1279px) {
 	.outlet {
-		position: initial;
+		/* position: initial; */
 	}
 }
 

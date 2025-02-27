@@ -7,6 +7,7 @@ import Pagination from '../components/Pagination/Pagination';
 import ClubCard from '../components/Club/ClubCard';
 import { MidLoading } from '../components/M_used/Loading';
 import { useSelector } from 'react-redux';
+import './styles/situationships.css'
 
 const ClubPage = () => {
 	const [clubs, setClubs] = useState([]);
@@ -121,7 +122,7 @@ const ClubPage = () => {
 				<>
 					{!loading ? (
 						<>
-							<div className='sticky top-0 bg-black z-[9] py-5 flex justify-between'>
+							<div className='top-0 bg-black z-[9] py-5 flex justify-between'>
 								<div className='flex justify-end items-center text-center flex-wrap gap-2 sm:gap-5 flex-1'>
 									<div className='flex gap-8 items-center'>
 										{user.role === 'business' && (
@@ -201,7 +202,7 @@ const ClubPage = () => {
 									</div>
 								</div>
 							</div>
-							<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-5'>
+							<div className='grid xl:grid-cols-4 2xl:grid-cols-4 gap-5 situationship_grid_wrap'>
 								{currentPost.map((el, i) => (
 									<>
 										<div className='h-full bg-light-grey rounded-2xl' key={i}>
