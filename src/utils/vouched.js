@@ -17,6 +17,7 @@ const config = {
 	includeBarcode: 'true',
 	manualCaptureTimeout: 20000,
 	showTermsAndPrivacy: true,
+	
 	appId: '~jBndy#OeBux5IVf_hLb-s2-2_ul3I',
 	// your webhook for POST verification processing
 	callbackURL: 'https://website.com/webhook',
@@ -119,6 +120,7 @@ const loadVouched = userId => {
 			var vouched = window['Vouched']({
 				liveness: 'mouth',
 				id: 'camera',
+				'x-test-request': true,
 				includeBarcode: 'true',
 				manualCaptureTimeout: 20000,
 				showTermsAndPrivacy: true,
@@ -132,10 +134,10 @@ const loadVouched = userId => {
 				crossDeviceSMS: true,
 
 				// have the user confirm information
-				userConfirmation: {
-					confirmData: true,
-					confirmImages: true,
-				},
+				// userConfirmation: {
+				// 	confirmData: true,
+				// 	confirmImages: true,
+				// },
 
 				// callback during initialization of the web app
 				onInit: ({ token, job }) => {

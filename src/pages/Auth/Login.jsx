@@ -295,28 +295,34 @@ const Login = () => {
 			{showPopup && (
 				<div className='popup-overlay'>
 					<div className='popup-content'>
-						<h2>Verify Your Identity</h2>
+						<h2>Verify Your Identity – Secure Your Membership</h2>
 						<p>
-							To continue using our platform, we need to confirm that you are a
-							real person. This is a one-time verification process to enhance
-							security and prevent fraudulent activity.
+							To keep our community safe and authentic, we require a one-time
+							identity verification. This simple process helps prevent fraud and
+							ensures a trusted environment for all members.
 						</p>
-						<p>Verification Fee: $9</p>
+						<div>
+							🔒 <b>Verification Fee:</b> single member: $7 couples: $9 ($4.50 per
+							each)
+						</div>
+						<b>Why Verify?</b>
 						<div className='popup-info'>
 							<div>
-								• After completing verification, you will receive{' '}
-								<b>one extra month</b> of membership for <b>free</b>.
+								✅ Get <b>one extra month</b> of membership for free!
 							</div>
 							<div>
-								• Our membership prices will become lower after you pass
-								verification, making access to premium access even more
-								affordable.
+								✅ Pay the <b>standard membership fee</b>—unverified members pay
+								<b>double</b>.
+							</div>
+							<div>
+								✅ Enjoy a more <b>secure and trustworthy</b> platform.
 							</div>
 						</div>
-						<b>
-							We do not store or share your personal data—our goal is simply to
-							ensure a safe and trusted environment for all users.
-						</b>
+						<div>
+							This verification is handled by an <b>accredited third-party
+							provider</b>, and we <b>never</b> store or share your personal data. Our only
+							goal is to create a safe and enjoyable experience for everyone.
+						</div>
 						<div className='button-wrapper'>
 							<button
 								onClick={() =>

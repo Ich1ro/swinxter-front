@@ -51,9 +51,7 @@
     } */
     
 }
-@media ( max-width: 490px ){
-    
-}
+
 
 .popup-overlay {
     width: 100%;
@@ -81,6 +79,7 @@
     text-align: center;
     background-color: white;
     border-radius: 20px;
+    width: 80%;
 }
 
 .popup-content p {
@@ -108,4 +107,10 @@
 .popup-info {
     display: flex;
     flex-direction: column;
+}
+
+@media ( max-width: 760px ){
+    .popup-content {
+        width: 100%;
+    }
 }
