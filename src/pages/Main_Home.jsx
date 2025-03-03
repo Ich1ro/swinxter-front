@@ -74,7 +74,7 @@ const Main_Home = () => {
 
 	return (
 		<div className='home_page bg-black py-8 px-6 rounded-2xl'>
-			{user.payment.membership ? (
+			{user?.payment?.membership ? (
 				<>
 					<div className='mb-20'>
 						<div className='flex justify-between flex-wrap gap-5 items-center mb-5 sm:mb-8'>

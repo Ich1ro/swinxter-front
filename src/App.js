@@ -100,7 +100,7 @@ useEffect(() => {
   }, []);
 
   useEffect(()=>{
-  if(isAuthenticated && !pathname.includes("legal") && pathname !== '/verification'){
+  if(isAuthenticated && !pathname.includes("legal") && pathname !== '/verification' && pathname !== '/login'){
   // console.log("first");
   // console.log(isAuthenticated.data);
   navigate(from, { replace: true })

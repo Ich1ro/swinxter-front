@@ -148,7 +148,7 @@ const CoupleDetailPage = ({
 					></p>
 				</div>
 
-				{user.payment.membership ? (
+				{user?.payment.membership ? (
 					<div className='max-w-5xl mx-auto pt-20'>
 						<div className='px-8'>
 							<span

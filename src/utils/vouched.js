@@ -108,7 +108,7 @@ const config = {
 	},
 };
 
-const loadVouched = userId => {
+const loadVouched = userObj => {
 	const existingScript = document.getElementById('vouched');
 	if (!existingScript) {
 		const script = document.createElement('script');
@@ -153,7 +153,7 @@ const loadVouched = userId => {
 				onDone: async job => {
 					// token used to query jobs
 					console.log('Scanning complete', { token: job.token });
-
+					
 					// An alternative way to update your system based on the
 					// results of the job. Your backend could perform the following:
 					// 1. query jobs with the token
@@ -161,10 +161,10 @@ const loadVouched = userId => {
 					//    success property into the user's profile
 
 					// Redirect to the next page based on the job success
-					if (job.result.success) {
+					if (job?.result?.success) {
 						try {
 							const user = await api
-								.get(`/verify-user-acc/${userId}`)
+								.get(`/verify-user-acc/${userObj._id}`)
 								.then(() => {
 									window.location.replace('/home');
 								});

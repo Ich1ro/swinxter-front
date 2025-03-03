@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
-import loadVouched from '../utils/vouched'
-import { useLocation } from 'react-router-dom'
+import loadVouched from '../utils/vouched';
+import { useSelector } from 'react-redux';
 
 const Verification = () => {
-	const location = useLocation();
-    const userId = location.state;
+	const { user } = useSelector(state => state.auth);
 	useEffect(() => {
-		console.log(userId);
-	}, []);
+		console.log(user);
+	}, [user]);
 
 	useEffect(() => {
-		loadVouched(userId);
-	}, []);
+		if (user) {
+			loadVouched(user);
+		}
+	}, [user]);
 
 	return <div id='vouched-element' style={{ height: '100%' }}></div>;
 };

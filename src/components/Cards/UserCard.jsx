@@ -132,7 +132,7 @@ const UserCard = ({ userInfo }) => {
 		<div
 			className='user_card'
 			onClick={() => {
-				if (user.payment.membership) {
+				if (user?.payment?.membership) {
 					navigate(`/user-detail?id=${userInfo._id}`);
 				} else {
 					toast(

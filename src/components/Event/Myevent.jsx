@@ -43,7 +43,7 @@ const Myevents = () => {
 
 	return (
 		<div className='bg-black pt-0 sm:pt-8 py-8 px-6 rounded-2xl min-h-full'>
-			{user.payment?.membership ? (
+			{user?.payment?.membership ? (
 				<>
 					<div className='sticky top-0 bg-black z-[9] py-5 flex justify-between'>
 						<div className='flex flex-wrap gap-2 sm:gap-5 flex-1'>

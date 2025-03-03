@@ -204,13 +204,14 @@ const Login = () => {
 							ans?.data?.isAccountVerify === undefined ||
 							ans?.data?.isAccountVerify === false
 						) {
-							setShowPopup(true);
-						} else {
 							dispatch({
 								type: LOGIN_SUCCESS,
 								payload: ans.data,
 							});
-							dispatch(loadUser());
+							await dispatch(loadUser());
+							
+							setShowPopup(true);
+						} else {
 							navigate(`${from}`, { replace: true });
 						}
 						// dispatch(loadUser());
