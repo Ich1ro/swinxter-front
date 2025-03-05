@@ -227,7 +227,6 @@ const loadVouched = (userObj, state) => {
 				},
 			});
 			console.log('mount vouched-element');
-			console.log('userId', userId);
 			vouched.mount('#vouched-element');
 		};
 	}
