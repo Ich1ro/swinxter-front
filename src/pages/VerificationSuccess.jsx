@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import loadVouched from '../utils/vouched';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { redirect, useLocation, useNavigate } from 'react-router-dom';
 import { loadUser } from '../redux/actions/auth';
-import './styles/verify.css'
+import './styles/verify.css';
 
 const VerificationSuccess = () => {
 	const location = useLocation();
@@ -107,13 +107,15 @@ const VerificationSuccess = () => {
 			<h2>Success</h2>
 			<p>Congrats verification is complete</p>
 			<p>You need to pay</p>
-			<div className='button-wrapper' style={{marginTop: '15px'}}>
+			<div className='button-wrapper' style={{ marginTop: '15px' }}>
 				<button
 					className='ok-button'
 					onClick={() =>
-						navigate(`/home`, {
-							replace: true,
-						})
+						user?.profile_type === 'single'
+							? (window.location.href =
+									'https://collectcheckout.com/r/31dlu37dgkwoznxxt3z52tns71naxk')
+							: (window.location.href =
+									'https://collectcheckout.com/r/us855duw0m15zl22osmqsiro563qzp')
 					}
 				>
 					OK

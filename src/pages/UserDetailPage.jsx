@@ -350,7 +350,7 @@ const UserDetailPage = ({ socket }) => {
 													Online
 												</p>
 											</h3>
-											{!userInfo?.isAccountVerify && (
+											{!userInfo?.isVerificationPaid && (
 												<>
 													<p className='user-not-verify'>This member is not verified!</p>
 												</>

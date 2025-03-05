@@ -2,7 +2,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import BotMessage from '../../components/Floating_Btn/Bot';
@@ -26,6 +26,7 @@ const Login = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [userData, setUserData] = useState(null);
+	const { user } = useSelector(state => state.auth);
 	let ans;
 
 	const handleChange = e => {
@@ -210,7 +211,7 @@ const Login = () => {
 							});
 							await dispatch(loadUser());
 
-							setShowPopup(true);
+							
 						} else {
 							navigate(`${from}`, { replace: true });
 						}
@@ -291,6 +292,17 @@ const Login = () => {
 	// 	},
 	// 	onError: errorResponse => console.log(errorResponse),
 	// });
+
+	useEffect(() => {
+		if(user && user?._id) {
+			if(user?.isVerificationPaid) {
+				navigate(`${from}?isVerify=false`, { replace: true })
+			} else {
+				setShowPopup(true)
+			}
+		}
+	}, [user])
+
 	return (
 		<>
 			{showPopup && (

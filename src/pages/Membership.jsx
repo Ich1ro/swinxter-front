@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PlansCard from '../components/Cards/PlansCard';
 import { useSelector } from 'react-redux';
 
 const Membership = () => {
+	const [isVerify, setIsVerify] = useState(false)
 	const { user } = useSelector(state => state.auth);
+
+	useEffect(() => {
+		if(user && user?._id) {
+			if(user?.isVerificationPaid && user?.verificationId) {
+				setIsVerify(true)
+			}
+		}
+	}, [user])
+
 	return (
 		<div className='home_page bg-black py-8 px-6 rounded-2xl'>
 			<div className='mb-20'>
@@ -34,45 +44,33 @@ const Membership = () => {
 				>
 					<PlansCard
 						title='3 Days'
-						price={user?.isAccountVerify ? `$2.99` : `$5.99`}
-            priceWithoutVerification={
-							user?.isAccountVerify ? null : `$2.99`
-						}
+						price={isVerify ? `$2.99` : `$5.99`}
+						priceWithoutVerification={isVerify ? null : `$2.99`}
 					/>
 					<PlansCard
 						title='1 Week'
-						price={user?.isAccountVerify ? `$14.99` : `$29.99`}
-            priceWithoutVerification={
-							user?.isAccountVerify ? null : `$14.99`
-						}
+						price={isVerify ? `$14.99` : `$29.99`}
+						priceWithoutVerification={isVerify ? null : `$14.99`}
 					/>
 					<PlansCard
 						title='1 Month'
-						price={user?.isAccountVerify ? `$24.99` : `$49.99`}
-						priceWithoutVerification={
-							user?.isAccountVerify ? null : `$24.99`
-						}
+						price={isVerify ? `$24.99` : `$49.99`}
+						priceWithoutVerification={isVerify ? null : `$24.99`}
 					/>
 					<PlansCard
 						title='3 Months'
-						price={user?.isAccountVerify ? `$46.99` : `$93.99`}
-            priceWithoutVerification={
-							user?.isAccountVerify ? null : `$46.99`
-						}
+						price={isVerify ? `$46.99` : `$93.99`}
+						priceWithoutVerification={isVerify ? null : `$46.99`}
 					/>
 					<PlansCard
 						title='6 Months'
-						price={user?.isAccountVerify ? `$77.99` : `$155.99`}
-            priceWithoutVerification={
-							user?.isAccountVerify ? null : `$77.99`
-						}
+						price={isVerify ? `$77.99` : `$155.99`}
+						priceWithoutVerification={isVerify ? null : `$77.99`}
 					/>
 					<PlansCard
 						title='9 Months'
-						price={user?.isAccountVerify ? `$119.99` : `$239.99`}
-            priceWithoutVerification={
-							user?.isAccountVerify ? null : `$119.99`
-						}
+						price={isVerify ? `$119.99` : `$239.99`}
+						priceWithoutVerification={isVerify ? null : `$119.99`}
 					/>
 				</div>
 			</div>
