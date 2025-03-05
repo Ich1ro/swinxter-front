@@ -124,7 +124,7 @@ const loadVouched = (userObj, state) => {
 				id: 'camera',
 				'x-test-request': true,
 				includeBarcode: 'true',
-				manualCaptureTimeout: 20000,
+				// manualCaptureTimeout: 20000,
 				showTermsAndPrivacy: true,
 				appId: '~jBndy#OeBux5IVf_hLb-s2-2_ul3I',
 				// your webhook for POST verification processing
