@@ -209,7 +209,7 @@ const Login = () => {
 								payload: ans.data,
 							});
 							await dispatch(loadUser());
-							
+
 							setShowPopup(true);
 						} else {
 							navigate(`${from}`, { replace: true });
@@ -303,8 +303,8 @@ const Login = () => {
 							ensures a trusted environment for all members.
 						</p>
 						<div>
-							🔒 <b>Verification Fee:</b> single member: $7 couples: $9 ($4.50 per
-							each)
+							🔒 <b>Verification Fee:</b> single member: $7 couples: $9 ($4.50
+							per each)
 						</div>
 						<b>Why Verify?</b>
 						<div className='popup-info'>
@@ -320,26 +320,59 @@ const Login = () => {
 							</div>
 						</div>
 						<div>
-							This verification is handled by an <b>accredited third-party
-							provider</b>, and we <b>never</b> store or share your personal data. Our only
-							goal is to create a safe and enjoyable experience for everyone.
+							This verification is handled by an{' '}
+							<b>accredited third-party provider</b>, and we <b>never</b> store
+							or share your personal data. Our only goal is to create a safe and
+							enjoyable experience for everyone.
 						</div>
-						<div className='button-wrapper'>
-							<button
-								onClick={() =>
-									navigate(`/verification`, {
-										replace: true,
-										state: userData?.data?._id,
-									})
-								}
-								className='ok-button'
-							>
-								OK
-							</button>
-							<button onClick={handleCancel} className='cancel-button'>
-								Cancel
-							</button>
-						</div>
+						{userData?.profile_type === 'couple' ? (
+							<div className='button-wrapper'>
+								<button
+									onClick={() =>
+										navigate(`/verification`, {
+											replace: true,
+											state: 'person1',
+										})
+									}
+									disabled={userData?.couple?.person1?.isVerify}
+									className='ok-button'
+								>
+									{userData?.couple?.person1?.person1_Name ? `Verify ${userData?.couple?.person1?.person1_Name}` : `Verify person 1`}
+								</button>
+								<button
+									onClick={() =>
+										navigate(`/verification`, {
+											replace: true,
+											state: 'person2'
+										})
+									}
+									disabled={userData?.couple?.person2?.isVerify}
+									className='ok-button'
+								>
+									{userData?.couple?.person1?.person2_Name ? `Verify ${userData?.couple?.person1?.person1_Name}` : `Verify person 2`}
+								</button>
+								<button onClick={handleCancel} className='cancel-button'>
+									Cancel
+								</button>
+							</div>
+						) : (
+							<div className='button-wrapper'>
+								<button
+									onClick={() =>
+										navigate(`/verification`, {
+											replace: true,
+											state: 'single',
+										})
+									}
+									className='ok-button'
+								>
+									OK
+								</button>
+								<button onClick={handleCancel} className='cancel-button'>
+									Cancel
+								</button>
+							</div>
+						)}
 					</div>
 				</div>
 			)}

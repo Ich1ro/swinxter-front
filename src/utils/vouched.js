@@ -108,7 +108,10 @@ const config = {
 	},
 };
 
-const loadVouched = userObj => {
+const loadVouched = (userObj, state) => {
+	console.log(userObj);
+	const userId = userObj?._id
+	
 	const existingScript = document.getElementById('vouched');
 	if (!existingScript) {
 		const script = document.createElement('script');
@@ -164,9 +167,12 @@ const loadVouched = userObj => {
 					if (job?.result?.success) {
 						try {
 							const user = await api
-								.get(`/verify-user-acc/${userObj._id}`)
+								.post(`/verify-user-acc/${userId}`, {
+									data: job?.result,
+									verifiedPerson: state
+								})
 								.then(() => {
-									window.location.replace('/home');
+									window.location.replace('/verification-success');
 								});
 							console.log(user);
 						} catch (error) {
@@ -222,6 +228,7 @@ const loadVouched = userObj => {
 				},
 			});
 			console.log('mount vouched-element');
+			console.log('userId', userId);
 			vouched.mount('#vouched-element');
 		};
 	}

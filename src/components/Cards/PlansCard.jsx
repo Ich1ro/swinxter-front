@@ -13,16 +13,15 @@ const PlansCard = ({ title, price, priceWithoutVerification }) => {
 			{showPopup && (
 				<div className='popup-overlay'>
 					<div className='popup-content'>
-					<h2>Why my membership fee is doubled?</h2>
+						<h2>Verify Your Identity – Secure Your Membership</h2>
+						<p>
+							To keep our community safe and authentic, we require a one-time
+							identity verification. This simple process helps prevent fraud and
+							ensures a trusted environment for all members.
+						</p>
 						<div>
-						Verify Your Identity – Get one extra month of membership for FREE and Secure Your Membership at regular price
-						</div>
-						<div>
-						To keep our community safe and authentic, we require a one-time identity verification. This simple process helps prevent fraud and ensures a trusted environment for all members.
-						</div>
-						<div>
-							🔒 <b>Verification Fee:</b> single member: $7 couples: $9 ($4.50 per
-							each)
+							🔒 <b>Verification Fee:</b> single member: $7 couples: $9 ($4.50
+							per each)
 						</div>
 						<b>Why Verify?</b>
 						<div className='popup-info'>
@@ -38,29 +37,59 @@ const PlansCard = ({ title, price, priceWithoutVerification }) => {
 							</div>
 						</div>
 						<div>
-							This verification is handled by an <b>accredited third-party
-							provider</b>, and we <b>never</b> store or share your personal data. Our only
-							goal is to create a safe and enjoyable experience for everyone.
+							This verification is handled by an{' '}
+							<b>accredited third-party provider</b>, and we <b>never</b> store
+							or share your personal data. Our only goal is to create a safe and
+							enjoyable experience for everyone.
 						</div>
-						<div className='button-wrapper'>
-							<button
-								onClick={() =>
-									navigate(`/verification`, {
-										replace: true,
-										state: user?.data?._id,
-									})
-								}
-								className='ok-button'
-							>
-								OK
-							</button>
-							<button
-								onClick={() => setShowPopup(false)}
-								className='cancel-button'
-							>
-								Cancel
-							</button>
-						</div>
+						{user?.profile_type === 'couple' ? (
+							<div className='button-wrapper'>
+								<button
+									onClick={() =>
+										navigate(`/verification`, {
+											replace: true,
+											state: 'person1',
+										})
+									}
+									disabled={user?.couple?.person1?.isVerify}
+									className='ok-button'
+								>
+									{user?.couple?.person1?.person1_Name ? `Verify ${user?.couple?.person1?.person1_Name}` : `Verify person 1`}
+								</button>
+								<button
+									onClick={() =>
+										navigate(`/verification`, {
+											replace: true,
+											state: 'person2'
+										})
+									}
+									disabled={user?.couple?.person2?.isVerify}
+									className='ok-button'
+								>
+									{user?.couple?.person1?.person2_Name ? `Verify ${user?.couple?.person1?.person1_Name}` : `Verify person 2`}
+								</button>
+								<button onClick={() => setShowPopup(false)} className='cancel-button'>
+									Cancel
+								</button>
+							</div>
+						) : (
+							<div className='button-wrapper'>
+								<button
+									onClick={() =>
+										navigate(`/verification`, {
+											replace: true,
+											state: 'single',
+										})
+									}
+									className='ok-button'
+								>
+									OK
+								</button>
+								<button onClick={() => setShowPopup(false)} className='cancel-button'>
+									Cancel
+								</button>
+							</div>
+						)}
 					</div>
 				</div>
 			)}
