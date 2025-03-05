@@ -110,7 +110,6 @@ const config = {
 
 const loadVouched = (userObj, state) => {
 	console.log(userObj);
-	const userId = userObj?._id
 	
 	const existingScript = document.getElementById('vouched');
 	if (!existingScript) {
@@ -167,7 +166,7 @@ const loadVouched = (userObj, state) => {
 					if (job?.result?.success) {
 						try {
 							const user = await api
-								.post(`/verify-user-acc/${userId}`, {
+								.post(`/verify-user-acc/${userObj?._id}`, {
 									data: job?.result,
 									verifiedPerson: state
 								})
