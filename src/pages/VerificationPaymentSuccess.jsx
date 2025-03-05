@@ -15,6 +15,7 @@ const VerificationPaymentSuccess = () => {
 		const data = await api.get(`/verification-payment-success/${user?._id}`);
 
 		console.log(data);
+		
 		if (data?.data?.data === 'success') {
 			setIsActive(true);
 		}
@@ -25,10 +26,16 @@ const VerificationPaymentSuccess = () => {
 	}, []);
 
 	useEffect(() => {
-		if (user && user?._id) {
+		if (user && user?._id && !isActive) {
 			verifyPayment();
 		}
-	}, [user]);
+	}, [user, isActive]);
+
+	useEffect(() => {
+		if (isActive) {
+			dispatch(loadUser());
+		}
+	}, [isActive]);
 
 	return (
 		<div className='verification-success'>

@@ -70,6 +70,10 @@ const Main_Home = () => {
 		getTravel();
 	}, [searchquery]);
 
+	useEffect(() => {
+		
+	}, [searchquery]);
+
 	console.log(typeof travel);
 
 	return (
