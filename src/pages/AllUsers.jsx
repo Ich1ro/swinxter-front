@@ -105,10 +105,10 @@ const AllUsers = () => {
 			.map(user => {
 				if (user.geometry?.coordinates && userInfo.geometry?.coordinates) {
 					const distance = calculateDistance(
-						userInfo.geometry.coordinates[0],
-						user.geometry.coordinates[0],
-						userInfo.geometry.coordinates[1],
-						user.geometry.coordinates[1]
+						userInfo.geometry?.coordinates[0],
+						user.geometry?.coordinates[0],
+						userInfo.geometry?.coordinates[1],
+						user.geometry?.coordinates[1]
 					);
 					return { ...user, distance };
 				}
@@ -147,8 +147,8 @@ const AllUsers = () => {
 	const handleSearchNear = async () => {
 		let userArr = [];
 		const { data } = await api.get(
-			`/near-users/${user.geometry.coordinates[0]}/${
-				user.geometry.coordinates[1]
+			`/near-users/${user.geometry?.coordinates[0]}/${
+				user.geometry?.coordinates[1]
 			}/${+radius * 1609}`
 		);
 		console.log(data);

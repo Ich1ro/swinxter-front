@@ -29,10 +29,10 @@ const VisitedUser = () => {
 				.map(user => {
 					if (user.geometry?.coordinates && userInfo.geometry?.coordinates) {
 						const distance = calculateDistance(
-							userInfo.geometry.coordinates[0],
-							user.geometry.coordinates[0],
-							userInfo.geometry.coordinates[1],
-							user.geometry.coordinates[1]
+							userInfo.geometry?.coordinates[0],
+							user.geometry?.coordinates[0],
+							userInfo.geometry?.coordinates[1],
+							user.geometry?.coordinates[1]
 						);
 						return { ...user, distance };
 					}

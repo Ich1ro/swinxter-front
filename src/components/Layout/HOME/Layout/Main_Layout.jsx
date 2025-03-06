@@ -33,7 +33,7 @@ const Main_Layout = ({ socket }) => {
 			pathname === '/event-participants'
 		) {
 			setLayout('layout-2');
-		} else if (pathname === '/verification' || pathname === '/verification-success' || pathname === '/verification-success-payment') {
+		} else if (pathname === '/verification' || pathname === '/verification-success' || pathname === '/verification-success-payment' || pathname === '/banner-success-payment') {
 			setLayout('layout-3');
 		}
 	}, [pathname]);

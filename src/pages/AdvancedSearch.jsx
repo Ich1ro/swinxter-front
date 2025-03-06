@@ -115,8 +115,8 @@ const AdvancedSearch = () => {
 		if (filters.radius !== '') {
 			const location = {
 				radius: +filters.radius * 1609,
-				lon: user.geometry.coordinates[0],
-				lat: user.geometry.coordinates[1],
+				lon: user.geometry?.coordinates[0],
+				lat: user.geometry?.coordinates[1],
 			};
 			filtersCopy.location = location;
 		}
@@ -157,10 +157,10 @@ const AdvancedSearch = () => {
 				.map(userObj => {
 					if (userObj.geometry?.coordinates && user.geometry?.coordinates) {
 						const distance = calculateDistance(
-							user.geometry.coordinates[0],
-							userObj.geometry.coordinates[0],
-							user.geometry.coordinates[1],
-							userObj.geometry.coordinates[1]
+							user.geometry?.coordinates[0],
+							userObj.geometry?.coordinates[0],
+							user.geometry?.coordinates[1],
+							userObj.geometry?.coordinates[1]
 						);
 						return { ...userObj, distance };
 					}

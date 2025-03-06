@@ -295,8 +295,8 @@ const Login = () => {
 
 	useEffect(() => {
 		if(user && user?._id) {
-			if(user?.isVerificationPaid) {
-				navigate(`${from}?isVerify=false`, { replace: true })
+			if(user?.profile_type === 'business' || user?.isVerificationPaid) {
+				navigate(`${from}`, { replace: true })
 			} else {
 				setShowPopup(true)
 			}

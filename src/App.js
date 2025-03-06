@@ -73,6 +73,10 @@ import TravelDetails from './components/Travel/TravelDetails'
 import Verification from './pages/Verification'
 import VerificationSuccess from './pages/VerificationSuccess'
 import VerificationPaymentSuccess from './pages/VerificationPaymentSuccess'
+import BannerPaymentSuccess from './pages/BannerPaymentSuccess'
+import BannerPage from './pages/BannerPage'
+import CreateBanner from './components/Banner/CreateBanner'
+import BannerDetails from './components/Banner/BannerDetails'
 
 function App() {
 const {isAuthenticated} = useSelector((state)=>state.auth);
@@ -102,7 +106,7 @@ useEffect(() => {
   }, []);
 
   useEffect(()=>{
-  if(isAuthenticated && !pathname.includes("legal") && pathname !== '/verification' && pathname !== '/verification-success' && pathname !== '/verification-success-payment' && pathname !== '/login'){
+  if(isAuthenticated && !pathname.includes("legal") && pathname !== '/verification' && pathname !== '/verification-success' && pathname !== '/verification-success-payment' && pathname !== '/banner-success-payment' && pathname !== '/login'){
   // console.log("first");
   // console.log(isAuthenticated.data);
   navigate(from, { replace: true })
@@ -141,6 +145,7 @@ useEffect(() => {
         <Route path="/verification" element={<Verification/>} />
         <Route path="/verification-success" element={<VerificationSuccess/>} />
         <Route path="/verification-success-payment" element={<VerificationPaymentSuccess/>} />
+        <Route path="/banner-success-payment" element={<BannerPaymentSuccess />} />
         <Route path="/business/:userId/:email" element={<RegisterBusiness/>} />
         <Route path="/verify_email/:userId/:email" element={<Layout><VerifyEmail/></Layout>} />
         <Route path="/verified/:id" element={<Layout><EmailVerified/></Layout>} />
@@ -185,6 +190,9 @@ useEffect(() => {
 
         {/* CLUBS */}
         <Route path="/club-page" element={<ProtectedRoute><ClubPage /></ProtectedRoute>} />
+        <Route path="/banners" element={<ProtectedRoute><BannerPage /></ProtectedRoute>} />
+        <Route path="/create-banner" element={<ProtectedRoute><CreateBanner /></ProtectedRoute>} />
+        <Route path="/banner/:id" element={<ProtectedRoute><BannerDetails /></ProtectedRoute>} />
         <Route path="/create_club" element={<ProtectedRoute><CreateClubPage /></ProtectedRoute>} />
         <Route path="/club-detail/:id" element={<ProtectedRoute><ClubDetail /></ProtectedRoute>} />
         <Route path="/club-detail-media" element={<ProtectedRoute><ClubDetailMedia/></ProtectedRoute>}/>

@@ -1,0 +1,37 @@
+.banner-card {
+	width: 100%;
+	padding: 15px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+.banner-card-title {
+	font-size: 25px;
+}
+
+.banner-card-status {
+	margin-bottom: 10px;
+}
+
+.banner-card-image {
+}
+
+.banner-card-title-wrapper {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.banner-card-empty {
+	width: 100px;
+}
+
+.pay_button {
+	background: linear-gradient(46deg, #f79220 55.15%, #f94a2b 82%);
+	width: 100px;
+	padding: 3px 5px;
+	border-radius: 12px;
+}

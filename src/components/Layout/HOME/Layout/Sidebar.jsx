@@ -242,7 +242,15 @@ const Sidebar = ({ unread, closeMenu }) => {
 		},
 
 		{ title: 'Businesses', submenus: [], path: '/club-page' },
-
+		...(user?.role === 'business'
+			? [
+					{
+						title: 'Banners',
+						submenus: [],
+						path: '/banners',
+					},
+			  ]
+			: []),
 		// {
 		// 	title: 'Parties & Events',
 		// 	submenus: [

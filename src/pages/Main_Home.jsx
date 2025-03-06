@@ -6,9 +6,9 @@ import EventCard from '../components/Event/EventCard';
 import TravelCard from '../components/Travel/TravelCard';
 import api from '../utils/api';
 import { useSelector } from 'react-redux';
-import NearUsers from './NearUsers'
-import VisitedUser from './VisitedUsers'
-import RecentUser from './RecentUser'
+import NearUsers from './NearUsers';
+import VisitedUser from './VisitedUsers';
+import RecentUser from './RecentUser';
 const Main_Home = () => {
 	const [event, setEvent] = useState([]);
 	const [clubs, setClubs] = useState([]);
@@ -70,9 +70,7 @@ const Main_Home = () => {
 		getTravel();
 	}, [searchquery]);
 
-	useEffect(() => {
-		
-	}, [searchquery]);
+	useEffect(() => {}, [searchquery]);
 
 	console.log(typeof travel);
 
@@ -128,9 +126,13 @@ const Main_Home = () => {
 							</div>
 						</div>
 					)}
-					<VisitedUser />
-					<RecentUser/>
-					<NearUsers />
+					{user && user?._id && user?.profile_type !== 'business' && (
+						<>
+							<VisitedUser />
+							<RecentUser />
+							<NearUsers />
+						</>
+					)}
 				</>
 			) : (
 				<div
