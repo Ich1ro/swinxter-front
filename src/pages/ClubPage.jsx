@@ -7,7 +7,7 @@ import Pagination from '../components/Pagination/Pagination';
 import ClubCard from '../components/Club/ClubCard';
 import { MidLoading } from '../components/M_used/Loading';
 import { useSelector } from 'react-redux';
-import './styles/situationships.css'
+import './styles/situationships.css';
 
 const ClubPage = () => {
 	const [clubs, setClubs] = useState([]);
@@ -37,10 +37,10 @@ const ClubPage = () => {
 		setLoading(true);
 		const { data } = await api.get(`/search_club?q=${searchquery}`);
 		const getBanners = async () => {
-			const {data} = await api.get(`/get_banner_by_page/${'business'}`);
-			setBanners(data)
+			const { data } = await api.get(`/get_banner_by_page/${'business'}`);
+			setBanners(data);
 		};
-		getBanners()
+		getBanners();
 		setLoading(false);
 		const allclubs = data;
 		const verifiedClubs = allclubs.filter(el => el.isverify === true);
@@ -203,23 +203,31 @@ const ClubPage = () => {
 								</div>
 							</div>
 							<div className='grid xl:grid-cols-4 2xl:grid-cols-4 gap-5 situationship_grid_wrap'>
-								{currentPost.map((el, i) => (
-									<>
-										<div className='h-full bg-light-grey rounded-2xl' key={i}>
-											<ClubCard key={i} clubs={el} />
-										</div>
-										{i !== 7 && (i + 1) % 4 === 0 && (
-											<div className='event_promo_ban'>
-												{/* Banner image */}
-												<img
-													className='w-full'
-													src={banners.length > 0 ? banners[0].imgUrl : `images/banner.jpg`}
-													alt='Banner'
-												/>
+								{currentPost.map((el, i) => {
+									const bannerIndex = (currentPage - 1) % banners.length;
+
+									return (
+										<React.Fragment key={i}>
+											<div className='h-full bg-light-grey rounded-2xl'>
+												<ClubCard clubs={el} />
 											</div>
-										)}
-									</>
-								))}
+
+											{i !== 7 && (i + 1) % 4 === 0 && (
+												<div className='event_promo_ban'>
+													<img
+														className='w-full'
+														src={
+															banners.length > 0
+																? banners[bannerIndex].imgUrl
+																: `images/banner.jpg`
+														}
+														alt='Banner'
+													/>
+												</div>
+											)}
+										</React.Fragment>
+									);
+								})}
 							</div>
 							{clubs.length === 0 ? (
 								club.length === 0 ? (

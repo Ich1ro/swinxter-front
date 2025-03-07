@@ -7,7 +7,7 @@ import Pagination from '../components/Pagination/Pagination';
 import TravelCard2 from '../components/Travel/TravelCard2';
 import api from '../utils/api';
 import { useSelector } from 'react-redux';
-import './styles/situationships.css'
+import './styles/situationships.css';
 
 const TravelPage = () => {
 	const [travel, setTravel] = useState([]);
@@ -95,13 +95,12 @@ const TravelPage = () => {
 		setTravel(newPost);
 		setNew(newPost);
 		const getBanners = async () => {
-			const {data} = await api.get(`/get_banner_by_page/travel`);
-			setBanners(data)
-		}
-		getBanners()
+			const { data } = await api.get(`/get_banner_by_page/travel`);
+			setBanners(data);
+		};
+		getBanners();
 		setLoading(false);
 	};
-
 
 	useEffect(() => {
 		setLoading(true);
@@ -277,23 +276,35 @@ const TravelPage = () => {
 								</div>
 							</div>
 							<div className='grid xl:grid-cols-3 2xl:grid-cols-3 gap-5 situationship_grid'>
-								{currentPost.map((el, i) => (
-									<>
-										<div className='h-full bg-light-grey rounded-2xl' key={i}>
-											<TravelCard2 key={i} travel={el} />
-										</div>
-										{i !== 5 && (i + 1) % 3 === 0 && (
-											<div className='event_promo_ban'>
-												{/* Banner image */}
-												<img
-													className='w-full'
-													src={banners.length > 0 ? banners[0].imgUrl : `images/banner.jpg`}
-													alt='Banner'
-												/>
-											</div>
-										)}
-									</>
-								))}
+								{currentPost.map((el, i) => {
+									const bannerIndex = (currentPage - 1) % banners.length;
+
+									return (
+										<React.Fragment key={i}>
+											<>
+												<div
+													className='h-full bg-light-grey rounded-2xl'
+													key={i}
+												>
+													<TravelCard2 key={i} travel={el} />
+												</div>
+												{i !== 5 && (i + 1) % 3 === 0 && (
+													<div className='event_promo_ban'>
+														<img
+															className='w-full'
+															src={
+																banners.length > 0
+																	? banners[bannerIndex].imgUrl
+																	: `images/banner.jpg`
+															}
+															alt='Banner'
+														/>
+													</div>
+												)}
+											</>
+										</React.Fragment>
+									);
+								})}
 							</div>
 							<Pagination
 								totalPosts={travel.length}

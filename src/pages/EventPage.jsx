@@ -320,27 +320,33 @@ const EventPage = () => {
 							</div>
 							<div className='grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-5'>
 								{currentPost.length > 0 ? (
-									currentPost.map((el, i) => (
-										<>
-											<div className='h-full bg-light-grey rounded-2xl' key={i}>
-												<EventCard key={i} event={el} />
-											</div>
-											{i !== 7 && (i + 1) % 4 === 0 && (
-												<div className='event_promo_ban'>
-													{/* Banner image */}
+									currentPost.map((el, i) => {
+										const bannerIndex = (currentPage - 1) % banners.length;
+
+										return (
+											<React.Fragment key={i}>
+												<div
+													className='h-full bg-light-grey rounded-2xl'
+													key={i}
+												>
+													<EventCard key={i} event={el} />
+												</div>
+												{i !== 7 && (i + 1) % 4 === 0 && (
+													<div className='event_promo_ban'>
 													<img
 														className='w-full'
 														src={
 															banners.length > 0
-																? banners[0].imgUrl
+																? banners[bannerIndex].imgUrl
 																: `images/banner.jpg`
 														}
 														alt='Banner'
 													/>
 												</div>
-											)}
-										</>
-									))
+												)}
+											</React.Fragment>
+										);
+									})
 								) : (
 									<p>No event available right now !</p>
 								)}
