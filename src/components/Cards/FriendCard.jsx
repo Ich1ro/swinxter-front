@@ -5,6 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import api from '../../utils/api';
 import { useCustomChatContext } from '../../Context/ChatContext';
 import { loadUser } from '../../redux/actions/auth';
+import toast from 'react-hot-toast'
 
 const FriendCard = ({ data, request, getFriends, socket }) => {
 	const [users, setUsers] = useState([]);
@@ -32,30 +33,68 @@ const FriendCard = ({ data, request, getFriends, socket }) => {
 	};
 
 	const decline_req = async () => {
-		try {
-			await api.put(`/decline_req/${userInfo._id}/${data?._id}`);
-			socket?.emit('sendNotification', {
-				senderName: user.username,
-				senderId: user._id,
-				recieverId: data._id,
-				recieverName: data.username,
-				message: `${user.username} decline your friend request`,
-				type: 'friendRequest',
-			});
-
-			await api.post('/notifications', {
-				senderId: user._id,
-				recieverId: data._id,
-				senderName: user.username,
-				recieverName: data.username,
-				type: 'friendRequest',
-				message: `${user.username} decline your friend request`,
-			});
-
-			window.location.reload();
-		} catch (e) {
-			console.log(e);
-		}
+		toast((t) => (
+			<div>
+				<p style={{ marginBottom: '10px' }}>Are you sure you want to decline this friend request?</p>
+				<div style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px' }}>
+					<button
+						onClick={async () => {
+							try {
+								await api.put(`/decline_req/${userInfo._id}/${data?._id}`);
+								socket?.emit('sendNotification', {
+									senderName: user.username,
+									senderId: user._id,
+									recieverId: data._id,
+									recieverName: data.username,
+									message: `${user.username} declined your friend request`,
+									type: 'friendRequest',
+								});
+								
+								await api.post('/notifications', {
+									senderId: user._id,
+									recieverId: data._id,
+									senderName: user.username,
+									recieverName: data.username,
+									type: 'friendRequest',
+									message: `${user.username} declined your friend request`,
+								});
+								
+								window.location.reload();
+							} catch (e) {
+								console.log(e);
+							}
+							toast.dismiss(t.id);
+						}}
+						style={{
+							padding: '5px 10px',
+							backgroundColor: '#b64a4a',
+							color: '#fff',
+							border: 'none',
+							borderRadius: '4px',
+							cursor: 'pointer',
+						}}
+					>
+						Yes
+					</button>
+					<button
+						onClick={() => toast.dismiss(t.id)}
+						style={{
+							padding: '5px 10px',
+							backgroundColor: '#4caf50',
+							color: '#fff',
+							border: 'none',
+							borderRadius: '4px',
+							cursor: 'pointer',
+						}}
+					>
+						No
+					</button>
+				</div>
+			</div>
+		), {
+			duration: Infinity,
+		});
+		
 	};
 
 	const unlike = async () => {

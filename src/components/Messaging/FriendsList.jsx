@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import "./styles/friendsList.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import api from '../../utils/api';
 import { IoArrowBackSharp } from "react-icons/io5";
 import { useCustomChatContext } from '../../Context/ChatContext';
+import { loadUser } from '../../redux/actions/auth'
 
 
 
@@ -12,6 +13,7 @@ const FriendsList = ({back}) => {
     const [userInfo,setUserInfo]=useState(user);
     const [friends,setFriends] = useState([]);
     const {startDMChatRoom} = useCustomChatContext();
+    const dispatch = useDispatch()
 
     const getFriends = async () => {
         // userInfo.friends.map(async ele => {
@@ -21,6 +23,14 @@ const FriendsList = ({back}) => {
           setFriends(data)
         // })
     }
+
+    useEffect(() => {
+        dispatch(loadUser())
+    },[])
+
+    useEffect(() => {
+        setUserInfo(user)
+    },[user])
 
     useEffect(() => {
       getFriends()

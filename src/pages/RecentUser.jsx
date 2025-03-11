@@ -27,17 +27,19 @@ const RecentUser = () => {
 
 	const getRecentUsers = async () => {
 		let userArr = [];
-		const { data } = await api.get(`/recent_users`);
-		data.users.map(d => {
+		const {data} = await api.get(`/recent_users`);
+		console.log(data);
+		
+		data?.users?.map(d => {
 			if (d._id !== userInfo._id && !userInfo.blockedby.includes(d._id)) {
 				userArr.push(d);
 			}
 		});
-		const sortedUsers = data.users
-			.filter(
+		const sortedUsers = data?.users
+			?.filter(
 				d => d._id !== userInfo._id && !userInfo.blockedby.includes(d._id)
 			)
-			.map(user => {
+			?.map(user => {
 				if (user.geometry?.coordinates && userInfo.geometry?.coordinates) {
 					const distance = calculateDistance(
 						userInfo.geometry?.coordinates[0],
@@ -49,11 +51,11 @@ const RecentUser = () => {
 				}
 				return { ...user, distance: null };
 			})
-			.sort((a, b) => {
+			?.sort((a, b) => {
 				if (a.distance === null) return 1;
 				if (b.distance === null) return -1;
 				return a.distance - b.distance;
-			});
+			}) || [];
 		console.log(sortedUsers);
 		setUsers(sortedUsers);
 		serUsersData(sortedUsers);
@@ -77,11 +79,22 @@ const RecentUser = () => {
 					user.profile_type === 'couple'
 				) {
 					return true;
-				} else if (filter.genderType.includes('Male') && user.gender === 'male') {
+				} else if (
+					filter.genderType.includes('Male') &&
+					user.gender === 'male'
+				) {
 					return true;
-				} else if (filter.genderType.includes('Female') && user.gender === 'female') {
+				} else if (
+					filter.genderType.includes('Female') &&
+					user.gender === 'female'
+				) {
 					return true;
-				} else if (filter.genderType.includes('Transgender') && user.profile_type !== 'couple' && user.gender !== 'male' && user.gender !== 'female') {
+				} else if (
+					filter.genderType.includes('Transgender') &&
+					user.profile_type !== 'couple' &&
+					user.gender !== 'male' &&
+					user.gender !== 'female'
+				) {
 					return true;
 				}
 			});

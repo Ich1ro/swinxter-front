@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import api from '../utils/api';
 import FriendCard from '../components/Cards/FriendCard';
 import { Link } from 'react-router-dom';
+import { loadUser } from '../redux/actions/auth'
 const SentRequest = () => {
 	const [users, setUsers] = useState([]);
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
 	const [friends, setFriends] = useState([]);
 	console.log(user);
+	const dispatch = useDispatch()
 
 	const getFriends = async () => {
 		if (user?.sent_requests.length > 0) {
 			const { data } = await api.post(`/get-friends`, {
-				friendIds: user.sent_requests,
+				friendIds: user?.sent_requests || [],
 			});
 			setFriends(data);
 		}
@@ -36,8 +38,12 @@ const SentRequest = () => {
 	};
 
 	useEffect(() => {
-		getFriends();
+		dispatch(loadUser())
 	}, []);
+	
+	useEffect(() => {
+		getFriends();
+	}, [user]);
 
 	return (
 		<div className='home_page bg-black py-8 px-6 rounded-2xl'>

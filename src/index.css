@@ -17,6 +17,18 @@ svg {
 	padding: 0 100px;
 }
 
+.homepage-title {
+	padding-top: 150px;
+	padding-bottom: 50px;
+}
+
+@media (max-width: 600px) {
+	.homepage-title {
+		padding-top: 150px;
+		padding-bottom: 50px;
+	}
+}
+
 .blurred-edge {
 	filter: blur(0);
 	mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0));
@@ -118,6 +130,12 @@ svg {
 .search_icon {
 	z-index: 0;
 } */
+
+@media (max-width: 1280px) {
+	.notificationDrp {
+		margin-bottom: 20px;
+	}
+}
 
 .search-block {
 	width: 100%;

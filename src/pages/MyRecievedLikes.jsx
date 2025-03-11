@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import api from '../utils/api';
 import FriendCard from '../components/Cards/FriendCard';
 import { Link } from 'react-router-dom';
+import { loadUser } from '../redux/actions/auth'
 const MyRecievedLikes = () => {
 	const [users, setUsers] = useState([]);
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
 	const [friends, setFriends] = useState([]);
+	const dispatch = useDispatch()
 	console.log(user);
 
 	const getFriends = async () => {
@@ -36,8 +38,12 @@ const MyRecievedLikes = () => {
 	};
 
 	useEffect(() => {
-		getFriends();
+		dispatch(loadUser());
 	}, []);
+
+	useEffect(() => {
+		getFriends();
+	}, [user]);
 
 	return (
 		<div className='home_page bg-black py-8 px-6 rounded-2xl'>

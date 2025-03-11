@@ -106,14 +106,49 @@ const UserDetailPage = ({ socket }) => {
 	console.log(location.search);
 
 	const handleRemove = async () => {
-		try {
-			setLoading(1);
-			await api.put(`/remove_friend/${user?._id}/${userInfo?._id}`);
-			setLoading(0);
-			setSent(0);
-		} catch (e) {
-			console.log(e);
-		}
+		toast((t) => (
+			<div>
+				<p style={{ marginBottom: '10px' }}>Are you sure you want to remove this friend?</p>
+				<div style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px' }}>
+					<button
+						onClick={async () => {
+							try {
+								await api.put(`/remove_friend/${user?._id}/${userInfo?._id}`);
+								navigate('/my_friends');
+							} catch (e) {
+								console.log(e);
+							}
+							toast.dismiss(t.id);
+						}}
+						style={{
+							padding: '5px 10px',
+							backgroundColor: '#b64a4a',
+							color: '#fff',
+							border: 'none',
+							borderRadius: '4px',
+							cursor: 'pointer',
+						}}
+					>
+						Yes
+					</button>
+					<button
+						onClick={() => toast.dismiss(t.id)}
+						style={{
+							padding: '5px 10px',
+							backgroundColor: '#4caf50',
+							color: '#fff',
+							border: 'none',
+							borderRadius: '4px',
+							cursor: 'pointer',
+						}}
+					>
+						No
+					</button>
+				</div>
+			</div>
+		), {
+			duration: Infinity,
+		});
 	};
 
 	// const handleSendRequest = async () => {

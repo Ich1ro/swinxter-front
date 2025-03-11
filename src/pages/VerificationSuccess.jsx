@@ -62,34 +62,39 @@ const VerificationSuccess = () => {
 							enjoyable experience for everyone.
 						</div>
 						<div className='button-wrapper'>
-							<button
-								onClick={() =>
-									navigate(`/verification`, {
-										replace: true,
-										state: 'person1',
-									})
-								}
-								disabled={user?.couple?.person1?.isVerify}
-								className='ok-button'
-							>
-								{user?.couple?.person1?.person1_Name
-									? `Verify ${user?.couple?.person1?.person1_Name}`
-									: `Verify person 1`}
-							</button>
-							<button
-								onClick={() =>
-									navigate(`/verification`, {
-										replace: true,
-										state: 'person2',
-									})
-								}
-								disabled={user?.couple?.person2?.isVerify}
-								className='ok-button'
-							>
-								{user?.couple?.person1?.person2_Name
-									? `Verify ${user?.couple?.person1?.person1_Name}`
-									: `Verify person 2`}
-							</button>
+							{!user?.couple?.person1?.isVerify && (
+								<button
+									onClick={() =>
+										navigate(`/verification`, {
+											replace: true,
+											state: 'person1',
+										})
+									}
+									disabled={user?.couple?.person1?.isVerify}
+									className='ok-button'
+								>
+									{user?.couple?.person1?.person1_Name
+										? `Verify ${user?.couple?.person1?.person1_Name}`
+										: `Verify person 1`}
+								</button>
+							)}
+							{!user?.couple?.person2?.isVerify && (
+								<button
+									onClick={() =>
+										navigate(`/verification`, {
+											replace: true,
+											state: 'person2',
+										})
+									}
+									disabled={user?.couple?.person2?.isVerify}
+									className='ok-button'
+								>
+									{user?.couple?.person1?.person2_Name
+										? `Verify ${user?.couple?.person1?.person1_Name}`
+										: `Verify person 2`}
+								</button>
+							)}
+
 							<button
 								onClick={() =>
 									navigate(`/home`, {
@@ -115,7 +120,7 @@ const VerificationSuccess = () => {
 							? (window.location.href =
 									'https://collectcheckout.com/r/31dlu37dgkwoznxxt3z52tns71naxk')
 							: (window.location.href =
-									'https://collectcheckout.com/r/us855duw0m15zl22osmqsiro563qzp')
+									'https://collectcheckout.com/r/9qt9gewal2voxqumnpyioazwcq80nv')
 					}
 				>
 					OK

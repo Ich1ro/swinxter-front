@@ -144,11 +144,11 @@ const Login = () => {
 	// };
 
 	const handleCancel = () => {
-		dispatch({
-			type: LOGIN_SUCCESS,
-			payload: userData,
-		});
-		dispatch(loadUser());
+		// dispatch({
+		// 	type: LOGIN_SUCCESS,
+		// 	payload: userData,
+		// });
+		// dispatch(loadUser());
 		setLogin({ identifier: '', password: '' });
 		setRememberMe(false);
 		navigate(`${from}?isVerify=false`, { replace: true });

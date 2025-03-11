@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useDebugValue, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { calculateAge } from '../../utils/CalculateAge';
 import CoupleDetailPage from './CoupleDetailid';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import api from '../../utils/api';
 import './user.css';
+import toast from 'react-hot-toast'
+import { loadUser } from '../../redux/actions/auth'
 
 const UserDetailPage = () => {
 	const [age, setAge] = useState('');
@@ -15,6 +17,7 @@ const UserDetailPage = () => {
 	const navigate = useNavigate();
 	const [sent, setSent] = useState(0);
 	const [friends, setFriends] = useState([]);
+	const dispatch = useDispatch()
 
 	const getUser = async () => {
 		const id = location.search.split('=')[1];
@@ -61,13 +64,49 @@ const UserDetailPage = () => {
 	}, []);
 
 	const handleRemove = async () => {
-		try {
-			await api.put(`/remove_friend/${user?._id}/${userInfo?._id}`);
-			window.location.reload();
-			navigate('/my_friends');
-		} catch (e) {
-			console.log(e);
-		}
+		toast((t) => (
+			<div>
+				<p style={{ marginBottom: '10px' }}>Are you sure you want to remove this friend?</p>
+				<div style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px' }}>
+					<button
+						onClick={async () => {
+							try {
+								await api.put(`/remove_friend/${user?._id}/${userInfo?._id}`);
+								navigate('/my_friends');
+							} catch (e) {
+								console.log(e);
+							}
+							toast.dismiss(t.id);
+						}}
+						style={{
+							padding: '5px 10px',
+							backgroundColor: '#b64a4a',
+							color: '#fff',
+							border: 'none',
+							borderRadius: '4px',
+							cursor: 'pointer',
+						}}
+					>
+						Yes
+					</button>
+					<button
+						onClick={() => toast.dismiss(t.id)}
+						style={{
+							padding: '5px 10px',
+							backgroundColor: '#4caf50',
+							color: '#fff',
+							border: 'none',
+							borderRadius: '4px',
+							cursor: 'pointer',
+						}}
+					>
+						No
+					</button>
+				</div>
+			</div>
+		), {
+			duration: Infinity,
+		});
 	};
 
 	const handleSendRequest = async () => {

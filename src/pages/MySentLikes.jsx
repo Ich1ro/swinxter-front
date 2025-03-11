@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import api from '../utils/api';
 import FriendCard from '../components/Cards/FriendCard';
 import { Link } from 'react-router-dom';
+import { loadUser } from '../redux/actions/auth'
 const MySentLikes = () => {
 	const [users, setUsers] = useState([]);
 	const { user } = useSelector(state => state.auth);
 	const [userInfo, setUserInfo] = useState(user);
 	const [friends, setFriends] = useState([]);
+	const dispatch = useDispatch();
 	console.log(user);
 
 	const getFriends = async () => {
 		if (user?.superlike?.sent.length > 0) {
-			const ids = user?.superlike?.sent.map(item => item.userId)
+			const ids = user?.superlike?.sent.map(item => item.userId);
 			const { data } = await api.post(`/get-friends`, {
 				friendIds: ids,
 			});
@@ -36,11 +38,13 @@ const MySentLikes = () => {
 		// });
 	};
 
-	
+	useEffect(() => {
+		dispatch(loadUser());
+	}, []);
 
 	useEffect(() => {
 		getFriends();
-	}, []);
+	}, [user]);
 
 	return (
 		<div className='home_page bg-black py-8 px-6 rounded-2xl'>
@@ -60,7 +64,14 @@ const MySentLikes = () => {
 						>
 							{friends.length > 0 ? (
 								friends?.map((friend, i) => {
-									return <FriendCard data={friend} key={i} request={false} getFriends={getFriends} />;
+									return (
+										<FriendCard
+											data={friend}
+											key={i}
+											request={false}
+											getFriends={getFriends}
+										/>
+									);
 								})
 							) : (
 								<p>No likes sent yet !</p>
