@@ -1,0 +1,27 @@
+.location-or-resort {
+	text-align: center;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	font-weight: bold;
+	font-size: 20px;
+	/* color: #333; */
+}
+
+.location-or-resort::before,
+.location-or-resort::after {
+	content: '';
+	flex: 1;
+	height: 2px;
+	background: linear-gradient(46deg, #f79220 55.15%, #f94a2b 82%);
+}
+
+.location-or-resort::before {
+	margin-right: 10px;
+}
+
+.location-or-resort::after {
+	margin-left: 10px;
+}

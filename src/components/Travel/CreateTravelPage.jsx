@@ -7,6 +7,7 @@ import { toast } from 'react-hot-toast';
 import api from '../../utils/api';
 import { BackBtn } from '../M_used/BackBtn';
 import getFullCoordinatesFromAWS from '../../utils/get-full-location';
+import './css/travel.css';
 const CreateTravelPage = () => {
 	const DEBOUNCE_DELAY = 300;
 	const [areaname, setAreaName] = useState([]);
@@ -93,10 +94,13 @@ const CreateTravelPage = () => {
 			travel.state.trim() !== '' &&
 			travel.country.trim() !== '';
 
-		if (
-			!isResortFilled && !isAddressFilled
-		) {
+		if (!isResortFilled && !isAddressFilled) {
 			toast.error('Please fill all location fields or choose resort.');
+			return null;
+		}
+
+		if (isResortFilled && isAddressFilled) {
+			toast.error('Please fill only one location field.');
 			return null;
 		}
 
@@ -122,6 +126,7 @@ const CreateTravelPage = () => {
 		// 	type: 'Point',
 		// 	coordinates: location.coordinates,
 		// };
+		console.log(travel);
 		console.log(address);
 		console.log(location);
 
@@ -227,6 +232,12 @@ const CreateTravelPage = () => {
 							className='flex flex-col justify-center gap-y-4 sm:gap-y-6'
 							autoComplete='off'
 						>
+							<label
+								htmlFor='Location'
+								className='gradient w-full h-[49px] flex items-center justify-center text-lg text-white  font-normal leading-29 rounded-md mb-0'
+							>
+								Location
+							</label>
 							<div className='flex flex-wrap rounded-md input_field_2'>
 								<label
 									htmlFor='Country'
@@ -303,6 +314,7 @@ const CreateTravelPage = () => {
 									required
 								/>
 							</div>
+							<div className='location-or-resort'>OR</div>
 							{/* <div className="flex flex-wrap rounded-md input_field_2">
                 <label
                   htmlFor="loc_to"
@@ -378,7 +390,12 @@ const CreateTravelPage = () => {
 										: ''}
 								</select>
 							</div>
-
+							<label
+								htmlFor='Details'
+								className='gradient w-full h-[49px] flex items-center justify-center text-lg text-white  font-normal leading-29 rounded-md mb-0'
+							>
+								Details
+							</label>
 							<div className='flex flex-wrap rounded-md input_field_2'>
 								<label
 									htmlFor='start_date'

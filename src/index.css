@@ -131,9 +131,23 @@ svg {
 	z-index: 0;
 } */
 
+.header-notification {
+	justify-content: end
+}
+
 @media (max-width: 1280px) {
 	.notificationDrp {
 		margin-bottom: 20px;
+	}
+}
+
+@media (max-width: 1280px) {
+	.header-notification {
+		justify-content: start;
+	}
+
+	.header-notification-item {
+		display: none;
 	}
 }
 
@@ -215,3 +229,4 @@ svg {
 .react-datepicker__input-container {
 	position: inherit !important;
 }
+

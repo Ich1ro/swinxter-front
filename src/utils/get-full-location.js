@@ -8,6 +8,8 @@ const getFullCoordinatesFromAWS = async (address) => {
             secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
         },
     });
+    console.log(client);
+    
 
     const indexName = "explore.place";
 
@@ -19,26 +21,31 @@ const getFullCoordinatesFromAWS = async (address) => {
 
         const response = await client.send(command);
 
-        if (response.Results && response.Results.length > 0) {
-            const { Geometry, AddressNumber, Street, Municipality, Region, Country } =
-                response.Results[0].Place;
+        console.log(response);
+        
 
-            const data = {
-                coordinates: Geometry.Point,
-				location: {
-					address: `${AddressNumber || ""}`,
-					street: `${Street || ""}`,
-					municipality: `${Municipality}`,
-					region: `${Region}`,
-					country: `${Country}`
-				}
-            };
+        // if (response.Results && response.Results.length > 0) {
+        //     console.log(response.Results);
+        //     const { Geometry, AddressNumber, Street, Municipality, Region, Country } =
+        //         response.Results[0].Place;
 
-            return data;
-        } else {
-            console.error("No results found.");
-            return null;
-        }
+        //     const data = {
+        //         coordinates: Geometry.Point,
+		// 		location: {
+		// 			address: `${AddressNumber || ""}`,
+		// 			street: `${Street || ""}`,
+		// 			municipality: `${Municipality}`,
+		// 			region: `${Region}`,
+		// 			country: `${Country}`
+		// 		}
+        //     };
+
+        //     return data;
+            
+        // } else {
+        //     console.error("No results found.");
+        //     return null;
+        // }
     } catch (error) {
         console.error("Error fetching coordinates from AWS:", error);
         return null;

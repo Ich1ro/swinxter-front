@@ -91,7 +91,7 @@ const TravelPage = () => {
 	const getTravel = async () => {
 		const { data } = await api.get(`/search_travel?q=${searchquery}`);
 
-		const newPost = data.reverse();
+		const newPost = data.filter(data => data.isVerify).reverse();
 		setTravel(newPost);
 		setNew(newPost);
 		const getBanners = async () => {

@@ -227,7 +227,7 @@ const DbHeader = ({ socket }) => {
 							</div>
 						</div> */}
 						<div
-							className='flex items-center xl:pl-5 flex-wrap order-first xl:order-2 xl:mt-0 xl:mb-0 mb-5 w-full'
+							className='flex items-center xl:pl-5 flex-wrap order-first xl:order-2 xl:mt-0 xl:mb-0 mb-5 w-full header-notification'
 							style={{ position: 'relative' }}
 						>
 							{/* <div className="cursor-pointer w-10 flex justify-center">
@@ -339,8 +339,8 @@ const DbHeader = ({ socket }) => {
 									</ul>
 								</div>
 							</div>
-							{/* <div
-								className='ml-4 w-10 cursor-pointer flex items-center'
+							<div
+								className='ml-4 w-10 cursor-pointer flex items-center header-notification-item'
 								style={{ height: '56px' }}
 								onClick={() => setSidebar(!sidebar)}
 							>
@@ -372,7 +372,7 @@ const DbHeader = ({ socket }) => {
 								<span className='flex xl:hidden text-base'>
 									<HiChevronDown />
 								</span>
-							</div> */}
+							</div>
 							<div
 								className={`block w-full xl:hidden sidebar_normal ${
 									sidebar ? 'sidebar_open' : ''

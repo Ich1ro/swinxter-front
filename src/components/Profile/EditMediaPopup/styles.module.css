@@ -9,7 +9,7 @@
 	justify-content: center;
 	align-items: center;
 	z-index: 9999;
-	cursor: pointer
+	cursor: pointer;
 }
 
 .popup_content {
@@ -19,7 +19,7 @@
 	width: 400px;
 	max-width: 90%;
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-	color: white
+	color: white;
 }
 
 .popup_actions {

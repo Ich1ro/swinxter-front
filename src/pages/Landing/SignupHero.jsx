@@ -8,7 +8,7 @@ const SignupHero = () => {
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
       
       <div className="container mx-auto px-4 text-center relative z-10 homepage-title">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 bg-clip-text bg-gradient-to-r from-swinxter-primary via-swinxter-accent to-swinxter-primary animate-gradient leading-tight">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 bg-clip-text bg-gradient-to-r from-swinxter-primary via-swinxter-accent to-swinxter-primary animate-gradient leading-tight" style={{color: '#F97316'}}>
           Elite Lifestyle Community for Adventurous Couples & Open-Minded Singles
         </h1>
         
