@@ -17,6 +17,7 @@ const getFullCoordinatesFromAWS = async (address) => {
         const command = new SearchPlaceIndexForTextCommand({
             IndexName: indexName,
             Text: address,
+            Key: process.env.REACT_APP_AWS_GEO_SECRET_ACCESS_KEY,
         });
 
         const response = await client.send(command);
@@ -24,28 +25,28 @@ const getFullCoordinatesFromAWS = async (address) => {
         console.log(response);
         
 
-        // if (response.Results && response.Results.length > 0) {
-        //     console.log(response.Results);
-        //     const { Geometry, AddressNumber, Street, Municipality, Region, Country } =
-        //         response.Results[0].Place;
+        if (response.Results && response.Results.length > 0) {
+            console.log(response.Results);
+            const { Geometry, AddressNumber, Street, Municipality, Region, Country } =
+                response.Results[0].Place;
 
-        //     const data = {
-        //         coordinates: Geometry.Point,
-		// 		location: {
-		// 			address: `${AddressNumber || ""}`,
-		// 			street: `${Street || ""}`,
-		// 			municipality: `${Municipality}`,
-		// 			region: `${Region}`,
-		// 			country: `${Country}`
-		// 		}
-        //     };
+            const data = {
+                coordinates: Geometry.Point,
+				location: {
+					address: `${AddressNumber || ""}`,
+					street: `${Street || ""}`,
+					municipality: `${Municipality}`,
+					region: `${Region}`,
+					country: `${Country}`
+				}
+            };
 
-        //     return data;
+            return data;
             
-        // } else {
-        //     console.error("No results found.");
-        //     return null;
-        // }
+        } else {
+            console.error("No results found.");
+            return null;
+        }
     } catch (error) {
         console.error("Error fetching coordinates from AWS:", error);
         return null;
