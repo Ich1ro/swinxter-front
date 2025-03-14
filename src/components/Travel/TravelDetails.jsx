@@ -230,7 +230,7 @@ const TravelDetails = () => {
 	};
 
 	const message = async () => {
-		startDMChatRoom(travelInfo.userId);
+		await startDMChatRoom(travelInfo.userId);
 		navigate('/messaging');
 	};
 

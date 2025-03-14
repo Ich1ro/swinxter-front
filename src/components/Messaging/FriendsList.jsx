@@ -6,8 +6,6 @@ import { IoArrowBackSharp } from "react-icons/io5";
 import { useCustomChatContext } from '../../Context/ChatContext';
 import { loadUser } from '../../redux/actions/auth'
 
-
-
 const FriendsList = ({back}) => {
     const {user} = useSelector((state)=>state.auth);
     const [userInfo,setUserInfo]=useState(user);

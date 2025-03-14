@@ -41,7 +41,7 @@ const CoupleDetailPage = ({
 	//   setUserInfo(user)
 	// },[])
 	const message = async () => {
-		startDMChatRoom(userInfo);
+		await startDMChatRoom(userInfo);
 		navigate('/messaging');
 	};
 

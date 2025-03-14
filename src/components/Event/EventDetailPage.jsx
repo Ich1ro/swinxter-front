@@ -226,7 +226,7 @@ const EventDetailPage = () => {
 	};
 
 	const message = async () => {
-		startDMChatRoom(eventInfo.userId);
+		await startDMChatRoom(eventInfo.userId);
 		navigate('/messaging');
 	};
 

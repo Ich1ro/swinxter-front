@@ -110,7 +110,7 @@ const FriendCard = ({ data, request, getFriends, socket }) => {
 	};
 
 	const message = async () => {
-		startDMChatRoom(data);
+		await startDMChatRoom(data);
 		navigate('/messaging');
 	};
 
