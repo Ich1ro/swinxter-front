@@ -21,10 +21,28 @@ const ChatContextProvider = ({ children }) => {
 	const [chatClient, setChatClient] = useState();
 	const initChatCalled = useRef(false); // Ref to track if initChat has been called
 	const [unread, setUnread] = useState();
+	const navigate = useNavigate();
+	const location = useLocation();
+	const searchParams = new URLSearchParams(location.search);
+	const chatId = searchParams.get('chatId');
+	const [activeChannel, setActiveChannel] = useState(null);
 	// const [zp,setZP] = useState(null);
 	let zp;
 
 	console.log(user._id);
+
+	useEffect(() => {
+		console.log('client', chatClient);
+		console.log('chatId', chatId);
+
+		if (!chatClient || !chatId) return;
+		const newChannel = chatClient.channel('messaging', chatId);
+		console.log('-----------------------------', newChannel);
+
+		newChannel.watch();
+		setActiveChannel(newChannel)
+		// .catch(error => console.error('Ошибка при загрузке канала:', error));
+	}, [chatClient, chatId]);
 
 	const initChat = async () => {
 		console.log('chatClient', chatClient);
@@ -80,7 +98,15 @@ const ChatContextProvider = ({ children }) => {
 		const newChannel = chatClient.channel('messaging', {
 			members: [user._id, chatUser._id],
 		});
+		await newChannel.create();
+
 		await newChannel.watch();
+		// setChatClient(prev => ({
+		// 	...prev,
+		// 	activeChannel: newChannel,
+		// }));
+		setActiveChannel(newChannel);
+		navigate(`/messaging?chatId=${newChannel.id}`);
 	};
 
 	const deleteChat = async event => {
@@ -90,6 +116,7 @@ const ChatContextProvider = ({ children }) => {
 	const value = {
 		startDMChatRoom,
 		setChatClient,
+		activeChannel,
 		unread,
 		deleteChat,
 		zp,

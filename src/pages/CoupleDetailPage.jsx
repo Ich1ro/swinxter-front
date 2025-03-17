@@ -42,7 +42,7 @@ const CoupleDetailPage = ({
 	// },[])
 	const message = async () => {
 		await startDMChatRoom(userInfo);
-		navigate('/messaging');
+		// navigate('/messaging');
 	};
 
 	const handlePasswordSubmit = e => {

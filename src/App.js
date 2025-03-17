@@ -106,7 +106,7 @@ useEffect(() => {
   }, []);
 
   useEffect(()=>{
-  if(isAuthenticated && !pathname.includes("legal") && pathname !== '/verification' && pathname !== '/verification-success' && pathname !== '/verification-success-payment' && pathname !== '/banner-success-payment' && pathname !== '/login'){
+  if(isAuthenticated && !pathname.includes("legal") && pathname !== '/verification' && pathname !== '/verification-success' && pathname !== '/verification-error' && pathname !== '/verification-success-payment' && pathname !== '/banner-success-payment' && pathname !== '/login'){
   // console.log("first");
   // console.log(isAuthenticated.data);
   navigate(from, { replace: true })
@@ -144,6 +144,7 @@ useEffect(() => {
         <Route path="/couple/:userId/:email" element={<SignUpCouple/>} />
         <Route path="/verification" element={<Verification/>} />
         <Route path="/verification-success" element={<VerificationSuccess/>} />
+        <Route path="/verification-error" element={<VerificationSuccess/>} />
         <Route path="/verification-success-payment" element={<VerificationPaymentSuccess/>} />
         <Route path="/banner-success-payment" element={<BannerPaymentSuccess />} />
         <Route path="/business/:userId/:email" element={<RegisterBusiness/>} />

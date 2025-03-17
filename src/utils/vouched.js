@@ -17,7 +17,7 @@ const config = {
 	includeBarcode: 'true',
 	manualCaptureTimeout: 20000,
 	showTermsAndPrivacy: true,
-	
+
 	appId: '~jBndy#OeBux5IVf_hLb-s2-2_ul3I',
 	// your webhook for POST verification processing
 	callbackURL: 'https://website.com/webhook',
@@ -110,7 +110,7 @@ const config = {
 
 const loadVouched = (userObj, state) => {
 	console.log(userObj);
-	
+
 	const existingScript = document.getElementById('vouched');
 	if (!existingScript) {
 		const script = document.createElement('script');
@@ -155,7 +155,7 @@ const loadVouched = (userObj, state) => {
 				onDone: async job => {
 					// token used to query jobs
 					console.log('Scanning complete', { token: job.token });
-					
+
 					// An alternative way to update your system based on the
 					// results of the job. Your backend could perform the following:
 					// 1. query jobs with the token
@@ -165,17 +165,17 @@ const loadVouched = (userObj, state) => {
 					// Redirect to the next page based on the job success
 					if (job?.result?.success) {
 						try {
-							const user = await api
-								.post(`/verify-user-acc/${userObj?._id}`, {
-									data: job?.result,
-									verifiedPerson: state
-								})
-								.then(() => {
-									window.location.replace('/verification-success');
-								});
+							const user = await api.post(`/verify-user-acc/${userObj?._id}`, {
+								data: job?.result,
+								verifiedPerson: state,
+							});
 							console.log(user);
+							if (user.data) {
+								window.location.replace('/verification-error');
+							}
+							window.location.replace('/verification-success');
 						} catch (error) {
-							console.log(error)
+							console.log(error);
 						}
 					} else {
 						window.location.replace('/home');

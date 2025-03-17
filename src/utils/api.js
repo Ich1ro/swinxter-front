@@ -16,7 +16,9 @@ api.interceptors.response.use(
          toast.error("You session is expired. Please login again!")  
       }
 
-      localStorage.clear();
+      localStorage.removeItem('token');
+      localStorage.removeItem('RefreshToken');
+      localStorage.removeItem('userToken');
       store.dispatch({ type: LOGOUT });
 
     }

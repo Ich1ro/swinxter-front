@@ -206,6 +206,11 @@ const CreateEventPage = () => {
 		}
 	};
 
+	useEffect(() => {
+		console.log(event);
+		
+	}, [event])
+
 	return (
 		<div className='bg-white rounded-40px'>
 			<div className='text-center p-5 py-10 text-black px-10 relative'>
@@ -254,7 +259,7 @@ const CreateEventPage = () => {
 									Start Date
 								</label>
 								<input
-									type='datetime-local'
+									type='date'
 									id='StartDate'
 									name='StartDate'
 									onChange={e => handleChange(e)}
@@ -277,7 +282,7 @@ const CreateEventPage = () => {
 								</label>
 								<input
 									min={event?.StartDate || currentDate}
-									type='datetime-local'
+									type='date'
 									id='EndDate'
 									name='EndDate'
 									onChange={e => handleChange(e)}

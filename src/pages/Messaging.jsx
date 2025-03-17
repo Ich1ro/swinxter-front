@@ -1,18 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import ChatRooms from '../components/Messaging/ChatRooms';
 import ChatRoomScreen from '../components/Messaging/ChatRoomScreen';
-import ChatContextProvider from '../Context/ChatContext';
+import ChatContextProvider, {
+	useCustomChatContext,
+} from '../Context/ChatContext';
 import 'stream-chat-react/dist/css/v2/index.css';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useChatContext } from 'stream-chat-react';
 
 const Messaging = () => {
 	const [userInfo, setUserInfo] = useState(null);
 	const { user } = useSelector(state => state.auth);
+	const location = useLocation();
+	const searchParams = new URLSearchParams(location.search);
+	const chatId = searchParams.get('chatId');
 
 	useEffect(() => {
 		setUserInfo(user);
 	}, [user?.payment?.membership]);
+
+	// useEffect(() => {
+	// 	console.log('client', chatClient);
+	// 	console.log('chatId', chatId);
+
+	// 	if (!chatClient || !chatId) return;
+	// 	const newChannel = chatClient.channel('messaging', chatId);
+
+	// 	newChannel
+	// 		.watch()
+	// 		.then(() => setActiveChannel(newChannel))
+	// 		.catch(error => console.error('Ошибка при загрузке канала:', error));
+	// }, [chatClient, chatId]);
 
 	if (userInfo?.payment?.membership) {
 		return (

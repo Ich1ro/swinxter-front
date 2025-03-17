@@ -127,13 +127,15 @@ const EventDetailPage = () => {
 	const year = parsedDate.getFullYear();
 	const formattedDate = `${monthNames[monthIndex]} ${day} ${year}`;
 	if (inputDateString) {
-		const time = inputDateString.split('T')[1];
-		const [hours, minutes] = time.split(':');
+		const time = inputDateString?.split('T')[1] || '';
+		const [hours, minutes] = time?.split(':') || '';
 		const date = new Date(0, 0, 0, hours, minutes);
-		formattedTime = date.toLocaleTimeString([], {
+		formattedTime = date?.toLocaleTimeString([], {
 			hour: '2-digit',
 			minute: '2-digit',
-		});
+		}) || '';
+		
+		
 	}
 
 	const endday = parseEndDate.getDate();
@@ -141,13 +143,13 @@ const EventDetailPage = () => {
 	const endyear = parseEndDate.getFullYear();
 	const endformattedDate = `${monthNames[endmonthIndex]} ${endday} ${endyear}`;
 	if (EndDateString) {
-		const time = EndDateString.split('T')[1];
-		const [hours, minutes] = time.split(':');
+		const time = EndDateString?.split('T')[1] || '';
+		const [hours, minutes] = time?.split(':') || '';
 		const date = new Date(0, 0, 0, hours, minutes);
-		formattedEndTime = date.toLocaleTimeString([], {
+		formattedEndTime = date?.toLocaleTimeString([], {
 			hour: '2-digit',
 			minute: '2-digit',
-		});
+		}) || '';
 	}
 	console.log(endformattedDate);
 	const handleJoin = async () => {
@@ -227,7 +229,7 @@ const EventDetailPage = () => {
 
 	const message = async () => {
 		await startDMChatRoom(eventInfo.userId);
-		navigate('/messaging');
+		// navigate('/messaging');
 	};
 
 	return (
@@ -367,13 +369,13 @@ const EventDetailPage = () => {
 											<span className='inline-block mr-1 font-body_font'>
 												Start Date :
 											</span>{' '}
-											{formattedDate} {formattedTime}
+											{formattedDate} {formattedTime === 'Invalid Date' ? '' : formattedTime}
 										</div>
 										<div className='text-sm'>
 											<span className='inline-block mr-1 font-body_font'>
 												End Date :
 											</span>
-											{endformattedDate} {formattedEndTime}
+											{endformattedDate} {formattedEndTime === 'Invalid Date' ? '' : formattedEndTime}
 										</div>
 									</div>
 									<div className='flex items-center text-sm font-body_font my-4'>

@@ -102,13 +102,16 @@ const EventCard = ({ event, loc }) => {
 							alt='calendar-icon'
 							style={{ marginRight: '10px' }}
 						/>
-
-						<DatePicker
-							dateFormat='yyyy/MM/dd'
-							selected={new Date(event?.Startdate)}
-							className='font-body_font date-picker'
-							disabled
-						/>
+						{(event?.Startdate !== '' &&
+							event?.EndDate !== '') &&
+								(
+									<DatePicker
+										dateFormat='yyyy/MM/dd'
+										selected={new Date(event?.Startdate)}
+										className='font-body_font date-picker'
+										disabled
+									/>
+								)}
 					</div>
 				</div>
 				<div className='flex flex-wrap justify-between gap-x-3 gap-y-2 text-sm'>

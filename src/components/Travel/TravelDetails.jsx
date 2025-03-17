@@ -231,7 +231,7 @@ const TravelDetails = () => {
 
 	const message = async () => {
 		await startDMChatRoom(travelInfo.userId);
-		navigate('/messaging');
+		// navigate('/messaging');
 	};
 
 	return (

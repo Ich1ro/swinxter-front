@@ -100,7 +100,7 @@ const UserDetailPage = ({ socket }) => {
 
 	const message = async () => {
 		await startDMChatRoom(userInfo);
-		navigate('/messaging');
+		// navigate('/messaging');
 	};
 
 	console.log(location.search);

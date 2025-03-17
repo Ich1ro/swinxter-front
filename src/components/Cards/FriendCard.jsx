@@ -111,7 +111,7 @@ const FriendCard = ({ data, request, getFriends, socket }) => {
 
 	const message = async () => {
 		await startDMChatRoom(data);
-		navigate('/messaging');
+		// navigate('/messaging');
 	};
 
 	useEffect(() => {
