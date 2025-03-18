@@ -210,7 +210,7 @@ const Login = () => {
 								payload: ans.data,
 							});
 							await dispatch(loadUser());
-
+							setShowPopup(true)
 							
 						} else {
 							navigate(`${from}`, { replace: true });
