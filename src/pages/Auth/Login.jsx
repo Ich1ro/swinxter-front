@@ -26,6 +26,7 @@ const Login = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [userData, setUserData] = useState(null);
+	const [currentUser, setCurrentUser] = useState(null);
 	const { user } = useSelector(state => state.auth);
 	let ans;
 
@@ -148,10 +149,11 @@ const Login = () => {
 		// 	type: LOGIN_SUCCESS,
 		// 	payload: userData,
 		// });
-		dispatch(loadUser());
+		dispatch(loadUser()).then(() => {
+			navigate(`${from}?isVerify=false`, { replace: true });
+		});
 		setLogin({ identifier: '', password: '' });
 		setRememberMe(false);
-		// navigate(`${from}?isVerify=false`, { replace: true });
 	};
 
 	const handleLogin = async e => {
@@ -174,13 +176,13 @@ const Login = () => {
 						const { data } = await api.post(`/login4`, login, {
 							withCredentials: true,
 						});
-						setUserData(data);
+						setUserData(data?.data);
 						ans = data;
 					} else {
 						const { data } = await api.post(`/login`, login, {
 							withCredentials: true,
 						});
-						setUserData(data);
+						setUserData(data?.data);
 						ans = data;
 					}
 
@@ -210,8 +212,7 @@ const Login = () => {
 								payload: ans.data,
 							});
 							// dispatch(loadUser());
-							setShowPopup(true)
-							
+							setShowPopup(true);
 						} else {
 							navigate(`${from}`, { replace: true });
 						}
@@ -294,14 +295,18 @@ const Login = () => {
 	// });
 
 	useEffect(() => {
-		if(user && user?._id) {
-			if(user?.profile_type === 'business' || user?.isVerificationPaid) {
-				navigate(`${from}`, { replace: true })
+		if (user && user?._id) {
+			if (user?.profile_type === 'business' || (user?.verificationId && user?.verificationId !== undefined && user?.verificationId !== '')) {
+				navigate(`${from}`, { replace: true });
 			} else {
-				setShowPopup(true)
+				setShowPopup(true);
 			}
 		}
-	}, [user])
+	}, [user]);
+
+	useEffect(() => {
+		setCurrentUser(user || userData)
+	}, [user, userData]);
 
 	return (
 		<>
@@ -337,7 +342,7 @@ const Login = () => {
 							or share your personal data. Our only goal is to create a safe and
 							enjoyable experience for everyone.
 						</div>
-						{userData?.profile_type === 'couple' ? (
+						{currentUser?.profile_type === 'couple' ? (
 							<div className='button-wrapper'>
 								<button
 									onClick={() =>
@@ -346,22 +351,26 @@ const Login = () => {
 											state: 'person1',
 										})
 									}
-									disabled={userData?.couple?.person1?.isVerify}
+									disabled={currentUser?.couple?.person1?.isVerify}
 									className='ok-button'
 								>
-									{userData?.couple?.person1?.person1_Name ? `Verify ${userData?.couple?.person1?.person1_Name}` : `Verify person 1`}
+									{currentUser?.couple?.person1?.person1_Name
+										? `Verify ${currentUser?.couple?.person1?.person1_Name}`
+										: `Verify person 1`}
 								</button>
 								<button
 									onClick={() =>
 										navigate(`/verification`, {
 											replace: true,
-											state: 'person2'
+											state: 'person2',
 										})
 									}
-									disabled={userData?.couple?.person2?.isVerify}
+									disabled={currentUser?.couple?.person2?.isVerify}
 									className='ok-button'
 								>
-									{userData?.couple?.person1?.person2_Name ? `Verify ${userData?.couple?.person1?.person1_Name}` : `Verify person 2`}
+									{currentUser?.couple?.person1?.person2_Name
+										? `Verify ${currentUser?.couple?.person1?.person1_Name}`
+										: `Verify person 2`}
 								</button>
 								<button onClick={handleCancel} className='cancel-button'>
 									Cancel
