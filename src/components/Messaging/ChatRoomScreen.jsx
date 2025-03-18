@@ -22,12 +22,12 @@ import { useCustomChatContext } from '../../Context/ChatContext';
 
 const ChatRoomScreen = () => {
 	const { user } = useSelector(state => state.auth);
-	const { activeChannel: contextChannel } = useCustomChatContext();
-	const channel = contextChannel;
+	const {channel} = useChatContext();
+	// const {activeChannel} = useCustomChatContext()
 
-	useEffect(() => {
-		console.log(contextChannel);
-	}, [contextChannel]);
+	// useEffect(() => {
+	// 	console.log(contextChannel);
+	// }, [contextChannel]);
 	let zp;
 
 	const getTargetId = () => {
@@ -76,6 +76,11 @@ const ChatRoomScreen = () => {
 
 	useEffect(() => {
 		initVideo();
+	}, [channel]);
+
+	useEffect(() => {
+		console.log(channel);
+		;
 	}, [channel]);
 
 	const handleSend = async callType => {

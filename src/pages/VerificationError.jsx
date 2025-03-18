@@ -34,9 +34,12 @@ const VerificationError = () => {
 					<div className='popup-content'>
 						<h2>🔴 Verification Failed</h2>
 						<p>We couldn't complete your account verification.</p>
-						<div>
-							Possible reasons: Your details match previous verification
-							attempts. The provided first name and last name were already used.
+						<b>Possible reasons:</b>
+						<div className='popup-info'>
+							<div>Your details match previous verification attempts.</div>
+							<div>
+								The provided first name and last name were already used.
+							</div>
 						</div>
 						<b>What can you do?</b>
 						<div className='popup-info'>

@@ -203,18 +203,49 @@ const Login = () => {
 							ans?.data?.isAccountVerify
 						);
 
-						if (
-							ans?.data?.isAccountVerify === undefined ||
-							ans?.data?.isAccountVerify === false
-						) {
+						// if (
+						// 	ans?.data?.isAccountVerify === undefined ||
+						// 	ans?.data?.isAccountVerify === false
+						// ) {
+						// 	dispatch({
+						// 		type: LOGIN_SUCCESS,
+						// 		payload: ans.data,
+						// 	});
+						// 	// dispatch(loadUser());
+						// 	setShowPopup(true);
+						// } else {
+						// 	navigate(`${from}`, { replace: true });
+						// }
+
+						if (ans?.data?.profile_type === 'couple') {
+							if (
+								ans?.data?.couple?.person1?.isVerify &&
+								ans?.data?.couple?.person2?.isVerify
+							) {
+								dispatch({
+									type: LOGIN_SUCCESS,
+									payload: ans.data,
+								});
+								// dispatch(loadUser());
+								setShowPopup(true);
+							}
+							dispatch(loadUser());
+							navigate(`${from}`, { replace: true });
+						} else {
+							if (
+								ans?.data?.verificationId &&
+								ans?.data?.verificationId !== undefined &&
+								ans?.data?.verificationId !== ''
+							) {
+								dispatch(loadUser());
+								navigate(`${from}`, { replace: true });
+							}
 							dispatch({
 								type: LOGIN_SUCCESS,
 								payload: ans.data,
 							});
 							// dispatch(loadUser());
 							setShowPopup(true);
-						} else {
-							navigate(`${from}`, { replace: true });
 						}
 						// dispatch(loadUser());
 
@@ -296,7 +327,12 @@ const Login = () => {
 
 	useEffect(() => {
 		if (user && user?._id) {
-			if (user?.profile_type === 'business' || (user?.verificationId && user?.verificationId !== undefined && user?.verificationId !== '')) {
+			if (
+				user?.profile_type === 'business' ||
+				(user?.verificationId &&
+					user?.verificationId !== undefined &&
+					user?.verificationId !== '')
+			) {
 				navigate(`${from}`, { replace: true });
 			} else {
 				setShowPopup(true);
@@ -305,7 +341,7 @@ const Login = () => {
 	}, [user]);
 
 	useEffect(() => {
-		setCurrentUser(user || userData)
+		setCurrentUser(user || userData);
 	}, [user, userData]);
 
 	return (
@@ -344,34 +380,35 @@ const Login = () => {
 						</div>
 						{currentUser?.profile_type === 'couple' ? (
 							<div className='button-wrapper'>
-								<button
-									onClick={() =>
-										navigate(`/verification`, {
-											replace: true,
-											state: 'person1',
-										})
-									}
-									disabled={currentUser?.couple?.person1?.isVerify}
-									className='ok-button'
-								>
-									{currentUser?.couple?.person1?.person1_Name
-										? `Verify ${currentUser?.couple?.person1?.person1_Name}`
-										: `Verify person 1`}
-								</button>
-								<button
-									onClick={() =>
-										navigate(`/verification`, {
-											replace: true,
-											state: 'person2',
-										})
-									}
-									disabled={currentUser?.couple?.person2?.isVerify}
-									className='ok-button'
-								>
-									{currentUser?.couple?.person1?.person2_Name
-										? `Verify ${currentUser?.couple?.person1?.person1_Name}`
-										: `Verify person 2`}
-								</button>
+								{!currentUser?.couple?.person1?.isVerify && (
+									<button
+										onClick={() =>
+											navigate(`/verification`, {
+												replace: true,
+												state: 'person1',
+											})
+										}
+										disabled={currentUser?.couple?.person1?.isVerify}
+										className='ok-button'
+									>
+										{`Verify person 1`}
+									</button>
+								)}
+								{!currentUser?.couple?.person2?.isVerify && (
+									<button
+										onClick={() =>
+											navigate(`/verification`, {
+												replace: true,
+												state: 'person2',
+											})
+										}
+										disabled={currentUser?.couple?.person2?.isVerify}
+										className='ok-button'
+									>
+										{`Verify person 2`}
+									</button>
+								)}
+
 								<button onClick={handleCancel} className='cancel-button'>
 									Cancel
 								</button>

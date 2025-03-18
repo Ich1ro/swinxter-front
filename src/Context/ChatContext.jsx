@@ -25,24 +25,26 @@ const ChatContextProvider = ({ children }) => {
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);
 	const chatId = searchParams.get('chatId');
-	const [activeChannel, setActiveChannel] = useState(null);
+	// const [activeChannel, setActiveChannel] = useState(null);
 	// const [zp,setZP] = useState(null);
+	const { client, setActiveChannel } = useChatContext();
+
 	let zp;
 
 	console.log(user._id);
 
-	useEffect(() => {
-		console.log('client', chatClient);
-		console.log('chatId', chatId);
+	// useEffect(() => {
+	// 	console.log('client', chatClient);
+	// 	console.log('chatId', chatId);
 
-		if (!chatClient || !chatId) return;
-		const newChannel = chatClient.channel('messaging', chatId);
-		console.log('-----------------------------', newChannel);
+	// 	if (!chatClient || !chatId) return;
+	// 	const newChannel = chatClient.channel('messaging', chatId);
+	// 	console.log('-----------------------------', newChannel);
 
-		newChannel.watch();
-		setActiveChannel(newChannel)
-		// .catch(error => console.error('Ошибка при загрузке канала:', error));
-	}, [chatClient, chatId]);
+	// 	newChannel.watch();
+	// 	setActiveChannel(newChannel)
+	// 	// .catch(error => console.error('Ошибка при загрузке канала:', error));
+	// }, [chatClient, chatId]);
 
 	const initChat = async () => {
 		console.log('chatClient', chatClient);
@@ -92,12 +94,14 @@ const ChatContextProvider = ({ children }) => {
 
 	useEffect(() => {
 		console.log('chatClient', chatClient);
-	}, [chatClient]);
+		console.log('client', client);
+	}, [chatClient, client]);
 
 	const startDMChatRoom = async chatUser => {
 		const newChannel = chatClient.channel('messaging', {
 			members: [user._id, chatUser._id],
 		});
+		// setActiveChannel(newChannel);
 		await newChannel.create();
 
 		await newChannel.watch();
@@ -105,7 +109,7 @@ const ChatContextProvider = ({ children }) => {
 		// 	...prev,
 		// 	activeChannel: newChannel,
 		// }));
-		setActiveChannel(newChannel);
+		
 		navigate(`/messaging?chatId=${newChannel.id}`);
 	};
 
@@ -116,7 +120,7 @@ const ChatContextProvider = ({ children }) => {
 	const value = {
 		startDMChatRoom,
 		setChatClient,
-		activeChannel,
+		// activeChannel,
 		unread,
 		deleteChat,
 		zp,

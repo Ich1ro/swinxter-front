@@ -77,6 +77,7 @@ import BannerPaymentSuccess from './pages/BannerPaymentSuccess'
 import BannerPage from './pages/BannerPage'
 import CreateBanner from './components/Banner/CreateBanner'
 import BannerDetails from './components/Banner/BannerDetails'
+import VerificationError from './pages/VerificationError'
 
 function App() {
 const {isAuthenticated} = useSelector((state)=>state.auth);
@@ -147,7 +148,7 @@ useEffect(() => {
         <Route path="/couple/:userId/:email" element={<SignUpCouple/>} />
         <Route path="/verification" element={<Verification/>} />
         <Route path="/verification-success" element={<VerificationSuccess/>} />
-        <Route path="/verification-error" element={<VerificationSuccess/>} />
+        <Route path="/verification-error" element={<VerificationError/>} />
         <Route path="/verification-success-payment" element={<VerificationPaymentSuccess/>} />
         <Route path="/banner-success-payment" element={<BannerPaymentSuccess />} />
         <Route path="/business/:userId/:email" element={<RegisterBusiness/>} />
