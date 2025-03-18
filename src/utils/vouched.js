@@ -169,11 +169,16 @@ const loadVouched = (userObj, state) => {
 								data: job?.result,
 								verifiedPerson: state,
 							});
-							console.log(user);
-							if (user.data) {
+							console.log('user', user);
+							console.log('user.data', user.data);
+							// if (user.data) {
+							// 	console.log('123');
+							// }
+							if (user.data === true) {
 								window.location.replace('/verification-error');
+							} else {
+								window.location.replace('/verification-success');
 							}
-							window.location.replace('/verification-success');
 						} catch (error) {
 							console.log(error);
 						}

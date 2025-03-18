@@ -219,7 +219,7 @@ const Login = () => {
 
 						if (ans?.data?.profile_type === 'couple') {
 							if (
-								ans?.data?.couple?.person1?.isVerify &&
+								ans?.data?.couple?.person1?.isVerify ||
 								ans?.data?.couple?.person2?.isVerify
 							) {
 								dispatch({
@@ -228,9 +228,10 @@ const Login = () => {
 								});
 								// dispatch(loadUser());
 								setShowPopup(true);
+							} else {
+								dispatch(loadUser());
+								navigate(`${from}`, { replace: true });
 							}
-							dispatch(loadUser());
-							navigate(`${from}`, { replace: true });
 						} else {
 							if (
 								ans?.data?.verificationId &&
