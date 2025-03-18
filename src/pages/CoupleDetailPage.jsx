@@ -27,6 +27,8 @@ const CoupleDetailPage = ({
 	blocked,
 	isFriendsOpen,
 	setIsFriendsOpen,
+	setShowPopup,
+	showPopup
 }) => {
 	const location = useLocation();
 	const [age, setAge] = useState('');
@@ -112,13 +114,41 @@ const CoupleDetailPage = ({
 											Online
 										</p>
 									</h3>
-									{!userInfo?.isVerificationPaid && (
-										<>
-											<p className='user-not-verify'>
-												This member is not verified!
-											</p>
-										</>
-									)}
+									{location.search.length > 0
+										? !userInfo?.isVerificationPaid && (
+												<>
+													<p className='user-not-verify'>
+														This member is not verified!
+													</p>
+												</>
+										  )
+										: !currentUser?.isVerificationPaid && (
+												<>
+													<p
+														className='user-not-verify'
+														onClick={() => {
+															if (user?.profile_type === 'single') {
+																if (user?.verificationId) {
+																	navigate('/verification-success');
+																} else {
+																	setShowPopup(true);
+																}
+															} else {
+																if (
+																	!user?.couple?.person1?.isVerify ||
+																	!user?.couple?.person2?.isVerify
+																) {
+																	navigate('/verification-success');
+																} else {
+																	setShowPopup(true);
+																}
+															}
+														}}
+													>
+														You are not verified!
+													</p>
+												</>
+										  )}
 								</div>
 								<div className='text-lg flex items-center gap-2  mt-1 font-body_font'>
 									{/* <span>

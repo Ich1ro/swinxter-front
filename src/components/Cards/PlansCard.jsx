@@ -44,31 +44,39 @@ const PlansCard = ({ title, price, priceWithoutVerification }) => {
 						</div>
 						{user?.profile_type === 'couple' ? (
 							<div className='button-wrapper'>
+								{!user?.couple?.person1?.isVerify && (
+									<button
+										onClick={() =>
+											navigate(`/verification`, {
+												replace: true,
+												state: 'person1',
+											})
+										}
+										disabled={user?.couple?.person1?.isVerify}
+										className='ok-button'
+									>
+										{`Verify person 1`}
+									</button>
+								)}
+								{!user?.couple?.person2?.isVerify && (
+									<button
+										onClick={() =>
+											navigate(`/verification`, {
+												replace: true,
+												state: 'person2',
+											})
+										}
+										disabled={user?.couple?.person2?.isVerify}
+										className='ok-button'
+									>
+										{`Verify person 2`}
+									</button>
+								)}
+
 								<button
-									onClick={() =>
-										navigate(`/verification`, {
-											replace: true,
-											state: 'person1',
-										})
-									}
-									disabled={user?.couple?.person1?.isVerify}
-									className='ok-button'
+									onClick={() => setShowPopup(false)}
+									className='cancel-button'
 								>
-									{user?.couple?.person1?.person1_Name ? `Verify ${user?.couple?.person1?.person1_Name}` : `Verify person 1`}
-								</button>
-								<button
-									onClick={() =>
-										navigate(`/verification`, {
-											replace: true,
-											state: 'person2'
-										})
-									}
-									disabled={user?.couple?.person2?.isVerify}
-									className='ok-button'
-								>
-									{user?.couple?.person1?.person2_Name ? `Verify ${user?.couple?.person1?.person1_Name}` : `Verify person 2`}
-								</button>
-								<button onClick={() => setShowPopup(false)} className='cancel-button'>
 									Cancel
 								</button>
 							</div>
@@ -85,7 +93,10 @@ const PlansCard = ({ title, price, priceWithoutVerification }) => {
 								>
 									OK
 								</button>
-								<button onClick={() => setShowPopup(false)} className='cancel-button'>
+								<button
+									onClick={() => setShowPopup(false)}
+									className='cancel-button'
+								>
 									Cancel
 								</button>
 							</div>
@@ -101,7 +112,24 @@ const PlansCard = ({ title, price, priceWithoutVerification }) => {
 						className='info-icon'
 						onMouseEnter={() => setShowTooltip(true)}
 						onMouseLeave={() => setShowTooltip(false)}
-						onClick={() => setShowPopup(true)}
+						onClick={() => {
+							if (user?.profile_type === 'single') {
+								if (user?.verificationId) {
+									navigate('/verification-success');
+								} else {
+									setShowPopup(true);
+								}
+							} else {
+								if (
+									!user?.couple?.person1?.isVerify ||
+									!user?.couple?.person2?.isVerify
+								) {
+									navigate('/verification-success');
+								} else {
+									setShowPopup(true);
+								}
+							}
+						}}
 					>
 						!{/* {showTooltip && ( */}
 						<div className='tooltip'>

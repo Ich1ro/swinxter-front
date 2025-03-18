@@ -11,7 +11,7 @@ import api from '../utils/api';
 import CoupleDetailPage from './CoupleDetailPage';
 import FriendCard from '../components/Cards/FriendCard';
 import TravelCard2 from '../components/Travel/TravelCard2';
-import './styles/verify.css'
+import './styles/verify.css';
 
 const UserDetailPage = ({ socket }) => {
 	const [age, setAge] = useState('');
@@ -31,6 +31,7 @@ const UserDetailPage = ({ socket }) => {
 	const [friends, setFriends] = useState([]);
 	const [situationships, setSituationships] = useState([]);
 	const [isFriendsOpen, setIsFriendsOpen] = useState(false);
+	const [showPopup, setShowPopup] = useState(false);
 
 	const getUser = async () => {
 		const currentUser = await api.get(`/user_details/${user._id}`);
@@ -106,49 +107,56 @@ const UserDetailPage = ({ socket }) => {
 	console.log(location.search);
 
 	const handleRemove = async () => {
-		toast((t) => (
-			<div>
-				<p style={{ marginBottom: '10px' }}>Are you sure you want to remove this friend?</p>
-				<div style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px' }}>
-					<button
-						onClick={async () => {
-							try {
-								await api.put(`/remove_friend/${user?._id}/${userInfo?._id}`);
-								navigate('/my_friends');
-							} catch (e) {
-								console.log(e);
-							}
-							toast.dismiss(t.id);
-						}}
-						style={{
-							padding: '5px 10px',
-							backgroundColor: '#b64a4a',
-							color: '#fff',
-							border: 'none',
-							borderRadius: '4px',
-							cursor: 'pointer',
-						}}
+		toast(
+			t => (
+				<div>
+					<p style={{ marginBottom: '10px' }}>
+						Are you sure you want to remove this friend?
+					</p>
+					<div
+						style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px' }}
 					>
-						Yes
-					</button>
-					<button
-						onClick={() => toast.dismiss(t.id)}
-						style={{
-							padding: '5px 10px',
-							backgroundColor: '#4caf50',
-							color: '#fff',
-							border: 'none',
-							borderRadius: '4px',
-							cursor: 'pointer',
-						}}
-					>
-						No
-					</button>
+						<button
+							onClick={async () => {
+								try {
+									await api.put(`/remove_friend/${user?._id}/${userInfo?._id}`);
+									navigate('/my_friends');
+								} catch (e) {
+									console.log(e);
+								}
+								toast.dismiss(t.id);
+							}}
+							style={{
+								padding: '5px 10px',
+								backgroundColor: '#b64a4a',
+								color: '#fff',
+								border: 'none',
+								borderRadius: '4px',
+								cursor: 'pointer',
+							}}
+						>
+							Yes
+						</button>
+						<button
+							onClick={() => toast.dismiss(t.id)}
+							style={{
+								padding: '5px 10px',
+								backgroundColor: '#4caf50',
+								color: '#fff',
+								border: 'none',
+								borderRadius: '4px',
+								cursor: 'pointer',
+							}}
+						>
+							No
+						</button>
+					</div>
 				</div>
-			</div>
-		), {
-			duration: Infinity,
-		});
+			),
+			{
+				duration: Infinity,
+			}
+		);
 	};
 
 	// const handleSendRequest = async () => {
@@ -354,6 +362,100 @@ const UserDetailPage = ({ socket }) => {
 
 	return (
 		<>
+			{showPopup && (
+				<div className='popup-overlay'>
+					<div className='popup-content'>
+						<h2>Verify Your Identity – Secure Your Membership</h2>
+						<p>
+							To keep our community safe and authentic, we require a one-time
+							identity verification. This simple process helps prevent fraud and
+							ensures a trusted environment for all members.
+						</p>
+						<div>
+							🔒 <b>Verification Fee:</b> single member: $7 couples: $9 ($4.50
+							per each)
+						</div>
+						<b>Why Verify?</b>
+						<div className='popup-info'>
+							<div>
+								✅ Get <b>one extra month</b> of membership for free!
+							</div>
+							<div>
+								✅ Pay the <b>standard membership fee</b>—unverified members pay
+								<b>double</b>.
+							</div>
+							<div>
+								✅ Enjoy a more <b>secure and trustworthy</b> platform.
+							</div>
+						</div>
+						<div>
+							This verification is handled by an{' '}
+							<b>accredited third-party provider</b>, and we <b>never</b> store
+							or share your personal data. Our only goal is to create a safe and
+							enjoyable experience for everyone.
+						</div>
+						{user?.profile_type === 'couple' ? (
+							<div className='button-wrapper'>
+								{!user?.couple?.person1?.isVerify && (
+									<button
+										onClick={() =>
+											navigate(`/verification`, {
+												replace: true,
+												state: 'person1',
+											})
+										}
+										disabled={user?.couple?.person1?.isVerify}
+										className='ok-button'
+									>
+										{`Verify person 1`}
+									</button>
+								)}
+								{!user?.couple?.person2?.isVerify && (
+									<button
+										onClick={() =>
+											navigate(`/verification`, {
+												replace: true,
+												state: 'person2',
+											})
+										}
+										disabled={user?.couple?.person2?.isVerify}
+										className='ok-button'
+									>
+										{`Verify person 2`}
+									</button>
+								)}
+
+								<button
+									onClick={() => setShowPopup(false)}
+									className='cancel-button'
+								>
+									Cancel
+								</button>
+							</div>
+						) : (
+							<div className='button-wrapper'>
+								<button
+									onClick={() =>
+										navigate(`/verification`, {
+											replace: true,
+											state: 'single',
+										})
+									}
+									className='ok-button'
+								>
+									OK
+								</button>
+								<button
+									onClick={() => setShowPopup(false)}
+									className='cancel-button'
+								>
+									Cancel
+								</button>
+							</div>
+						)}
+					</div>
+				</div>
+			)}
 			{userInfo?.profile_type === 'single' ? (
 				<div className='bg-black-20'>
 					<div className='min-h-[130px] md:min-h-[130px] flex justify-center items-end bg-black rounded-b-50px'></div>
@@ -385,11 +487,46 @@ const UserDetailPage = ({ socket }) => {
 													Online
 												</p>
 											</h3>
-											{!userInfo?.isVerificationPaid && (
+											{location.search.length > 0
+												? !userInfo?.isVerificationPaid && (
+														<>
+															<p className='user-not-verify'>
+																This member is not verified!
+															</p>
+														</>
+												  )
+												: !currentUser?.isVerificationPaid && (
+														<>
+															<p
+																className='user-not-verify'
+																onClick={() => {
+																	if (user?.profile_type === 'single') {
+																		if (user?.verificationId) {
+																			navigate('/verification-success');
+																		} else {
+																			setShowPopup(true);
+																		}
+																	} else {
+																		if (
+																			!user?.couple?.person1?.isVerify ||
+																			!user?.couple?.person2?.isVerify
+																		) {
+																			navigate('/verification-success');
+																		} else {
+																			setShowPopup(true);
+																		}
+																	}
+																}}
+															>
+																You are not verified!
+															</p>
+														</>
+												  )}
+											{/* {!userInfo?.isVerificationPaid && (
 												<>
 													<p className='user-not-verify'>This member is not verified!</p>
 												</>
-											)}
+											)} */}
 										</div>
 										<div className='text-lg flex items-center gap-2  mt-1 font-body_font'>
 											<span style={RenderedStyle}>{age}</span>
@@ -397,7 +534,15 @@ const UserDetailPage = ({ socket }) => {
 									</div>
 									{location.search.length > 0 &&
 									location.search.split('=')[1] !== user?._id ? (
-										<div className='flex' style={{ width: '100%', flexWrap: 'wrap', justifyContent: 'center', gap: '10px' }}>
+										<div
+											className='flex'
+											style={{
+												width: '100%',
+												flexWrap: 'wrap',
+												justifyContent: 'center',
+												gap: '10px',
+											}}
+										>
 											{currentUser.friends.includes(userInfo?._id) ? (
 												<button
 													className='primary_btn'
@@ -1341,6 +1486,8 @@ const UserDetailPage = ({ socket }) => {
 					friends={friends}
 					situationships={situationships}
 					unlike={unlike}
+					setShowPopup={setShowPopup}
+					showPopup={showPopup}
 					currentUser={currentUser}
 					handleRemove={handleRemove}
 					handleSendRequest={handleSendRequest}

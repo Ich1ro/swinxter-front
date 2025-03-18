@@ -2,6 +2,7 @@
 	padding: 3px 7.5px;
 	border-radius: 12px;
 	background-color: #fd2f2f;
+	cursor: pointer;
 }
 
 .verification-success {
