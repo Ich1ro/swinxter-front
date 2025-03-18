@@ -148,10 +148,10 @@ const Login = () => {
 		// 	type: LOGIN_SUCCESS,
 		// 	payload: userData,
 		// });
-		// dispatch(loadUser());
+		dispatch(loadUser());
 		setLogin({ identifier: '', password: '' });
 		setRememberMe(false);
-		navigate(`${from}?isVerify=false`, { replace: true });
+		// navigate(`${from}?isVerify=false`, { replace: true });
 	};
 
 	const handleLogin = async e => {
@@ -209,7 +209,7 @@ const Login = () => {
 								type: LOGIN_SUCCESS,
 								payload: ans.data,
 							});
-							await dispatch(loadUser());
+							// dispatch(loadUser());
 							setShowPopup(true)
 							
 						} else {

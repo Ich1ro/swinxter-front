@@ -106,7 +106,10 @@ useEffect(() => {
   }, []);
 
   useEffect(()=>{
-  if(isAuthenticated && !pathname.includes("legal") && pathname !== '/verification' && pathname !== '/verification-success' && pathname !== '/verification-error' && pathname !== '/verification-success-payment' && pathname !== '/banner-success-payment' && pathname !== '/login'){
+  if(isAuthenticated &&
+    !pathname.includes("legal") &&
+    !["/verification", "/verification-success", "/verification-error", "/verification-success-payment", "/banner-success-payment"].includes(pathname) &&
+    !pathname.includes("login")){
   // console.log("first");
   // console.log(isAuthenticated.data);
   navigate(from, { replace: true })
