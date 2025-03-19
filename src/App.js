@@ -191,6 +191,7 @@ useEffect(() => {
         <Route path="/recieved_request" element={<ProtectedRoute><RecievedRequests socket={socket}/></ProtectedRoute>} />
         <Route path="/membership" element={<ProtectedRoute><Membership/></ProtectedRoute>} />
         <Route path="/messaging" element={<ProtectedRoute><Messaging /></ProtectedRoute>} />
+        <Route path="/messaging/:chatId" element={<ProtectedRoute><Messaging /></ProtectedRoute>} />
         {/* <Route path="/verification" element={<ProtectedRoute><Verification /></ProtectedRoute>} /> */}
 
         {/* CLUBS */}

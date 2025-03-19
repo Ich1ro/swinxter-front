@@ -23,8 +23,6 @@ import { useCustomChatContext } from '../../Context/ChatContext';
 const ChatRoomScreen = () => {
 	const { user } = useSelector(state => state.auth);
 	const {channel} = useChatContext();
-	// const {activeChannel} = useCustomChatContext()
-
 	// useEffect(() => {
 	// 	console.log(contextChannel);
 	// }, [contextChannel]);

@@ -109,8 +109,9 @@ const ChatContextProvider = ({ children }) => {
 		// 	...prev,
 		// 	activeChannel: newChannel,
 		// }));
+		console.log('newChannel.id', newChannel.id);
 		
-		navigate(`/messaging?chatId=${newChannel.id}`);
+		navigate(`/messaging/${newChannel.id}`);
 	};
 
 	const deleteChat = async event => {
